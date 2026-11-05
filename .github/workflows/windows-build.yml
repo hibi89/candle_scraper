@@ -7,7 +7,6 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/windows-build.yml'
-      - 'menu.py' # Korean console compatibility requires actual Windows CI
 
 permissions:
   contents: read
@@ -55,4 +54,14 @@ jobs:
             customer_packages/BUILD_EVIDENCE.txt
             dist/exe_verification.json
           if-no-files-found: error
+          retention-days: 14
+      - name: Live read-only APIs from each actual customer EXE
+        run: python verify_live_exes.py
+      - name: Preserve separate EXE live API audit evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: CoinCollector-EXE-LiveAPI-EVIDENCE-${{ github.sha }}
+          path: live_exe_evidence.json
+          if-no-files-found: warn
           retention-days: 14
