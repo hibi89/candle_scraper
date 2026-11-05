@@ -162,23 +162,25 @@ def _db_open_unlocked(exchange):
         finally:
             preflight.close()
     db = sqlite3.connect(path, timeout=60)
-    db.execute('PRAGMA busy_timeout=60000')
-    db.execute('PRAGMA journal_mode=WAL')
-    db.execute('''CREATE TABLE IF NOT EXISTS candles (
-        market TEXT NOT NULL, unit INTEGER NOT NULL, utc TEXT NOT NULL,
-        kst TEXT NOT NULL, open REAL NOT NULL, high REAL NOT NULL,
-        low REAL NOT NULL, close REAL NOT NULL, volume REAL NOT NULL,
-        trade_value REAL NOT NULL, PRIMARY KEY (market,unit,utc))''')
-    db.execute('''CREATE TABLE IF NOT EXISTS collection_state (
-        market TEXT NOT NULL, unit INTEGER NOT NULL, finished INTEGER NOT NULL DEFAULT 0,
-        PRIMARY KEY(market,unit))''')
-    db.commit()
     try:
+        db.execute('PRAGMA busy_timeout=60000')
+        db.execute('PRAGMA journal_mode=WAL')
+        db.execute('''CREATE TABLE IF NOT EXISTS candles (
+            market TEXT NOT NULL, unit INTEGER NOT NULL, utc TEXT NOT NULL,
+            kst TEXT NOT NULL, open REAL NOT NULL, high REAL NOT NULL,
+            low REAL NOT NULL, close REAL NOT NULL, volume REAL NOT NULL,
+            trade_value REAL NOT NULL, PRIMARY KEY (market,unit,utc))''')
+        db.execute('''CREATE TABLE IF NOT EXISTS collection_state (
+            market TEXT NOT NULL, unit INTEGER NOT NULL, finished INTEGER NOT NULL DEFAULT 0,
+            PRIMARY KEY(market,unit))''')
+        db.commit()
         verify_existing_schema(db)
-    except Exception:
+        return db
+    except BaseException:
+        # In particular, PRAGMA/CREATE errors on Windows must not leak a
+        # file handle that blocks recovery or deletion of a disposable DB.
         db.close()
         raise
-    return db
 
 def endpoint(unit):
     return f'/candles/minutes/{unit}' if isinstance(unit, int) else '/candles/days' if unit == 'day' else '/candles/weeks' if unit == 'week' else '/candles/months'
@@ -257,10 +259,16 @@ def insert_page(db, market, unit, page):
              c['candle_acc_trade_volume'], c['candle_acc_trade_price'])
             for c in page if is_closed(c, unit)]
     before = db.total_changes
-    db.executemany('''INSERT OR IGNORE INTO candles
-        (market,unit,utc,kst,open,high,low,close,volume,trade_value)
-        VALUES (?,?,?,?,?,?,?,?,?,?)''', rows)
-    db.commit()
+    try:
+        db.executemany('''INSERT OR IGNORE INTO candles
+            (market,unit,utc,kst,open,high,low,close,volume,trade_value)
+            VALUES (?,?,?,?,?,?,?,?,?,?)''', rows)
+        db.commit()
+    except BaseException:
+        # Explicitly discard a partly executed page even if the caller keeps
+        # the SQLite handle open after a disk/trigger/interruption failure.
+        db.rollback()
+        raise
     return db.total_changes - before
 
 def market_query(exchange):
