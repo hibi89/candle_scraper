@@ -42,3 +42,6 @@
 - **실행 검증:** 이 환경에서 Python offline unittest 127/127 PASS, compileall PASS, source manifest 파일 SHA256 27/27 MATCH.
 - **미검증:** Windows EXE 실빌드와 고객 ZIP 독립 실행, Upbit/Bithumb 실제 HTTPS, GitHub Actions 수동 CI.
 - **후속 문서 커밋:** HANDOFF/STATUS/SOURCE_MANIFEST 갱신만 포함. 코드는 `b9a1483a790c642704abd492493c50e038ad7344`와 동일.
+
+## 범위 분리
+- 이전 대화의 공통 패턴 검색 설계는 `docs/FUTURE_PATTERN_SEARCH.md`에 미래 계획으로만 기록. 실행 엔진/수식 해석은 미구현이며 현 85% 추정률에 포함하지 않음.

@@ -25,3 +25,6 @@
 - Canonical GitHub repository: `hibi89/candle_scraper` (private), branch `main`; commit SHA must be recorded in status reports.
 - Original ZIP backups remain in ChatGPT Library; GitHub source, tests, schema expectations and docs must remain available independently.
 - `docs/RELEASE_CHECKLIST.md` sets the objective sales gate; Windows and live HTTP are not automatically certified by local tests.
+
+## 후속 검색 제품과의 경계
+- 공통 패턴 검색 엔진(두 DB 읽기→규칙 실행→통합 결과 CSV)은 별도 아이디어이며 본 수집기 v1.6.1에 **포함되지 않음**. 설계 기록은 `docs/FUTURE_PATTERN_SEARCH.md`.
