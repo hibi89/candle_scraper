@@ -73,6 +73,18 @@ class RetryRequestTests(unittest.TestCase):
             sleep.assert_not_called()
             block_for.assert_called_once_with(120.0)
 
+    def test_fifth_429_long_cooldown_still_blocks_provider(self):
+        errors = [self.error(429, '1') for _ in range(4)] + [self.error(429, '120')]
+        with patch.object(collector.GATES['upbit'], 'wait'), \
+                patch.object(collector.GATES['upbit'], 'block_for') as block_for, \
+                patch.object(collector.urllib.request, 'urlopen', side_effect=errors) as urlopen, \
+                patch.object(collector.time, 'sleep') as sleep:
+            with self.assertRaisesRegex(RuntimeError, 'cooldown'):
+                collector.request('upbit', '/market/all')
+            self.assertEqual(urlopen.call_count, 5)
+            self.assertEqual(sleep.call_count, 4)
+            block_for.assert_called_once_with(120.0)
+
     def test_no_retry_after_uses_exponential_backoff(self):
         result, calls, sleeps, _ = self.invoke([self.error(503), self.error(503), self.response()])
         self.assertEqual(result, [])

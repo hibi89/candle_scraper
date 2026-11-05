@@ -112,7 +112,7 @@ def request(exchange, path, params=None):
             if not isinstance(data, list): raise ValueError(f'Unexpected API response: {str(data)[:180]}')
             return data
         except urllib.error.HTTPError as exc:
-            if attempt == 4 or exc.code not in (429, 500, 502, 503, 504):
+            if exc.code not in (429, 500, 502, 503, 504):
                 raise
             delay = retry_after_seconds((exc.headers or {}).get('Retry-After'))
             # Do not retry before a provider-specified long cooldown. Fail
@@ -125,6 +125,8 @@ def request(exchange, path, params=None):
                     f'Exchange requested a {delay:.0f}s Retry-After cooldown; '
                     'collection paused to respect API rate limits'
                 ) from exc
+            if attempt == 4:
+                raise
             time.sleep(min(30, max(1.0 * 2 ** attempt, delay or 0.0)))
         except (urllib.error.URLError, TimeoutError, ConnectionError):
             if attempt == 4: raise
