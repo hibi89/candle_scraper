@@ -1,3 +1,16 @@
+# 분석기 브랜치 현행 상태 — 2026-11-05 KST
+
+- **적용 범위:** `feature/candle-pattern-analyzer` 전용 신규 코드. 기존 `main` 수집기/고객 SQLite는 변경 없음. 사용자 제공 기준 SHA `1f976770db4797bcaa846ed32962e306318971ca`에서 시작.
+- **완료:** `pattern_analyzer.py`에 SQLite `mode=ro`/`query_only`, 8개 분봉 전체·최근 N개 신호 탐색, EMA280/560·SMA280/560·BB(20,2), SMA280↗SMA560 신규 교차 및 `EMA560>EMA280>SMA280>SMA560>BBupper` 판정, CSV 원자 저장. `--last 0` 전체 무제한, 양수 N은 종목/분봉별 최근 N개 신호 표시(이동평균 계산은 전체 이전 이력 활용). 복수 SQLite `--db` 지원.
+- **테스트:** 작성자의 임시 로컬 Python 3.13.5 환경에서 `python -m unittest -q test_pattern_analyzer.py` **12/12 PASS**, 실제 합성가격 873봉의 조건 발생 1건과 마지막 100봉 제외 0건, 기존 DB 해시 불변, BOM/원자 출력, 파일 보호, 잘못된 데이터 취소. GitHub 동일 SHA의 Windows Actions/EXE 및 실제 사용자의 10,000+봉 DB 전체 검색 **NOT_RUN**.
+- **기능 코드 기준 GitHub 커밋:** `ab5d904701fe78a273978ca81bcd6622e4dcb7ad` (그 이전 분석기 파일 생성 `a6d9084`, 테스트 `0f04aa3`, 규칙 문서 `82a340d`). 문서 커밋 후 최종 HEAD 재조회 필요.
+- **원본 보호:** 수집기와 시장 원본·고객 데이터 접근/변경 없음; synthetic 임시 DB만 사용, 결과 CSV는 별도 경로. `docs/PATTERN_ANALYZER.md`가 현재 규칙과 사용법 기준.
+- **진행/제약:** 분석기 MVP의 Python 코드·오프라인 시험 완료. Windows EXE/전종목 실운용/차트 1:1 비교/CSV·JSON·Excel·Parquet 입력 어댑터/판매조건은 **미완료/미검증**. 기존 수집기 기술 추정 99% 및 **판매 HOLD**와 혼동 금지. 현재 분석기 완성률 정량 수치는 미산정.
+- **Vercel/Production:** 미적용(로컬 오프라인 Python 도구). GitHub Actions 자동 Windows 빌드는 이 신규 분석기 파일에 대해 구성/실행하지 않음.
+- **다음:** 실제 10,000+봉 로컬 DB를 읽기 전용으로 스캔해 사건 개수·시간·차트 대조, 이후 Windows 전용 분석기 EXE·UI, 멀티포맷 어댑터 및 상업용 정책 검토. 사용자가 요구한 옵션은 커맨드라인 `--last`로 우선 지원.
+
+---
+
 # STATUS — Coin Candle Collector v1.6.1 (commercial Windows editions)
 
 최신 확인: **2026-11-05 22:50 KST**
