@@ -32,6 +32,13 @@ Consequence: do not bundle or redistribute fetched candle data, market DBs, expo
 
 **No new launch claims from passing Windows CI or live API tests.** This is a release policy and licensing blocker, not a failing unit test. A legal professional or the provider should confirm any exceptional permission. Any paid API, external transfer, change of product scope or source/sales material requires owner approval.
 
+
+## Official agreement cross-check (2026-11-05 KST)
+
+- [Upbit Open API agreement (current official terms entry)](https://www.upbit.com/open_api_agreement) is the direct provider URL.
+- [Upbit developer notice quoting the 2024-10-30 revision](https://docs.upbit.com/kr/v1.5.9/changelog/%EC%95%88%EB%82%B4-open-api-%ED%82%A4-%EC%A0%95%EB%B3%B4-%EB%B3%B4%EC%95%88-%EC%A3%BC%EC%9D%98-%EC%95%88%EB%82%B4-%EB%B0%8F-%EC%9D%B4%EC%9A%A9%EC%95%BD%EA%B4%80-%EC%95%88%EB%82%B4-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8-%EC%9C%A0%EC%83%81-%ED%8C%90%EB%A7%A4-%EB%B6%88%EA%B0%80) reproduces the complete revised agreement and its effective date. In the reproduced text, Article 6(3) expressly disallows paid transfers, distribution, or licensing of programs that can access the Upbit Open API; Article 5 restricts unlicensed commercial reuse of data. This is **direct provider documentary evidence** rather than relying on mere public endpoint access.
+- **No written exceptional permission obtained, no inquiry sent.** Current no-sale/no-distribution HOLD remains. Technical build success does not override these terms.
+
 ## Rights-verification correspondence (draft only)
 
 Unsent and unapproved official-permission inquiry templates are preserved in [LICENSING_REQUEST_DRAFTS.md](LICENSING_REQUEST_DRAFTS.md). Do not present them as permission or send them without user approval.

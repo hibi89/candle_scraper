@@ -2,7 +2,7 @@
 
 **HOLD** until all steps are evidenced at the same commit. This is a commercial product, not a live trading bot. No automatic payments, remote execution, or authenticated API access are needed.
 
-1. Source integrity: checkout commit SHA, compare against `SOURCE_MANIFEST.json`, inspect `.github/workflows/windows-build.yml`, pin any altered dependencies before building.
+1. Source integrity: check out the **exact tested source SHA** from the successful GitHub Actions run; inspect `.github/workflows/windows-build.yml` and the EXE/ZIP hashes recorded in `BUILD_EVIDENCE.txt`. `SOURCE_MANIFEST.json` describes only the **historical initial-import source snapshot**, not the current `main` revision; do **not** compare current files to its old hashes. Pin any altered build dependencies before building.
 2. Windows build: Windows 10 or later, Python 3.11+, PyInstaller 6.x installed with explicit owner permission. In a **new** writable directory run `build_windows.bat`. Expect offline unittest PASS, 3 EXEs built, startup/exit verification, 3 customer ZIPs, independent extract/start/exit check. Windows 2022 GitHub Actions manual workflow is an alternative but its artifact expiry means GitHub is not a long-term binary archive.
 3. Test all 3 editions from **separate unpacked customer ZIPs** on a real Windows machine. Confirm menu displayed, cancel/exit works, no unexpected DB creation before collection, clean machine/Windows Defender warning behavior; do not disable protection.
 4. Real endpoints: Upbit and Bithumb public KRW market list, 11 supported timeframe queries and historical page 2 `to` cursor. Check KST/UTC values, no partial candle storage and 429 backoff; avoid abusive API rates. Use **small** test limits first.
