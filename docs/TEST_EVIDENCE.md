@@ -1,3 +1,14 @@
+# 2026-11-05 21:49 KST — Final Windows customer-EXE live check
+
+- [run #42029964305](https://github.com/hibi89/candle_scraper/actions/runs/42029964305), SHA `40c0afe32e4eecda64ada9021aad35a8d1cd96fd`, Windows Server 2022 Python 3.11.9, PyInstaller 6.16.0, **SUCCESS**.
+- Offline unittest 127/127 PASS; independently launched all 3 customer ZIP EXEs, 3/3 PASS, no DB on startup.
+- Actual customer ZIP program live API menu `[5]`: Upbit only 11 units PASS, Bithumb only 11 units PASS, Both edition Upbit 11 and Bithumb 11 PASS. Real public HTTPS first page and historical cursor page 2; read-only, temp folders only.
+- Latest ZIP SHA256: Upbit `6985a6ae9c8ed094161db16863af7ce3d52cbc60862c85325efb27649db7e314`, Bithumb `5bd484fda1e6bfdd9be20527db4139bb958d2b7cdd3213c995df5dee390ae741`, Both `0e7ccc6850e67a36b2d6e71b6acc42611dd7ceb10026f8f51560f3737bb903f0`.
+- CI Artifacts: Windows ZIP ID `13416505378` and EXE-live evidence ID `13416380913`, expire 2026-11-19 KST.
+- **Sales HOLD**: Windows 10/11 customer deployment, prolonged all-KRW market live data/backfill, commercial API/data use rights NOT VERIFIED.
+
+---
+
 # Test evidence — updated 2026-11-05 21:40 KST
 
 ## Windows build and actual ZIP runtime — PASS

@@ -1,3 +1,21 @@
+# HANDOFF 최신 확인 — 2026-11-05 21:49 KST (이 문서의 최우선 기록)
+
+**한눈에 보는 최신 기준:**
+- 목표/기술: Windows 무설치 코인 캔들 수집기 업비트/빗썸/통합 EXE 3종, Python 3.11 stdlib + PyInstaller.
+- 완성/판정: 판매 완성률 추정 **94%** (이전 85% 대비 +9%p), **RELEASE HOLD**; 일반 고객 Windows 10/11 직접 실행, 장기 전체 종목 10,000봉 실수집, 데이터 이용조건 검토가 남음.
+- Windows 2022 CI: [run #42029964305](https://github.com/hibi89/candle_scraper/actions/runs/42029964305) SUCCESS, 정확한 실행 SHA **`40c0afe32e4eecda64ada9021aad35a8d1cd96fd`**. Python 3.11.9, PyInstaller 6.16.0, unittest 127/127 PASS, EXE 3종 및 ZIP 3종 독립 실행 3/3 PASS.
+- **실행 파일 자체 검증**: 최신 ZIP 3종을 별도 임시 폴더에 풀어 각 EXE 메뉴 `[5]` 공개 API 점검 수행. Upbit 전용 11봉 PASS; Bithumb 전용 11봉 PASS; 통합형 업비트·빗썸 각 11봉 PASS. 페이지 2차 응답 조회, DB 불생성, 오류 0.
+- **실제 임시 DB 단위/증분 검증**: 이전 성공 [run #42028865266](https://github.com/hibi89/candle_scraper/actions/runs/42028865266) SHA `5a503c9f214e11ae77ebfb264478bef3b4cafa00`, 거래소별 KRW-BTC 11봉·2페이지·일봉 11개 이하 임시 SQLite 최초/갱신·CSV BOM 및 PK 무결성 PASS. 실수집은 KRW-BTC에 제한, **전 종목 검증 아님**.
+- **고객 ZIP 최신 SHA256**: upbit `6985a6ae9c8ed094161db16863af7ce3d52cbc60862c85325efb27649db7e314`; bithumb `5bd484fda1e6bfdd9be20527db4139bb958d2b7cdd3213c995df5dee390ae741`; both `0e7ccc6850e67a36b2d6e71b6acc42611dd7ceb10026f8f51560f3737bb903f0`. 업로드 이전 ZIP과는 해시가 다름.
+- GitHub 기록: 비공개 `hibi89/candle_scraper` 브랜치 `main`, 최신 기능 검증 SHA `40c0afe32e4eecda64ada9021aad35a8d1cd96fd`; 최신 `.gitignore` `197ed84544f4ec1c2a980253a46551d0f9ad374a`. **이 문서 반영 후 HEAD가 변경되므로 반드시 원격 main 재조회.** Author/Committer = `hibi89`. Vercel 배포 **미적용**.
+- 내부 CI 산출물: 고객 ZIP 3종 artifact ID `13416505378`; 실행파일 live API evidence artifact ID `13416380913`, 각각 **2026-11-19 21:48~21:49 KST 만료**. 실제 파일은 Actions run의 Artifacts에서 받고, 공개 판매 릴리스가 아니다. 장기 보관 확인 없음.
+- 보안·원본: 이전 v1.4/1.5/1.6/1.6.1 원본 ZIP은 Library, 고객 DB/CSV/.env/토큰/실시세는 GitHub 비반영. 사용자 `E:\업비트 캔들긁어오기\upbit_candles.sqlite3` 불변. `SOURCE_MANIFEST.json`의 파일별 해시는 최초 GitHub 스냅샷에만 대응.
+- 실패 원인과 복구: YAML plain scalar, Python3.11 메뉴 f-string, Windows CP1252, 실검증 임시 SQLite 핸들 WinError 32 모두 소스/CI 최소 변경으로 해결 후 성공 런 검증. 과거 실패한 동일 SHA 반복 금지.
+- 다음 우선순위·완료 조건: 고객 환경 Windows10/11 실제 ZIP 실행·SmartScreen/보안·폴더 권한 확인 → 전 종목 장기 실수집·증분·복구 정합성 표본 검증(새 DB만) → 거래소 별 이용조건/상용 EXE 설명 정책 검토 → 동일 배포 SHA에서 최종 회귀·해시 대조 → **사용자 출시 승인**. 완료 시 RELEASE HOLD 해제.
+- 검증 시점: **2026-11-05 21:49 KST**, 확인 범위는 Windows Server 2022 CI 및 공개 Upbit/Bithumb API 실호출, 일반 고객 PC는 **미검증**. GitHub 인수인계 문서 기준 커밋은 문서 갱신 후 `main` HEAD로 확인한다.
+
+---
+
 # HANDOFF — Coin Candle Collector v1.6.1
 
 ## 최신 우선 인수인계 — 2026-11-05 21:40 KST
