@@ -5,6 +5,7 @@ No auth, trading, mass harvesting or customer DB access. Only KRW-BTC
 11-timeframe two-page checks, then 11 closed daily candles per exchange.
 """
 import json
+from contextlib import closing
 import os
 import sqlite3
 import sys
@@ -29,7 +30,9 @@ def check_exchange(exchange, temp_root):
         n_updated, _, update_status = collector.collect_pair(exchange, 'KRW-BTC', 'day', 'update')
         if n_updated < n or update_status != 'ok':
             raise RuntimeError('incremental update lost candles or failed')
-        with sqlite3.connect(trial_db) as db:
+        # sqlite3.Connection.__exit__ commits but does NOT close the file on Windows.
+        # closing() releases SQLite/WAL handles before the temp directory is removed.
+        with closing(sqlite3.connect(trial_db)) as db:
             actual = db.execute('SELECT COUNT(*) FROM candles WHERE market=? AND unit=?', ('KRW-BTC', 'day')).fetchone()[0]
             distinct = db.execute('SELECT COUNT(*) FROM (SELECT market,unit,utc FROM candles GROUP BY market,unit,utc)').fetchone()[0]
         if actual != n_updated or actual != distinct:
