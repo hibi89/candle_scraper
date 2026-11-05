@@ -15,6 +15,7 @@ customer_packages/
 *.db-*
 *.csv
 *.log
+live_api_evidence.json
 *.tmp
 .env
 .env.*
