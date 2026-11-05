@@ -17,6 +17,13 @@ The currently published terms' **Article 6(3)** disallows transferring, distribu
 
 Bithumb's [public API reference](https://apidocs.bithumb.com/reference/api-%EB%A0%88%ED%8D%BC%EB%9F%B0%EC%8A%A4) describes access without API keys, and [public API limits](https://apidocs.bithumb.com/docs/api-%25EC%259A%2594%25EC%25B2%25AD-%25EC%2588%2598-%25EC%25A0%259C%25ED%2595%259C-%25EC%2595%2588%25EB%2582%25B4) describe rate restrictions; neither alone grants rights to sell a data-collecting EXE or sublicense market data. Obtain current *official* commercial distribution and data-use conditions / written permission from Bithumb before sale. Third-party/archived terms are not adequate proof of present permission.
 
+
+### Bithumb's historical API terms: direct data-transfer prohibition
+
+A separately published Bithumb API agreement on Bithumb's official domain (PDF filename `20180911_bithumb_APIService.pdf`, effective **2018-10-18**) contains **Article 6(1)(4)**, barring the transfer to other persons of investment information, quotations, balance, trade details, etc. obtained from the API: [official older terms PDF](https://www.bithumb.com/resources/data/20180911_bithumb_APIService.pdf). The [Bithumb API Service Terms page](https://en.m.bithumb.com/member_operation/info_api) currently indexed by search also reports an equivalent Article 6 restriction, but the direct page could not be loaded due to a redirect loop at verification. The historical PDF is **not proof of what later revisions permit**.
+
+Consequence: do not bundle or redistribute fetched candle data, market DBs, exported CSVs, or customer data with any paid package. This separate prohibition **does not prove that selling a no-data Bithumb-only collector EXE is allowed or prohibited**; confirm current terms and explicit written distribution permission with Bithumb. Current public endpoint availability is not a resale license.
+
 ## Options requiring owner choice before material product scope change
 
 1. **Permission-first (preserves current 3 EXEs):** request explicit commercial API software redistribution and market-data handling approval from Upbit and Bithumb. Development cost minimal; timetable/price and approval uncertain. Recommended to preserve current intended product if permission is granted.
