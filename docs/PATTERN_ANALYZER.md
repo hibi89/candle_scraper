@@ -1,3 +1,7 @@
+> **신규 이중 BB 패턴:** 독립 실행기 `dual_bollinger_scanner.py` / 수식·검증·실행법은 [DUAL_BOLLINGER.md](DUAL_BOLLINGER.md). 아래 문서는 기존 골든크로스 패턴에 관한 기록으로 변경하지 않음.
+
+---
+
 ## v1.1 — 신호 당시 고정 BB 상단 재도달 필터 (2026-11-06)
 
 `future_retouch_review.py`: 업로드된 기존 357건 `results.csv`의 각 신호 `bb_upper`를 기준가로 사용(기본값). 신호봉 다음부터 high >= 기준가를 찾는다. 첫 터치 시각/경과분/봉 개수 기록. 골든크로스 수식/신호 목록 및 원본 SQLite는 수정하지 않는다. 이전 SMA280은 `--price-field sma280` 옵션. 실제 고객 DB 미검증. 자세한 내용은 `docs/BBUPPER_RETOUCH_v1.1.md`.

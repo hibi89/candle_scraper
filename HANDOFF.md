@@ -1,3 +1,18 @@
+# 2026-11-06 KST — 이중 BB(20,2 Close / 4,4 Open) 검색기 인수인계
+
+1. **목표·용도·확정 수식:** 신규 검색기. 최초 close가 BB20 close 하단 AND BB4 open 하단보다 작은 봉을 setup. 이후 첫 close>BB20 하단 복귀봉에서 BB4 open 중간선=SMA4(open) 고정. 복귀봉 자체부터 이후 high>=고정값인 봉 발견 시 REACHED, low>고정값인 갭상승도 포함. 연속 setup은 최초 한 건으로 묶음. BB4 하단 재복귀는 요구하지 않음. 이전 SMA280 골든크로스 패턴과 독립.
+2. **완료·결정 근거:** 종목·분봉별 SQLite 오름차순 1회 SQL 조회+20 close/4 open rolling windows+최소힙으로 각 고정목표가 첫 터치 판정. 개별 신호마다 전체 과거·미래 SQL 반복보다 중복 IO 작고, 골든크로스 기존 코드를 변경하는 것보다 회귀 위험 낮음. 기본 전체 KRW·8종 분봉, CLI 시장 선택. Python 3.11+ 표준 라이브러리/로컬 HTML+CSV. 테스트 소스와 ZIP 원본 Git Blob SHA 일치.
+3. **테스트·미검증:** `python -m unittest -q test_dual_bollinger_scanner.py` **24 PASS/0 FAIL**, compileall PASS. 합성 DB end-to-end/CSV, SHA256 DB 보존 PASS; Node22 HTML JS 구문 검사 PASS; ZIP CRC PASS. 실제 사용자 3GB E: DB·Windows 실행·차트 비교·시간 측정 NOT_RUN. 실질 승률/실전 익절 체결 불명.
+4. **상태/중단:** 구현+오프라인 검증 완료, 실 DB/Windows 검증 대기. 상품 RELEASE HOLD. 복귀봉 high가 목표가 이상인 경우 포함하지만 그 고가는 복귀 종가 확정 전일 수 있어 실거래 체결 근거로 사용할 수 없음.
+5. **오류·시도·대안:** 외부 API/실 DB 접근 없음. 구형 ZIP의 SMA280/BB 상단 재도달 로직은 이 신패턴에 부적절하므로 재사용하지 않음. 저장된 봉 사이의 미거래/수집 공백은 별도 `pair_data_gaps`로 기록. SQLite WAL 파일 엄격 불변 필요 시 수집기 종료 후 백업본 분석. 수집기 동시에 실행한 실제 DB는 미검증.
+6. **저장소·브랜치·주요 경로:** private `hibi89/candle_scraper`, `feature/candle-pattern-analyzer`; 새로운 `dual_bollinger_scanner.py`, `test_dual_bollinger_scanner.py`, `start_dual_bb_scanner.bat`, `docs/DUAL_BOLLINGER.md`, `docs/DUAL_BOLLINGER_README.txt`. HEAD SHA는 이 커밋 직후 원격으로 확인. `main`/기존 수집기 변경 없음.
+7. **배포·실행:** Vercel/Production 미적용. 고객 ZIP을 새 폴더에 풀고 `start_dual_bb_scanner.bat` 더블클릭; 기본 DB `E:\업비트 캔들긁어오기\upbit_candles.sqlite3`. 결과는 `dual_bb_results_...`의 `report.html`과 CSV 4종. EXE 아님, Python 3.11+ 필요.
+8. **원본·백업·보안:** 사용자 3GB SQLite/CSV를 GitHub로 보내지 않음. SQLite `mode=ro`, `PRAGMA query_only=ON`; 결과 timestamp 폴더는 원본 외부 별도 생성. 기존 ZIP/기존 신호 CSV 보존. 비밀·토큰 없음. ZIP SHA256 `179422a16d01a3541e65106f992a4f269143ad21db19f396adffa5a2555c131d`.
+9. **다음 작업·완료기준:** 고객 3GB 실 DB에서 BAT→전체 스캔→`summary.json`의 수량→실차트와 다수 신호에서 BB 하단 계산/고정 목표가/최초 터치→Windows 실제 보고서 브라우저 확인→성능 개선/상용 여부 승인. 확인 전 성공률 100% 주장 불가.
+10. **갱신 시점·증거:** 2026-11-06 KST. 로컬 Python 24/24+합성 DB+HTML JS+ZIP 검증 완료; 실 DB/Windows/Production 범위 미검증. 이 인수인계 문서와 상태 문서는 함께 갱신했으며 원격 확인 SHA가 유효 기준.
+
+---
+
 # 2026-11-06 — BB상단 재도달 판정 v1.1 인수인계
 
 1. **목표/요구/기술:** 기존 골든크로스 탐색 수식 그대로, CSV의 각 신호봉 당시 볼린저 상단(`bb_upper`)을 고정해 이후 최초 high >= 기준가 재도달 여부로 필터링. Python 3.11+ 표준 라이브러리/SQLite read-only/HTML 정적 보고서.

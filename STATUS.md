@@ -1,3 +1,15 @@
+# 2026-11-06 — 신규 이중 볼린저밴드 신호 전수 검색기 v1.0
+
+- 독립 `dual_bollinger_scanner.py`: 기존 `results.csv`를 재활용하지 않고 수집된 전체 SQLite OHLC를 읽기 전용 스캔. 모든 KRW 종목/1,3,5,10,15,30,60,240분봉 기본 검색; 선택 종목/분봉 CLI 지원.
+- 이탈: 신호 봉 close < BB(20,2,close) lower AND close < BB(4,4,open) lower. 이탈 뒤 **첫** close > BB20 lower 복귀봉 확정(연속 이탈은 단일 에피소드). 매도 목표를 복귀봉 당시 BB4(4,4,open) middle=SMA4(open)로 **고정**. 복귀봉 포함 이후 high>=fixed target이면 REACHED(갭상승 low>target 포함), 나머지 NOT_REACHED_AS_OF_DATA_END, 마지막 봉에 복귀한 미관측 NO_FUTURE_CANDLES로 구별. 이 조건은 원래 골든크로스와 무관함.
+- 신규 `start_dual_bb_scanner.bat`, `test_dual_bollinger_scanner.py`, `docs/DUAL_BOLLINGER_README.txt`, `docs/DUAL_BOLLINGER.md`. GitHub 소스 blob은 ZIP 안의 원본 byte와 git SHA 일치 검증. 기존 `pattern_analyzer.py`와 수집기 `main` 미변경.
+- 검증: Python3.13.5 합성 SQLite unittest **24/24 PASS**, Python compileall PASS, 진짜 SQL 스키마 합성 E2E/CSV UTF-8 BOM/로컬 HTML 생성/DB SHA256 보존 PASS, Node22 HTML JavaScript `--check` PASS, ZIP CRC PASS. Windows10/11 실제 3GB 사용자 DB 및 실차트 일치 **NOT_RUN**. 실행 결과 수치/성공률 주장 금지.
+- 사용자 다운로드 ZIP `DualBollinger_BreakoutReentry_Scanner_v1.0.zip` 15,184 bytes SHA256 `179422a16d01a3541e65106f992a4f269143ad21db19f396adffa5a2555c131d` (Python/테스트/BAT/README 4파일). DB/실제 검색 결과 파일 ZIP/GitHub 미포함. 원본 E: DB/WAL/SHM 보존; read-only/PRAGMA query_only. WAL 동시 접근 시 SQLite 측면 파일의 완전한 byte 불변성은 별도 정적 DB 백업으로 보장해야 함.
+- 출력: `01_not_reached.csv`, `02_reached_first_touch.csv`, `03_no_future_candles.csv`, `04_all_recovery_signals.csv`, `summary.json`, `report.html`. 모두 새 timestamp 폴더에 생성하며 기존 결과 덮어쓰기 없음.
+- Vercel/Production 해당없음, Windows exe 아직 미구현. 출시 HOLD. 실제 사용자 DB에서 검증 전 실사용 완료로 판정 금지.
+
+---
+
 # 2026-11-06 — BB상단 기준 후속 미재도달 판정 v1.1 (기능 소스 GitHub 반영)
 
 - 골든크로스 패턴 검출 수식 불변. 기존 추출 357개 결과를 재사용. 향후 재도달의 기준가를 신호 당시 고정 `bb_upper`로 변경(기존 v1.0 SMA280 기본과 구별). BB 미래값 추종 없음.
