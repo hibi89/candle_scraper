@@ -31,10 +31,21 @@ class RateGate:
         self.lock = threading.Lock()
         self.interval = interval
         self.last = 0.0
+        self.blocked_until = 0.0
+
+    def block_for(self, seconds):
+        """Fail closed across all threads for one exchange; never sleep 5 workers."""
+        with self.lock:
+            self.blocked_until = max(self.blocked_until, time.monotonic() + seconds)
+
     def wait(self):
         with self.lock:
+            remaining = self.blocked_until - time.monotonic()
+            if remaining > 0:
+                raise RuntimeError(f'Exchange API cooldown active: retry after {remaining:.0f}s')
             delay = self.interval - (time.monotonic() - self.last)
-            if delay > 0: time.sleep(delay)
+            if delay > 0:
+                time.sleep(delay)
             self.last = time.monotonic()
 
 GATES = {name: RateGate() for name in CONFIG}
@@ -107,6 +118,9 @@ def request(exchange, path, params=None):
             # Do not retry before a provider-specified long cooldown. Fail
             # closed rather than silently capping Retry-After to 30 seconds.
             if delay is not None and delay > 30:
+                # A single 429 with a long cooldown must stop all five
+                # collection workers from hitting this provider again.
+                GATES[exchange].block_for(delay)
                 raise RuntimeError(
                     f'Exchange requested a {delay:.0f}s Retry-After cooldown; '
                     'collection paused to respect API rate limits'
