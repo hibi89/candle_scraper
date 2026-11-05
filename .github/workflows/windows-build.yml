@@ -1,0 +1,30 @@
+name: Manual Windows EXE safety build
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-exes:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+      - name: Python 3.11
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Install packager
+        run: python -m pip install --disable-pip-version-check 'pyinstaller>=6,<7'
+      - name: Unit tests, build, and independently launch all 3 customer ZIPs
+        shell: cmd
+        run: call build_windows.bat
+      - name: Save customer ZIPs as internal CI artifacts (not a release)
+        uses: actions/upload-artifact@v7
+        with:
+          name: CoinCollector-Windows-UNRELEASED-${{ github.sha }}
+          path: customer_packages/CoinCollector_*_customer.zip
+          if-no-files-found: error
+          retention-days: 14

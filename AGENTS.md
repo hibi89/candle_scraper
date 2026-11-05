@@ -1,0 +1,10 @@
+# AGENTS — Coin Candle Collector (repo-wide)
+
+- Canonical editable source: **private** `hibi89/candle_scraper`, `main`; use commit SHA to identify a tested version. Legacy v1.4/v1.5/v1.6/v1.6.1 ZIPs are preserved in ChatGPT Library; do not overwrite.
+- Next session document order: `HANDOFF.md` → `STATUS.md` → `AGENTS.md` → `REQUIREMENTS.md` → actual source. If docs differ from code/test/CI, verified source behavior wins and discrepancy must be documented.
+- Product: commercial Windows 10+ console EXE in three editions (Upbit, Bithumb, both); first 10k complete candles per market/timeframe, unlimited incremental, SQLite, CSV, selected 11 timeframes, restart/resume.
+- Preserve all legacy users' files. Never touch or migrate local `E:\업비트 캔들긁어오기\upbit_candles.sqlite3` or concurrent active collectors without separate approval and backups. Keep credentials, binaries, market data, customer DB and logs outside Git.
+- Before modifying code, review trigger / collection API rate limits, UTC-KST `to` pagination, market list parameter compatibility, duplicate request / crash recovery, initial vs incremental persistence, and failure modes. Compare at least two viable designs for major changes; choose low-cost, maintainable option.
+- Modification flow: inspect latest HEAD → smallest safe change → offline unit and mock HTTP integration tests → commit source/docs → inspect CI and actual SHA. Do not claim Windows EXE, real exchange or sales-ready based only on offline tests.
+- CI workflow is **manual**. Do not start billable GitHub Actions runners, make a release, change repository privacy or alter branch security without clear user approval. No uncontrolled live API scraping.
+- Update `STATUS.md` and `HANDOFF.md` after substantial work, with test commands/counts and verified vs unverified; avoid empty commits. Always identify branch/HEAD and package provenance. Release remains HOLD until `docs/RELEASE_CHECKLIST.md` gates pass.
