@@ -11,6 +11,11 @@ on:
 permissions:
   contents: read
 
+# Keep repeated live public-API checks from overlapping on the same branch.
+concurrency:
+  group: coin-live-public-api-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   public-api:
     runs-on: windows-2022
