@@ -25,7 +25,9 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install pinned Windows packager
-        run: python -m pip install --disable-pip-version-check --no-input --only-binary=:all: 'pyinstaller==6.16.0'
+        run: >-
+          python -m pip install --disable-pip-version-check --no-input
+          --only-binary=:all: pyinstaller==6.16.0
       - name: Offline tests, build, and launch all 3 customer ZIPs
         shell: cmd
         run: call build_windows.bat
