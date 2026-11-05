@@ -1,6 +1,12 @@
-name: Manual Windows EXE safety build
+name: Manual or workflow-change Windows EXE safety build
 on:
   workflow_dispatch:
+  # Build only when this workflow itself is changed; ordinary code/docs pushes
+  # do not spend Windows runner minutes. Manual runs remain available.
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/windows-build.yml'
 
 permissions:
   contents: read
@@ -11,20 +17,37 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout source
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - name: Python 3.11
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: '3.11'
-      - name: Install packager
-        run: python -m pip install --disable-pip-version-check 'pyinstaller>=6,<7'
-      - name: Unit tests, build, and independently launch all 3 customer ZIPs
+      - name: Install pinned Windows packager
+        run: python -m pip install --disable-pip-version-check --no-input --only-binary=:all: 'pyinstaller==6.16.0'
+      - name: Offline tests, build, and launch all 3 customer ZIPs
         shell: cmd
         run: call build_windows.bat
-      - name: Save customer ZIPs as internal CI artifacts (not a release)
-        uses: actions/upload-artifact@v7
+      - name: Record customer ZIP hashes and source SHA
+        shell: pwsh
+        run: |
+          $files = @(Get-ChildItem customer_packages/CoinCollector_*_customer.zip -File)
+          if ($files.Count -ne 3) { throw "Expected 3 customer ZIPs, found $($files.Count)" }
+          $lines = @("source_sha=$env:GITHUB_SHA", "runner=$env:RUNNER_OS", "python=$(python --version)", "pyinstaller=$(python -m PyInstaller --version)")
+          foreach ($file in $files) {
+            $hash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            $lines += "$($file.Name) sha256=$hash size=$($file.Length)"
+          }
+          $lines | Set-Content customer_packages/BUILD_EVIDENCE.txt -Encoding utf8
+          Get-Content customer_packages/BUILD_EVIDENCE.txt
+      - name: Save verified ZIPs and evidence (internal, not a release)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: CoinCollector-Windows-UNRELEASED-${{ github.sha }}
-          path: customer_packages/CoinCollector_*_customer.zip
+          path: |
+            customer_packages/CoinCollector_*_customer.zip
+            customer_packages/BUILD_EVIDENCE.txt
+            dist/exe_verification.json
           if-no-files-found: error
           retention-days: 14
