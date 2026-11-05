@@ -84,7 +84,8 @@ class RetryRequestTests(unittest.TestCase):
                 collector.request('upbit', '/market/all')
             self.assertEqual(urlopen.call_count, 5)
             self.assertEqual(sleep.call_count, 4)
-            block_for.assert_called_once_with(120.0)
+            self.assertEqual(block_for.call_count, 5)
+            self.assertEqual(block_for.call_args.args, (120.0,))
 
     def test_429_short_header_blocks_other_workers_too(self):
         gate = collector.RateGate(interval=0)
@@ -134,6 +135,7 @@ class RetryRequestTests(unittest.TestCase):
 
     def test_retryable_code_exhaustion_stops_after_five_attempts(self):
         with patch.object(collector.GATES['upbit'], 'wait'), \
+                patch.object(collector.GATES['upbit'], 'block_for'), \
                 patch.object(collector.urllib.request, 'urlopen', side_effect=self.error(429, "1")) as urlopen, \
                 patch.object(collector.time, 'sleep') as sleep:
             with self.assertRaises(urllib.error.HTTPError):

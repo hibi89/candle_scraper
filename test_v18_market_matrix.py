@@ -6,6 +6,7 @@ The mock implements each provider's exclusive UTC / KST paging boundary.
 import csv
 import sqlite3
 import tempfile
+from contextlib import closing
 import threading
 import unittest
 from collections import Counter
@@ -111,7 +112,7 @@ class MarketMatrixTests(unittest.TestCase):
                         file=dest / f'{market}_{unit}.csv'
                         with file.open('r',encoding='utf-8-sig',newline='') as handle:
                             self.assertEqual(sum(1 for _ in csv.reader(handle)),208)
-                with sqlite3.connect(collector.CONFIG[exchange][1]) as db:
+                with closing(sqlite3.connect(collector.CONFIG[exchange][1])) as db:
                     duplicate=db.execute('''
                         SELECT COUNT(*) FROM
                         (SELECT market,unit,utc FROM candles GROUP BY market,unit,utc HAVING COUNT(*) > 1)''').fetchone()[0]
