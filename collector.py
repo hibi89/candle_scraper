@@ -14,6 +14,7 @@ import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 ROOT = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
@@ -66,6 +67,29 @@ def verify_existing_schema(connection):
             raise RuntimeError(f'Existing {table} table has an incompatible schema or primary key; not modified')
 
 
+def retry_after_seconds(raw_value, now=None):
+    """Interpret HTTP Retry-After safely, preserving server throttling instructions.
+
+    Supports delta-seconds and HTTP-date. Return None for invalid headers.
+    """
+    if raw_value is None:
+        return None
+    try:
+        delay = float(str(raw_value).strip())
+    except (ValueError, TypeError):
+        try:
+            until = parsedate_to_datetime(str(raw_value).strip())
+            if until.tzinfo is None:
+                return None
+            now = now if now is not None else datetime.now(timezone.utc)
+            delay = (until - now).total_seconds()
+        except (ValueError, TypeError, OverflowError, IndexError):
+            return None
+    if not math.isfinite(delay):
+        return None
+    return max(0.0, delay)
+
+
 def request(exchange, path, params=None):
     url = CONFIG[exchange][0] + path
     if params: url += '?' + urllib.parse.urlencode(params)
@@ -77,9 +101,17 @@ def request(exchange, path, params=None):
             if not isinstance(data, list): raise ValueError(f'Unexpected API response: {str(data)[:180]}')
             return data
         except urllib.error.HTTPError as exc:
-            if attempt == 4 or exc.code not in (429, 500, 502, 503, 504): raise
-            retry = exc.headers.get('Retry-After', '')
-            time.sleep(min(30, max(1.0 * 2 ** attempt, float(retry) if retry.isdigit() else 0)))
+            if attempt == 4 or exc.code not in (429, 500, 502, 503, 504):
+                raise
+            delay = retry_after_seconds((exc.headers or {}).get('Retry-After'))
+            # Do not retry before a provider-specified long cooldown. Fail
+            # closed rather than silently capping Retry-After to 30 seconds.
+            if delay is not None and delay > 30:
+                raise RuntimeError(
+                    f'Exchange requested a {delay:.0f}s Retry-After cooldown; '
+                    'collection paused to respect API rate limits'
+                ) from exc
+            time.sleep(min(30, max(1.0 * 2 ** attempt, delay or 0.0)))
         except (urllib.error.URLError, TimeoutError, ConnectionError):
             if attempt == 4: raise
             time.sleep(min(8, 2 ** attempt))
