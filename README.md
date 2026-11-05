@@ -1,6 +1,6 @@
 # 코인 캔들 수집기 — v1.6.1 (비공개 GitHub 소스 저장소)
 
-**상태: 판매 보류(HOLD).** 업비트·빗썸 실거래소 수집, 장시간 운영, 고객 Windows PC에서의 EXE 빌드·실행은 아직 검증하지 않았습니다. 이 저장소와 개발 소스 ZIP 자체는 EXE가 아닙니다.
+**상태: 판매 보류(HOLD), 완성률 추정 92%.** Windows Server 2022 GitHub Actions에서 3종 EXE 빌드/실행 및 고객 ZIP 3종 독립 실행 3/3 PASS. 업비트·빗썸 각각 KRW-BTC 실 API 11봉·2페이지 및 임시 DB 소량 수집/증분/CSV PASS. 단, 소비자 Windows 10/11 실행·장기/전종목 수집·약관 검증은 남아 있습니다. GitHub 소스 ZIP 자체는 EXE가 아닙니다.
 
 ## 주요 기능
 
@@ -31,7 +31,7 @@ py entry_both.py
 
 실행 중인 기존 `upbit_collect_fast.py`와 **같은 SQLite 파일에 동시 수집하지 마세요.** 기존 수집 완료 후 프로그램을 닫고 DB와 WAL 체크포인트/백업 상태를 확인한 다음 데이터를 이전하는 것이 안전합니다. 이 소스 ZIP은 기존 사용자 DB를 포함하거나 수정하지 않습니다.
 
-## Windows EXE 빌드 및 검증 (아직 수행되지 않음)
+## Windows EXE 빌드 및 검증 (Windows Server 2022 CI 통과, 일반 소비자 PC 미검증)
 
 1. Windows 개발 PC에 Python 3.11+ 및 PyInstaller가 필요합니다. 설치가 필요한 경우 별도 승인·관리 하에 `py -m pip install pyinstaller` 사용.
 2. `build_windows.bat` 실행: 자동 테스트 → EXE 3개 빌드 → 3개 EXE 시작·종료 점검 및 검증 해시 기록 → 상품별 ZIP 제작.
@@ -57,9 +57,9 @@ Linux Python 3.13.5 테스트 환경에서 Python 단위·동시성·로컬 HTTP
 
 **상용화 전:** 거래소별 API 정책, 데이터 활용·재배포 조건, 실제 데이터 일치 여부를 별도로 확인해야 합니다. 수집된 시세는 투자 수익을 보장하지 않습니다.
 
-## GitHub Windows CI 빌드 준비 (아직 실행하지 않음)
+## GitHub Windows CI 빌드 검증 (2026-11-05 완료)
 
-코드/문서를 신규 **비공개** GitHub 저장소의 **루트**에 올릴 경우(`.github/workflows/windows-build.yml`이 저장소 루트에 위치), Actions의 수동 `workflow_dispatch`를 이용한 Windows 2022 / Python 3.11 자동 빌드를 준비해 두었습니다. 승인 없이 저장소를 만들거나 워크플로를 실행하지 않았습니다. 성공 시 Windows 전용 고객 ZIP 3종을 14일간 Actions artifact로 보존하며, 고객에게 판매 배포하라는 뜻은 아닙니다.
+비공개 `main`의 `.github/workflows/windows-build.yml`로 Windows Server 2022 / Python 3.11.9 / PyInstaller 6.16.0 실제 빌드를 완료했습니다. [성공 run #42027942187](https://github.com/hibi89/candle_scraper/actions/runs/42027942187)에서 내부 고객 ZIP 3종과 SHA256 증거를 내려받을 수 있습니다(14일 후 만료). 별도 [실 API run #42028865266](https://github.com/hibi89/candle_scraper/actions/runs/42028865266)도 통과했고, `live_api_probe.py`는 고객 데이터베이스와 무관한 일회성 임시 DB만 사용합니다. 두 실행의 정확한 SHA와 범위는 STATUS.md에 있습니다. **판매 HOLD 유지.**
 
 ## 프로젝트 관리 및 백업
 

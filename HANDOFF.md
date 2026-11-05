@@ -1,3 +1,22 @@
+# HANDOFF — Coin Candle Collector v1.6.1
+
+## 최신 우선 인수인계 — 2026-11-05 21:40 KST
+**아래 '이전 이력'에는 이전 시점의 85%/NOT_RUN 기록이 남아 있다. 최신 근거는 이 10항과 STATUS.md이다.**
+
+1. **목표·요구·기술**: 크몽 판매용 Windows 무설치 EXE 3종(업비트/빗썸/통합), 메뉴형 최초 최대 10,000 완료봉·무제한 증분, 월/주/일/240/60/30/15/10/5/3/1분봉, 거래소별 SQLite, CSV, 재시작/이어받기. Python 3.11 stdlib + PyInstaller 6.16.0.
+2. **완료·설계**: v1.6.1 수집기·무결성/중복키/복구·127 오프라인 테스트 보존. 이번 작업에서 Python 3.11 메뉴 파서/Windows CP1252 출력을 고치고, 의존 도구 버전 및 GitHub Actions 액션 SHA를 고정한 Windows 자동 빌드·고객 ZIP 해시 증거를 확보. 실 API용 별도 일회성 임시 DB 스크립트 추가.
+3. **테스트·범위**: Windows Server 2022 Python 3.11.9 / PyInstaller 6.16.0, 127/127 PASS, `build_windows.bat` 5/5 PASS, EXE 시작/종료 3/3, 독립 고객 ZIP 3/3. Windows Actions [run #42027942187](https://github.com/hibi89/candle_scraper/actions/runs/42027942187) / SHA `f39932db1c5253c38fc8e0521e419da0920237fa`. 실제 KRW-BTC 업비트·빗썸 각각 11봉·2페이지·소량 최초/증분/CSV/SQLite PK 검증 PASS: [run #42028865266](https://github.com/hibi89/candle_scraper/actions/runs/42028865266) / SHA `5a503c9f214e11ae77ebfb264478bef3b4cafa00`. 전체 KRW 대량 수집과 일반 소비자 Windows 10/11 검증은 NOT_RUN.
+4. **상태**: 전체 판매 완성률 **보수적 추정 92% (+7%p)**, **RELEASE HOLD**. GitHub 내부 ZIP 아티팩트 3종 생성 완료, 고객 배포 승인 아님. 실 API 2개 거래소 소량 실증 성공. Vercel은 미적용.
+5. **오류·재시도 주의**: (a) Actions YAML plain scalar의 `: ` → 인용/블록으로 수정 (b) 3.11 동일 인용부호 f-string → 변수 분리 (c) CP1252 UnicodeEncodeError → UTF-8 출력 설정 (d) 실검증 임시 SQLite 핸들 WinError32 → `closing()` 수정. 각 성공 CI 로그로 해결 확인. 이미 실패한 SHA 재시도·무의미한 빈 커밋 금지.
+6. **GitHub·경로**: 비공개 [hibi89/candle_scraper](https://github.com/hibi89/candle_scraper), `main`; 최종 기능 확인 SHA `5a503c9f214e11ae77ebfb264478bef3b4cafa00`, 후속 gitignore SHA `a682c4584f231b7a4db1904575b175acacef2cac`; 문서 반영 후 GitHub `main` HEAD를 다시 조회. 주요 `collector.py`, `menu.py`, `build_windows.bat`, `live_api_probe.py`, `.github/workflows/*.yml`, `verify_*exes.py`, `verify_customer_packages.py`, `make_customer_packages.py`.
+7. **배포·환경**: `windows-2022` + Python 3.11.9/ PyInstaller 6.16.0. Windows 빌드 run `42027942187`, 고객 ZIP artifact ID `13414129062`; 실 API run `42028865266`, evidence ID `13415620777`. 둘 다 내부 비공개, **2026-11-19 KST 만료**, 영구 백업 아님. 서비스 URL·Vercel 미적용.
+8. **원본·보안·복구**: v1.4/v1.5/v1.6/v1.6.1 ZIP은 Library에 별도 보관. v1.6.1 원본 ZIP SHA256 `a913ac56674dc3d712b134e56dc11b78ae1e48d5e716a11e6d408d8a82eedf50`. `E:\업비트 캔들긁어오기\upbit_candles.sqlite3` 등 고객 로컬 DB/비밀정보/시장 원데이터 수정·업로드 금지. GitHub가 복구 가능한 코드 기준이며 `SOURCE_MANIFEST.json`은 최초 업로드 SHA `b9a1483...`의 과거 스냅샷.
+9. **다음 우선순위·승인**: (1) Windows10/11 고객 수준 3개 ZIP 직접 사용/보안 확인 (2) 양 거래소 장시간 전체 KRW/11봉 실제 최초·증분·재시작 데이터 대조 (3) 최신 데이터 이용정책·상업 배포 설명 검토 (4) 동일 출시 SHA의 회귀 및 사용자 RELEASE 승인. 유료 이용·권한/원본 변경/게시 전 추가 승인.
+10. **검증 시각·문서 기준**: 2026-11-05 **21:40 KST**. Windows GitHub Actions 빌드 및 네트워크 검증 로그까지 직접 확인했으며 일반 Windows10/11 PC와 보안 백신은 미검증. 최신 문서 커밋의 SHA는 본 기록을 반영한 GitHub `main` HEAD로 확인; 원본 저장 기준은 위 SHA 및 RELEASE_CHECKLIST.md.
+
+---
+
+## 이전 인수인계 이력 (역사적 기록)
 # HANDOFF — Coin Candle Collector v1.6.1 (2026-11-05 21:12 KST)
 
 1. **목표/요구/기술:** 크몽 Windows 무설치 콘솔 EXE 단독 업비트/빗썸/통합 3종. KRW 전 종목, 월·주·일·240/60/30/15/10/5/3/1분봉 11종. 최초 최대 10,000 완료봉/이후 무제한 증분. 메뉴 선택, SQLite 분리, CSV. Python 3.11+ 표준 라이브러리 + PyInstaller. 상품 오픈가 단일형 4만/통합 6만원.

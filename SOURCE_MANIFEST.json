@@ -1,7 +1,7 @@
 {
   "version": "1.6.1",
-  "type": "development-source-NOT-Windows-EXE",
-  "Windows_GitHub_Actions": "manual workflow_dispatch; NOT_RUN until verified",
+  "type": "historical-development-source-manifest-for-initial-upload",
+  "Windows_GitHub_Actions": "At the historical GitHub_commit snapshot: NOT_RUN. Current Windows PASS and live API PASS in STATUS.md.",
   "files_sha256": {
     ".github/workflows/windows-build.yml": "dabb5c2cc4da01e29ce7da9648214e063e73ab09ad3bc04620eea77a53a730a2",
     ".gitignore": "135582872ccadf462e2905dcaacf193fd8df3a08af9e2d8c58550d199954be97",
@@ -32,9 +32,10 @@
     "verify_customer_packages.py": "e83d20d2cec8a508b25778a4668e6467e62a94d3df3f1b1d92fc1a323bf9ba43",
     "verify_windows_exes.py": "b84548afb3fae389c2c27d96195940518e1c50ce8529bf2001bea4bb483fd18e"
   },
-  "offline_tests": "127/127 PASS; Windows EXE and real API NOT_RUN",
+  "offline_tests": "At historical GitHub_commit snapshot: 127/127 PASS. Later CI and live-api checks listed in STATUS.md.",
   "GitHub_repo": "hibi89/candle_scraper",
   "GitHub_branch": "main",
   "GitHub_commit": "b9a1483a790c642704abd492493c50e038ad7344",
-  "archive_sha256": "a913ac56674dc3d712b134e56dc11b78ae1e48d5e716a11e6d408d8a82eedf50"
+  "archive_sha256": "a913ac56674dc3d712b134e56dc11b78ae1e48d5e716a11e6d408d8a82eedf50",
+  "snapshot_warning": "files_sha256 covers initial GitHub_commit b9a148... only, NOT current main HEAD or subsequent GitHub edits."
 }
