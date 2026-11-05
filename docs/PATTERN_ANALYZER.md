@@ -1,3 +1,15 @@
+## v1.0 대화형 종목 선택·검색 옵션 — 2026-11-06
+
+- Windows Python 설치 환경에서는 ZIP 압축 해제 후 `start_pattern_analyzer.bat` 더블클릭, 또는 `py pattern_analyzer.py --interactive` 실행.
+- DB 전체 종목(기본) / 복수 특정 종목(`BTC,ETH` 또는 `KRW-BTC,KRW-ETH`) / 키워드로 DB 내 종목 목록 검색.
+- 선택 분봉: `all` 또는 `1,3,5,10,15,30,60,240` 중 복수; 종목·분봉별 최근 N개 발생 신호만 검색(`--last N`), 기본 `--last 0` 전체 누적.
+- 선택한 최근 N개 구간만 결과 판정하지만 SMA/EMA 시드는 전체 과거 이력부터 계산하므로 계산에 읽는 봉 수는 N보다 많을 수 있음.
+- 실행 중 전체 처리율(%)·시장/분봉·완료 캔들·검출 건수·ETA 출력. CSV 기존 파일은 명시적 `--overwrite` 외 보존, 원본 DB는 항상 읽기 전용.
+- CLI도 지원: `py pattern_analyzer.py --db "DB_PATH" --markets BTC,ETH --units 240 --last 10000 --output results.csv`. `--list-markets`는 DB 종목 열람.
+- 성능: 볼린저 상단 표준편차는 고정 배열/골든크로스가 발생한 후보 봉에서만 계산. 추가 시계열 보관 메모리는 O(560). 실제 3GB DB 속도는 아직 미검증.
+- 테스트: Python3.13.5 오프라인 23/23 PASS. Python3.11 Windows 실기기·무설치 EXE·실데이터·상용 출시 미검증.
+- 상용형과 구분: 이것은 **Python 실행판 v1.0**, Windows EXE나 CSV/JSON/Excel/Parquet 멀티포맷 판매 완성판이 아님.
+
 # 캔들 패턴 분석기 v0.1 — 구현 기준 (2026-11-05 KST)
 
 ## 제품 경계
