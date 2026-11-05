@@ -1,6 +1,6 @@
 # STATUS — Coin Candle Collector v1.6.1 (commercial Windows editions)
 
-최신 확인: **2026-11-05 21:40 KST**
+최신 확인: **2026-11-05 21:49 KST**
 
 ## 판정
 - **추가 통합 검증:** Windows 고객 EXE 3종에서 실제 업비트·빗썸 공개 API 메뉴 실행까지 통과. 세부 검증 SHA와 최신 ZIP 해시 및 아티팩트는 바로 아래 최신 추가 검증 기록 참조.
