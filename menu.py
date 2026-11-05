@@ -19,7 +19,8 @@ def choose_units():
     """Enter all, comma-separated indices, or 0 to cancel."""
     print('\n시간봉 선택 (월봉부터 순서대로 수집):')
     for i, unit in enumerate(UNITS, 1):
-        print(f'  [{i:>2}] {UNIT_LABELS.get(unit, str(unit) + '분봉')}')
+        label = UNIT_LABELS.get(unit, str(unit) + '분봉')
+        print(f'  [{i:>2}] {label}')
     print('  [A] 전체  [0] 돌아가기')
     raw = input('번호 여러 개(예: 1,2,4) 또는 A 입력: ').strip().lower()
     if raw in ('a', 'all'): return UNITS
