@@ -1,3 +1,11 @@
+## 오프라인 결과 뷰어 (2026-11-06)
+
+긴 결과 CSV를 직접 읽기 어려우면 `CandlePatternResultsViewer.html` 더블클릭 → **CSV 파일 선택** → 기존 `results.csv` 또는 `pattern_matches.csv` 지정. 다시 검색할 필요 없음. 브라우저 안에서만 읽으며 종목/분봉/거래소/날짜 필터, 검출 건수, 정렬, 60건씩 보기, 각 사건의 EMA/SMA/BB 자세히 보기, 필터 CSV 저장 기능 제공. 원본 CSV/SQLite 불변.
+
+`node test_report_viewer.mjs` 오프라인 파서/정적 검사 9개 PASS. 실제 Windows 브라우저 실행은 검증되지 않았으며 제품 EXE 완성으로 간주하지 않음.
+
+---
+
 ## v1.0 대화형 종목 선택·검색 옵션 — 2026-11-06
 
 - Windows Python 설치 환경에서는 ZIP 압축 해제 후 `start_pattern_analyzer.bat` 더블클릭, 또는 `py pattern_analyzer.py --interactive` 실행.

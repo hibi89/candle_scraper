@@ -1,3 +1,12 @@
+# 2026-11-06 — 검색 결과 가독성 개선
+
+- 신규 `CandlePatternResultsViewer.html`: 기존 `results.csv`를 다시 검색하지 않고 파일 선택/드롭으로 로컬 읽기. 검출 개수·종목/분봉·최근 시각, 종목별 빈도, 필터·정렬·60건 페이지, 지표 상세·수식 조건, 필터 결과를 새 CSV로 저장.
+- 신규 `test_report_viewer.mjs`: Node 오프라인 CSV 스트리밍/유니코드·인용·오류/정적 검사(컨테이너 9/9 PASS). 설치 프로그램/외부 API/CDN 불필요.
+- 브라우저 실제 클릭 자동검증: 파일 URL과 로컬서버 URL 모두 실행환경 `ERR_BLOCKED_BY_ADMINISTRATOR`로 **미검증**. 실제 Windows/고객 CSV, 대용량 SQLite 검색, 최종 EXE도 **미검증/미완성**.
+- 기존 수집기 `main` 및 SQLite, 원본 CSV 불변. 판매 RELEASE HOLD 유지. 인수인계 기준 SHA 최신화는 커밋 직후 원격 확인.
+
+---
+
 # 분석기 브랜치 최신 상태 — 2026-11-06 00:26 KST
 
 **작동 확인 범위: Python 인터랙티브 메뉴형 검색기 v1.0 / Windows 무설치 EXE는 아직 미구현 / 사용자 실 DB는 미검증.**

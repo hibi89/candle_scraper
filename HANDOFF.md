@@ -1,3 +1,18 @@
+# 패턴 검색기 오프라인 결과 뷰어 인수인계 — 2026-11-06 KST
+
+1. **목표/용도:** 이전 분석기의 검색 결과 CSV가 길어 읽기 어려워, 고객이 PC에서 오프라인 HTML로 요약/검색/선택하도록 독립 뷰어 추가. 기존 검색 수식/수집기 변경 없음.
+2. **완료/설계:** `CandlePatternResultsViewer.html` (단일 정적 파일). Excel 필터(설치·조작 요구)와 비교해 별도 설치·계정 없는 Chrome/Edge 로컬 HTML 방식 선택. 요약 4종, 종목별 히스토그램, 종목/분봉/거래소/날짜 검색, 최신·과거 정렬, 60건 페이지, 상세 SMA/EMA/BB/조건 검사, 필터 결과 CSV 다운로드.
+3. **검증:** 컨테이너 Node22 오프라인 CSV/정적 검사 9/9 PASS(5개 스트림 분할, 빈 파일, 비정상 열, 따옴표, 누락 열); `node test_report_viewer.mjs`. 고객 브라우저 UI 테스트는 실행정책 차단으로 NOT_RUN. 기존 Python 분석기 23 PASS는 이전 회차 기록.
+4. **상태:** 새 HTML/파서 코드 정적 검증 완료. 실제 고객 `results.csv`·Windows10/11 실기기·3.63GB DB는 NOT_RUN. 분석기 EXE, 멀티포맷 입력 미완성. 제품 RELEASE HOLD 유지.
+5. **오류/시도/대안:** 브라우저 자동화 file:// 및 localhost에서 `ERR_BLOCKED_BY_ADMINISTRATOR` 발생(정책 환경 문제, 제품 오류 여부 불명). 동일 방법 반복하지 말고 소비자 Chrome/Edge에서 파일 선택·상세·CSV 저장을 수동 검증.
+6. **저장소/브랜치/SHA:** private `hibi89/candle_scraper`, `feature/candle-pattern-analyzer`; 이전 HEAD `dad206a3e4c0107fc09fc92f3fe2ef4e8648d56c`. 신규 HTML, Node 검사, 이 문서 및 STATUS/docs만 추가/변경. 최신 SHA는 변경 후 원격 확인. `main` 원본 보존.
+7. **배포/환경:** 단일 HTML을 Windows에서 더블클릭하고 기존 검색 CSV 선택. 외부 연결이나 실행 파일 설치 없음. Vercel 미적용, Windows EXE는 별도 개발 대상.
+8. **원본/보안/금지:** `E:\\업비트 캔들긁어오기\\upbit_candles.sqlite3`/WAL/SHM 및 CSV 내용 수정 없음. 외부 JS/HTTP/CDN 미사용, 텍스트는 DOM textContent로 삽입, 필터 CSV 내보내기만 별도 다운로드.
+9. **다음 우선순위:** 실제 사용자 CSV 뷰어 결과/수식값 확인 → 특정 종목 240분봉 및 전종목 전8분봉 실검증 → Windows 무설치 분석기 EXE → 입력 포맷 확장 → 상용 이용범위/출시 승인.
+10. **갱신 기준:** 2026-11-06 KST, 로컬 HTML 파싱 검사와 소스 확인 범위. 실제 브라우저/고객 PC 검증 없이 실사용 완성 주장 금지.
+
+---
+
 # 캔들 패턴 분석기 v1.0 최신 인수인계 — 2026-11-06 00:26 KST
 
 1. **목표·기술·확정 요구:** 수집기와 독립된 오프라인 맞춤식 검색기. 보라 EMA560 > 노랑 EMA280 > 분홍 SMA280 > 파랑 SMA560 > BB(20,2) 상단, SMA280이 SMA560을 이번 봉에서 골든크로스. KRW 전 종목·1/3/5/10/15/30/60/240분봉, DB 모든 누적 봉 또는 최근 N개 신호만. Python3.11+ 표준 라이브러리, SQLite 읽기 전용, CSV 출력.
