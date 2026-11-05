@@ -1,3 +1,18 @@
+# 2026-11-06 — 후속 재도달 판정 기능 인수인계 (소스 GitHub 미반영)
+
+1. **목표·확정 요구:** 이미 추출한 357개 패턴 신호에서 신호 이후 저장된 캔들의 high가 골든크로스 기준가 이상인 적이 없던 건만 남기고, 한 번이라도 넘은 건의 최초 도달 봉/경과 시간을 백테스트 기록. Python 표준 라이브러리 + 기존 SQLite mode=ro + 오프라인 HTML.
+2. **설계·기능:** 개별 SQL 반복보다 market/unit별 한 번의 정렬 조회+보류 이벤트 최소힙을 선택. 기준가 `sma280` 기본/옵션 `sma560|close` (357개 모두 종가와 SMA280 값 상이). 신호봉 자체 제외, 고가 `>=`, 저가가 기준가 초과인 봉도 재도달. 미도달/재도달/데이터 보류 분리. 결과 CSV 4종+HTML+JSON.
+3. **테스트:** 로컬 Python3.13.5 유닛 15/15 PASS, Node22 HTML JS 문법 PASS, 업로드한 실제 `results.csv` 357건 파싱 PASS, ZIP CRC/CSV 해시 일치 PASS. 사용자 실제 E: SQLite/Windows 10/11/실차트·상업 배포 NOT_RUN.
+4. **상태:** 다운로드용 ZIP 제작 완료(대화 첨부), 실제 DB 검증 미실시. **GitHub에는 로컬 Python 소스·테스트가 아직 업로드되지 않음.** 따라서 GitHub 브랜치의 실행 코드만으로 해당 신기능 재현 불가. 제품 출시 HOLD.
+5. **오류·대안:** GitHub 연결 도구는 파일 원본 경로 자체를 Git blob 업로드로 연결하는 기능을 제공하지 않아 현재 회차 소스 반영 미완료. ZIP의 source/test 파일을 확인해 후속 GitHub 전송해야 함. 없는 DB로 완료 숫자 생성 금지. 원본 DB/WAL/SHM 삭제/수정 금지.
+6. **저장소/브랜치/SHA:** private `hibi89/candle_scraper` `feature/candle-pattern-analyzer`, 작업 시작 HEAD `89ce50b4a2ecd71d0d6aafb40ced81cc83ff145d`. 이번 STATUS/HANDOFF 문서만 추가 반영, 실제 코드 GitHub 미반영. `main` 불변.
+7. **실행·환경:** ZIP `CandleGoldenCross_FutureRetouch_v1.0.zip` SHA256 `d24a75eec903a89e1144fdd9fc8c18c48d5e98debc2399860d0fe498e37960db`, 36884 bytes. 압축 해제/기존 E: 경로 DB/Windows Python3.11+, `start_future_retouch_review.bat` 실행. Vercel 미적용, EXE 아님.
+8. **원본·백업·보안:** 사용자 `E:\\업비트 캔들긁어오기\\upbit_candles.sqlite3` 실제 원본은 접근하지 않음. 업로드된 357건 CSV만 ZIP에 포함(비공개 GitHub에 시장 데이터 업로드하지 않음). SQLite 로컬 읽기 전용; 별도 출력 폴더만 새로 생성.
+9. **다음 우선순위·기준:** GitHub에 ZIP 내 원본 Python/테스트/launcher를 정확하게 반영하고 테스트 → 사용자 DB에서 최초 재도달 시간·갭상승·미도달 결과 확인 → 고객 Windows10 EXE 검증 → 인수인계 최종 동기화/출시 승인.
+10. **갱신 기준:** 2026-11-06 KST, 검증은 합성 오프라인 15건·실 신호 CSV 파싱/ZIP CRC, 미래 OHLC는 미접근. 문서 기준 커밋은 원격 HEAD 재조회.
+
+---
+
 # 패턴 검색기 오프라인 결과 뷰어 인수인계 — 2026-11-06 KST
 
 1. **목표/용도:** 이전 분석기의 검색 결과 CSV가 길어 읽기 어려워, 고객이 PC에서 오프라인 HTML로 요약/검색/선택하도록 독립 뷰어 추가. 기존 검색 수식/수집기 변경 없음.

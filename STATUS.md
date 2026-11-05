@@ -1,3 +1,14 @@
+# 2026-11-06 — 후속 고가 재도달 검사 (로컬 산출물, GitHub 소스 미반영)
+
+- 사용자 업로드 `results.csv` **357신호 / 210종목 / 8종 분봉 / 326 종목·분봉 조합** 정상 파싱, 중복 0. 해당 CSV만으로는 이후 고가·저가를 판정할 수 없음.
+- **로컬 임시 개발판 준비:** `future_retouch_review.py`, `start_future_retouch_review.bat`, `README_사용방법.txt`, 기존 `results.csv`를 묶은 `CandleGoldenCross_FutureRetouch_v1.0.zip` (SHA256 `d24a75eec903a89e1144fdd9fc8c18c48d5e98debc2399860d0fe498e37960db`, 36884 bytes). 임시 대화 첨부; GitHub source는 아직 **미반영**. 재개 시 ZIP 첨부 필요.
+- 로컬 Python3.13.5 합성 SQLite **15/15 PASS** / Node22 HTML 스크립트 구문 PASS / 기존 CSV 357건 parse PASS / ZIP CRC 및 포함 CSV 해시 일치 PASS. 사용자 Windows10/11·3.63GB 실 SQLite·실차트 **NOT_RUN**.
+- 기준가 옵션 `--price-field sma280`(기본, 교차선), `sma560`, `close`; 357신호 모두 close와 sma280이 다름. 신호봉 자체 제외, **이후 high >= 기준가** 최초를 감지하며 low>기준가인 갭상승/봉 전체 초과 포함. 한 번 도달한 사건은 `02_retouch_backtest.csv`(최초 시각·경과 분·봉 수·OHLC), 관찰 후 미도달 `01_untouched.csv`, 보류 `03_unresolved.csv`, 전체 `04_all_classified.csv`, 로컬 HTML `report.html`.
+- 원본 DB mode=ro/PRAGMA query_only; 수식 재계산/거래소 HTTP 호출 없음. 입력/기존 CSV 덮어쓰기 없음. SQLite WAL/SHM 엄격한 바이트 불변 보장을 위해서는 별도 정적 사본 필요.
+- **다음:** ZIP의 Python 파일과 15개 테스트를 GitHub 이 브랜치에 원문 그대로 추가 → 원본 SQLite 4시간봉·전분봉 검증 → Windows EXE 및 실차트 검증. `main` 변경 금지, 상품 RELEASE HOLD 유지.
+
+---
+
 # 2026-11-06 — 검색 결과 가독성 개선
 
 - 신규 `CandlePatternResultsViewer.html`: 기존 `results.csv`를 다시 검색하지 않고 파일 선택/드롭으로 로컬 읽기. 검출 개수·종목/분봉·최근 시각, 종목별 빈도, 필터·정렬·60건 페이지, 지표 상세·수식 조건, 필터 결과를 새 CSV로 저장.
