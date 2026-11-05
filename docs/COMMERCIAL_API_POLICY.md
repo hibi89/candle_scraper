@@ -32,6 +32,10 @@ Consequence: do not bundle or redistribute fetched candle data, market DBs, expo
 
 **No new launch claims from passing Windows CI or live API tests.** This is a release policy and licensing blocker, not a failing unit test. A legal professional or the provider should confirm any exceptional permission. Any paid API, external transfer, change of product scope or source/sales material requires owner approval.
 
+## Rights-verification correspondence (draft only)
+
+Unsent and unapproved official-permission inquiry templates are preserved in [LICENSING_REQUEST_DRAFTS.md](LICENSING_REQUEST_DRAFTS.md). Do not present them as permission or send them without user approval.
+
 ## Related source/technical evidence
 - `STATUS.md` and `HANDOFF.md`: source/CI SHA, actual Windows EXE launch proof and limitations.
 - `docs/RELEASE_CHECKLIST.md`: release is HOLD until **technical and contractual** gates independently pass.
