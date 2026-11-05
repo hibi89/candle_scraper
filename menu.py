@@ -7,6 +7,16 @@ from collector import ROOT, UNITS, run, export_csv, smoke_check, inspect_databas
 LABELS = {'upbit': 'Upbit', 'bithumb': 'Bithumb'}
 UNIT_LABELS = {'month': '월봉', 'week': '주봉', 'day': '일봉'}
 
+# CI and English-locale Windows terminals may redirect stdout as CP1252.
+# Force UTF-8 for Korean UI output without touching stdin or customer files.
+if os.name == 'nt':
+    for _stream in (sys.stdout, sys.stderr):
+        if hasattr(_stream, 'reconfigure'):
+            try:
+                _stream.reconfigure(encoding='utf-8', errors='replace')
+            except (OSError, ValueError):
+                pass
+
 def choose_exchange(allowed):
     allowed = tuple(allowed)
     if len(allowed) == 1:
