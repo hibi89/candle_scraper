@@ -25,3 +25,4 @@ live_exe_evidence.json
 *.exe
 .DS_Store
 Thumbs.db
+live_history_evidence.json
