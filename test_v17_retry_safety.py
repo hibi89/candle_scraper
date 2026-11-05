@@ -38,6 +38,7 @@ class RetryRequestTests(unittest.TestCase):
 
     def invoke(self, attempts):
         with patch.object(collector.GATES['upbit'], 'wait') as gate, \
+                patch.object(collector.GATES['upbit'], 'block_for'), \
                 patch.object(collector.urllib.request, 'urlopen', side_effect=attempts) as urlopen, \
                 patch.object(collector.time, 'sleep') as sleep:
             result = collector.request('upbit', '/market/all')
@@ -84,6 +85,37 @@ class RetryRequestTests(unittest.TestCase):
             self.assertEqual(urlopen.call_count, 5)
             self.assertEqual(sleep.call_count, 4)
             block_for.assert_called_once_with(120.0)
+
+    def test_429_short_header_blocks_other_workers_too(self):
+        gate = collector.RateGate(interval=0)
+        with patch.dict(collector.GATES, {'upbit': gate}), \
+                patch.object(gate, 'wait'), \
+                patch.object(collector.urllib.request, 'urlopen', side_effect=[
+                    self.error(429, "2"), self.response()]) as urlopen, \
+                patch.object(collector.time, 'sleep') as sleep:
+            self.assertEqual(collector.request('upbit', '/market/all'), [])
+            self.assertEqual(urlopen.call_count, 2)
+            self.assertEqual(sleep.call_args_list[0].args, (2.0,))
+        # The rate gate is shared by all workers, not specific to one request.
+        for _ in range(5):
+            with self.assertRaisesRegex(RuntimeError, "cooldown"):
+                gate.wait()
+
+    def test_429_without_header_blocks_all_workers_and_expires(self):
+        gate = collector.RateGate(interval=0)
+        with patch.dict(collector.GATES, {'upbit': gate}), \
+                patch.object(gate, 'wait'), \
+                patch.object(collector.urllib.request, 'urlopen', side_effect=[
+                    self.error(429), self.response()]) as urlopen, \
+                patch.object(collector.time, 'sleep') as sleep:
+            self.assertEqual(collector.request('upbit', '/market/all'), [])
+            self.assertEqual(urlopen.call_count, 2)
+            self.assertEqual(sleep.call_args_list[0].args, (1.0,))
+        self.assertGreater(gate.blocked_until, 0)
+        with self.assertRaisesRegex(RuntimeError, "cooldown"):
+            gate.wait()
+        with patch.object(collector.time, 'monotonic', return_value=gate.blocked_until + 1):
+            gate.wait()
 
     def test_no_retry_after_uses_exponential_backoff(self):
         result, calls, sleeps, _ = self.invoke([self.error(503), self.error(503), self.response()])

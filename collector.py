@@ -125,9 +125,15 @@ def request(exchange, path, params=None):
                     f'Exchange requested a {delay:.0f}s Retry-After cooldown; '
                     'collection paused to respect API rate limits'
                 ) from exc
+            backoff = min(30, max(1.0 * 2 ** attempt, delay or 0.0))
+            if exc.code == 429 or delay is not None:
+                # Also protect *other* workers against a short Retry-After
+                # (or a provider 429 with no header). One retrying thread
+                # sleeping alone does not enforce the shared provider quota.
+                GATES[exchange].block_for(backoff)
             if attempt == 4:
                 raise
-            time.sleep(min(30, max(1.0 * 2 ** attempt, delay or 0.0)))
+            time.sleep(backoff)
         except (urllib.error.URLError, TimeoutError, ConnectionError):
             if attempt == 4: raise
             time.sleep(min(8, 2 ** attempt))
