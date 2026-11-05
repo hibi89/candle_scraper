@@ -1,3 +1,18 @@
+# 2026-11-06 KST — SMA4(Close) 목표 재검증 인수인계 (신규 코드 GitHub 미반영)
+
+1. **목표·확정 수식:** 기존 설정 BB(20,2,Close) 하단 AND BB(4,4,Open) 하단 동시 이탈 → 이후 최초 BB20 하단 위 종가 복귀까지는 **그대로 유지**. 복귀봉 시점 SMA4(Close) 고정 후 복귀 **다음 봉부터** high>=목표가인지 검사. 실전 봉내 선후관계/미래 참조 방지.
+2. **완료·결정:** 기존 전수 검색 산출물 `04_all_recovery_signals.csv`의 222,408개 복귀 신호를 다시 활용하는 전용 `recheck_close_target.py` 제작. 3GB DB에서 추가로 SMA4(Close)와 미래 OHLC만 종목/분봉별 1회 순회, 원래 BB 하단 조건 재계산 불필요. 모든 원본 입력 별개 결과 폴더로 보존. 목표가<=진입종가를 수익 목표 부적격으로 별도 기록.
+3. **테스트:** `python -m unittest -q test_recheck_close_target.py` 17/17 PASS, `compileall` PASS. 기존 Open 스캐너에서 만든 독립 합성 CSV와 새 도구의 end-to-end 통합 PASS; old=UNREACHED/new=REACHED 합성 사례 입증. ZIP CRC PASS. Windows 사용자 환경/실 20,987,007개 DB/최종 도달률은 **NOT_RUN**.
+4. **상태:** 로컬 ZIP 다운로드 가능, 실제 데이터 실행 대기, 출시 HOLD. 100% 가설 근거 없음. 합성 반례 존재.
+5. **오류·시도·대안:** 초기에 유닛테스트 1/17은 누락 데이터 오류메시지 정규식 기대 차이로 실패 → 기대식 정정 후 17/17 PASS. 실제 3.63GB DB는 사용자 E: 로컬에만 있어 여기서 평가 불가; 사용자 PC 도구 실행 또는 승인 후 원본 데이터 전달 필요. 도달 시각/봉 수는 캔들 데이터의 정밀도 한계.
+6. **저장소/브랜치/SHA:** private `hibi89/candle_scraper`, `feature/candle-pattern-analyzer`. 이 회차 시작 HEAD `14b0820b83f77e69bc988aa421ff52e6bd60014b`. 기존 스캐너/collector/main 수정 없음. 신규 도구 소스는 로컬 ZIP만 존재하며 **GitHub에 아직 미반영**. ZIP SHA256 `8bc1556e1d65f628b2f73124df0fa8ec325c23e7c29b824c369e9cf14e157e17`.
+7. **배포/실행:** Windows Python3.11+ ZIP 추출→`start_close_target_recheck.bat`. E: 기본 DB 경로, 이전 `dual_bb_results_*/04_all_recovery_signals.csv` 자동 탐색, 필요시 CSV 경로 붙여넣기. 결과는 `close_target_recheck_*/report.html`; Vercel 미적용, EXE 아님.
+8. **원본/보안:** 원본 E: SQLite/WAL/SHM과 이전 CSV는 변경 금지. DB `mode=ro` 및 `PRAGMA query_only=ON`; HTTP 없음. 분석 결과는 로컬에만 생성, GitHub에 사용자 시장 데이터 업로드하지 않음. WAL/SHM 자체의 바이트 불변은 실기기 검증 없음.
+9. **다음 우선순위:** 사용자 재검증 실행 후 `summary.json`과 `01_close_target_unreached.csv` 수집/검증 → 해당 로컬 코드·테스트를 feature 브랜치에 보관 → 100% 미달 사례의 저장 누락/실제 반례 구분 → 실전 손익 유효성 검증.
+10. **갱신 기준:** 2026-11-06 KST, 오프라인 합성 테스트·실행 ZIP 검증. 기준 GitHub HEAD는 이 문서 변경 커밋 직전 `14b0820b83f77e69bc988aa421ff52e6bd60014b`, 최종 문서 HEAD는 원격 브랜치 재확인. 사용자 실제 분석 수치 미확정.
+
+---
+
 # 2026-11-06 KST — 이중 BB(20,2 Close / 4,4 Open) 검색기 인수인계
 
 1. **목표·용도·확정 수식:** 신규 검색기. 최초 close가 BB20 close 하단 AND BB4 open 하단보다 작은 봉을 setup. 이후 첫 close>BB20 하단 복귀봉에서 BB4 open 중간선=SMA4(open) 고정. 복귀봉 자체부터 이후 high>=고정값인 봉 발견 시 REACHED, low>고정값인 갭상승도 포함. 연속 setup은 최초 한 건으로 묶음. BB4 하단 재복귀는 요구하지 않음. 이전 SMA280 골든크로스 패턴과 독립.

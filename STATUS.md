@@ -1,3 +1,16 @@
+# 2026-11-06 — BB(4,4,Open) 원본 신호 재사용 + SMA4(Close) 목표 재검증
+
+- 사용자 요청: 기존 BB20(2,Close)·BB4(4,Open) 하단 이탈과 BB20 복귀 시점은 **불변**. 매도 목표가만 복귀 당시 최근 4개 **종가 평균**으로 변경하고 **복귀 다음 봉부터** high>=고정 목표가를 추적.
+- 로컬 단독 도구 `recheck_close_target.py` + ASCII BAT + 합성 테스트 + README를 `DualBB_CloseTarget_Recheck_v1.1.zip`으로 생성. SHA256 `8bc1556e1d65f628b2f73124df0fa8ec325c23e7c29b824c369e9cf14e157e17` (11,052 bytes). GitHub에는 **신규 소스 미반영**, 대화 첨부가 실행 원본임.
+- 원본 `04_all_recovery_signals.csv`의 기존 복귀 신호를 그대로 사용하며 SQLite(읽기 전용)에서 SMA4(Close)를 계산하므로 원래 이탈 탐색을 다시 하지 않음. 기존 CSV·SQLite 덮어쓰기 없음. 전 종목·분봉의 후속 OHLC는 다시 순회해야 함.
+- 검증: 독립 Python 합성 17/17 PASS / 컴파일 PASS / 기존 Open 패턴 스캐너의 **합성 출력 CSV**와 새 재검증기 end-to-end PASS / ZIP CRC PASS. 사용자 실 DB 20,987,007개 및 Windows BAT **미검증**. 실제 100% 주장 불가.
+- 주요 출력: 도달/미도달/후속봉 없음/전체 CSV, `05_target_at_or_below_entry.csv`(목표가가 진입 종가 이하), summary.json, report.html. 기존 복귀봉 고가는 미래 정보이므로 **다음 봉부터** 검사.
+- 고객 화면 기준 과거 Open 목표 222,408 신호/219,184 도달/3,219 미도달/5 후속봉 없음은 종전 결과이고, Close 목표 재검증 결과가 **아님**.
+- 로컬 사용자 DB: `E:\\업비트 캔들긁어오기\\upbit_candles.sqlite3`; 기존 신호 CSV: `Downloads/DualBollinger_BreakoutReentry_Scanner_v1.0/dual_bb_results_*/04_all_recovery_signals.csv`. 이 경로의 원본 파일과 WAL/SHM 수정·삭제 금지.
+- GitHub `main` 원본, 기존 듀얼 BB 도구를 변경하지 않음. 다음 우선순위: 사용자의 실제 결과 수치/반례 확인 → 로컬 소스·테스트를 비공개 feature 브랜치에 별도로 보존·재검증 → 상용 출시 판단 보류.
+
+---
+
 # 2026-11-06 — 신규 이중 볼린저밴드 신호 전수 검색기 v1.0
 
 - 독립 `dual_bollinger_scanner.py`: 기존 `results.csv`를 재활용하지 않고 수집된 전체 SQLite OHLC를 읽기 전용 스캔. 모든 KRW 종목/1,3,5,10,15,30,60,240분봉 기본 검색; 선택 종목/분봉 CLI 지원.
