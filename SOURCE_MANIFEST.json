@@ -6,10 +6,10 @@
     ".github/workflows/windows-build.yml": "dabb5c2cc4da01e29ce7da9648214e063e73ab09ad3bc04620eea77a53a730a2",
     ".gitignore": "135582872ccadf462e2905dcaacf193fd8df3a08af9e2d8c58550d199954be97",
     "AGENTS.md": "3e61293be63a4bd556bba5409f41dd612ccc8eb8dc82536bcb95220442e08e31",
-    "HANDOFF.md": "37d2fd6b2681f478c83586d1dbf4a0e2d7c914e9b2d5e6257cb3220b527250cf",
+    "HANDOFF.md": "d55d9119f1b153dfaebef592456402e3c26d580f60bc3934a5a845f089c1c9de",
     "README.md": "7239d1103849999a1d135d626bd9494ca70da78fa0cb02ea9c28e1de2138ec45",
     "REQUIREMENTS.md": "4fef7c27b5a236000878ceafe88b6258fb29d80accb7720ec5f80a808dcaa301",
-    "STATUS.md": "258490ac74215fcc95fdb36ee3297196dec308441f90fd7ad58b80b01ac7e4b6",
+    "STATUS.md": "746103c86581cbd4e010ea901a9e8ef8a40bcf39691c3a04dbe9dc136ce69c06",
     "build_windows.bat": "7cb8f5af934a026e19f3812b81a135a6adb1c3c7d11f47946d2fdb024c14612d",
     "collector.py": "8354f04a3d86336ee7cbaa20acb3dac4bee0dfefb9cb29783aed40a4ea2c96dc",
     "docs/ARCHIVE_PROVENANCE.md": "bf844d73738245d213c11db1b0bb6f0e245773c1a0a893f8ef697967372c7d5e",
@@ -34,6 +34,6 @@
   "offline_tests": "127/127 PASS; Windows EXE and real API NOT_RUN",
   "GitHub_repo": "hibi89/candle_scraper",
   "GitHub_branch": "main",
-  "GitHub_commit": "verify via branch API after push; source pre-commit snapshot",
+  "GitHub_commit": "b9a1483a790c642704abd492493c50e038ad7344",
   "archive_sha256": "a913ac56674dc3d712b134e56dc11b78ae1e48d5e716a11e6d408d8a82eedf50"
 }
