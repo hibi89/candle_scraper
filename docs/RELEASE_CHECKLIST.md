@@ -15,3 +15,9 @@
 Commit SHA / workflow run ID / artifact SHA256 / Windows OS / Python & PyInstaller version / PASS & FAIL counts / Upbit API / Bithumb API / three actual EXEs / three actual customer ZIPs / outstanding items / RELEASE or HOLD.
 
 Vercel production deployment: **not applicable** (offline Windows EXE product).
+
+## Commercial policy hard gate discovered 2026-11-05
+
+- **UPBIT: confirmed contractual blocker** for paid programs using its Open API. Article 6(3) prohibits selling/paid distribution/use rights of API-connected programs; Article 5 restricts unlicensed commercial use of API data. See `docs/COMMERCIAL_API_POLICY.md` and the official Upbit terms linked there. **Upbit-only and both-exchange ZIPs must not be sold absent express permission or approved redesign.**
+- **BITHUMB: commercial software redistribution not verified** solely by public documentation. Its no-key public API and rate-limit instructions are not licenses for third-party sales; confirm written rights.
+- Release HOLD must remain even if all Windows/10,000-candle technical gates PASS. Permission, customer terms and commercial product scope need separate approval; this new policy issue takes priority over packaging or price listing.

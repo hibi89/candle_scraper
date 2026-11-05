@@ -6,6 +6,8 @@
 
 [Windows Actions run #42029964305](https://github.com/hibi89/candle_scraper/actions/runs/42029964305)에서 **3종 실제 고객 EXE 실행·실거래소 메뉴 [5]·ZIP 독립 실행 전부 PASS**. 정확한 실행 소스 SHA `40c0afe32e4eecda64ada9021aad35a8d1cd96fd`. 고객 ZIP 해시: 업비트 `6985a6ae9c8ed094161db16863af7ce3d52cbc60862c85325efb27649db7e314`, 빗썸 `5bd484fda1e6bfdd9be20527db4139bb958d2b7cdd3213c995df5dee390ae741`, 통합 `0e7ccc6850e67a36b2d6e71b6acc42611dd7ceb10026f8f51560f3737bb903f0`. CI 아티팩트 만료 2026-11-19. 일반 소비자 Windows10/11, 전체 종목 장시간 실수집, 시장정보 상용 이용약관 검토 전까지 **판매 HOLD**.
 
+> **판매/라이선스 차단 (2026-11-05):** 업비트 Open API 현행 제6조 제3항은 해당 API 사용 프로그램의 유상 양도·배포·이용 허락을 제한합니다. 업비트 단독·통합 EXE는 별도 서면 허락 없이는 판매하지 않습니다. 빗썸 단독도 상용 배포 조건 확인 전 판매하지 않습니다. 상세 근거: [docs/COMMERCIAL_API_POLICY.md](docs/COMMERCIAL_API_POLICY.md). 기술 검증 성공과 판매 허용은 별개입니다.
+
 ## 주요 기능
 
 - 업비트 / 빗썸 독립 SQLite (`upbit_candles.sqlite3`, `bithumb_candles.sqlite3`).
