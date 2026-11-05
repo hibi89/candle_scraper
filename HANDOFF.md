@@ -1,3 +1,18 @@
+# 캔들 패턴 분석기 브랜치 인수인계 — 2026-11-05 KST (최우선)
+
+1. **목표·확정 요구·기술:** 기존 수집기 독립 유료 오프라인 패턴 검색 도구(예정가 170,000원). 기존 업비트 SQLite의 모든 KRW 종목·1/3/5/10/15/30/60/240분봉·누적 전체 과거 10,000봉 이상에서 사용자 수식 검색, 종목/봉/시간/조건값 CSV. Python 3.11+ 표준 라이브러리. 선택 `--last N`, 0=전체, N=종목/분봉별 최신 N개 결과만 판단; 계산은 전체 이력 사용. SQLite 고정 스키마를 첫 입력으로 구현, 기타 CSV/JSON/Excel/Parquet는 향후 어댑터.
+2. **완료 기능·근거:** `pattern_analyzer.py` 추가, 수집기/시장 DB 변경 없음. 조건은 직전 `SMA280<=SMA560`, 현재 `SMA280>SMA560`, 위치 `EMA560(보라)>EMA280(노랑)>SMA280(분홍)>SMA560(파랑)>BB20 upper`. Bollinger population std 2배, EMA 최초 종가 시드. `mode=ro`+`query_only`, 순차 O(560) 보조 메모리, 실패 시 결과 CSV 중간 산출물 제거, 기존 CSV 자동 덮어쓰기 금지. 설계: 외부 고객 수식을 Python 동적 실행하는 안보다 현재 정형 규칙 코어를 우선하여 임의 코드 실행을 배제.
+3. **테스트 명령·증거·미검증:** 로컬 `python -m unittest -q test_pattern_analyzer.py`, Python 3.13.5, **12/12 PASS** (기본 지표, 인위적 실제 가격 추세 교차 1건, 최근 100개에서 0건, SQLite 읽기 전 원본 SHA256과 후 SHA256 동일, CSV BOM, 원자 처리/덮어쓰기 보호, 스키마 오류, CLI). 정확한 GitHub 원격 SHA의 Windows CI **NOT_RUN**. 실 업비트 사용자 DB 및 TradingView 비교 **NOT_RUN**.
+4. **완료/진행/대기/차단:** Python MVP 구현·합성 시험 완료 / 고객 데이터 실검증·EXE 인터페이스 진행 대기 / 다른 파일 포맷 미구현 / 수집기 배포는 별도 유상 이용조건 검토 **RELEASE HOLD**. 분석기 전체 완성률은 근거 부족으로 미산정.
+5. **실패·복구·원인/대안:** 분석기 테스트 코드 SQLite 연결 누수 경고를 `contextlib.closing`으로 제거; 테스트 12개 최종 PASS. 무작위 합성 가격에서 존재 가능한 교차 판정 신호를 확인하고 고정 시계열 회귀로 유지. 대량 실제 DB 검증 실패를 주장하지 않는다(시도하지 않음). 원본 손상 시나리오에는 `mode=ro`+출력 경로 분리+기존 파일 보호 적용.
+6. **저장소·브랜치·SHA·주요 경로:** private `hibi89/candle_scraper`, `feature/candle-pattern-analyzer`, 초기 `1f976770db4797bcaa846ed32962e306318971ca`, 기능·테스트 소스 HEAD `ab5d904701fe78a273978ca81bcd6622e4dcb7ad`; 문서 업데이트 후 최종 SHA 확인. `pattern_analyzer.py`, `test_pattern_analyzer.py`, `docs/PATTERN_ANALYZER.md`.
+7. **환경·Production·실행:** Windows 개발 예정, Python CLI `py pattern_analyzer.py --db "C:\\path\\upbit_candles.sqlite3" --last 0 --output matches.csv`. 기존 Windows EXE 빌드는 수집기용이며 분석기 EXE는 아직 없음. Vercel/웹 배포 미적용. 외부 유료 실행 없음.
+8. **원본 위치·백업·인증·수정 금지:** 사용자 `E:\\업비트 캔들긁어오기\\upbit_candles.sqlite3` 로컬 원본은 접근하지 않음; GitHub에는 소스/문서/합성 테스트만. 다른 실 DB, API 키, EXE, CSV, 고객 데이터 업로드 금지. 기존 수집기 Legacy 원본은 Library 및 `main`에 보존. 분석기는 수집기 코드를 import하지 않음.
+9. **다음 순서·완료 기준·승인:** (a) 사용자 DB 실제 전체 누적 데이터에서 읽기 전용 실행과 시간대/지표 실제 차트 대조 (b) 시간봉과 탐색 건수 선택 메뉴형 Windows EXE 독립 배포, 출력 검사 (c) CSV/JSON/Excel/Parquet 포맷 어댑터, 회귀 (d) 계약·상용 이용 및 사용자 출시 승인. 무단 수집기 API 연동·외부 발송 금지. 설계 변경/범위 축소 사전 승인.
+10. **갱신시각·기준:** 2026-11-05 KST. 로컬 합성 데이터, 파이썬 12개 단위시험만 성공; GitHub Windows Actions/실 DB/실 EXE/거래소 라이선스 미검증. 이 문서 반영 커밋은 최종 브랜치 HEAD로 재확인.
+
+---
+
 # HANDOFF 최신 검증 — 2026-11-05 22:50 KST
 
 **기술 전체 완성률 추정 99% (직전 98% 대비 +1%p), 판매 RELEASE HOLD.** 기술 진척과 상업용 출시 허가는 별개의 게이트이다. 이 문서 아래의 98%, 97%, 95%는 역사적 기록이며 최신 판정이 아니다.
