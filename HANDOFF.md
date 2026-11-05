@@ -1,3 +1,20 @@
+# HANDOFF 최신 — 2026-11-05 22:15 KST
+
+**최신 확인된 기술 완성률 97% (전 회차 95% → +2%p) / 판매 RELEASE HOLD.** 아래 연혁의 95%,94% 등은 과거 시점 기록이다.
+
+1. **목표·기술:** Windows 무설치 EXE 업비트/빗썸/통합 3종, KRW 11봉, 최초 10,000 완료봉+증분 무제한, 진행률·ETA, SQLite·CSV, 오프라인 Python3.11 stdlib/PyInstaller, 고객 ZIP. 크몽 유료 판매 모델은 법적 허가 전 중지.
+2. **완료 기능·근거:** 원래 수집/중복·복구/CSV/실 API 기능 유지. HTTP `Retry-After` 초·HTTP-date 해석, 30초 초과 제한 즉시 중지, 최종 5번째 재시도까지 긴 쿨다운 감지, 같은 거래소 5개 작업자에 공통 쿨다운 적용. 두 거래소 별도 제한 유지. 오프라인 모의·실 Windows 회귀 통과.
+3. **테스트/검증:** [CI #42033704161](https://github.com/hibi89/candle_scraper/actions/runs/42033704161) 소스 SHA **`da582b1c4c6db6740c08d2ddce7788d8e658724d`**, Windows 2022/Python3.11.9/PyInstaller6.16.0, **140/140 tests PASS**, compileall PASS, EXE 3/3 시작·종료, ZIP 3/3 독립 실행, 실제 고객 EXE 3판형 공개 API 11봉 점검 PASS. 별도 [10,000봉 실복구 CI #42031303797](https://github.com/hibi89/candle_scraper/actions/runs/42031303797) 두 거래소 각각 BTC 1분봉 10k·중단/복구/CSV PASS. 소비자 Windows10/11 및 전 KRW/전 봉 장기운영 NOT_RUN.
+4. **상태:** 기술 완성률 **97%** (프로젝트 추정, 100% 실서비스 또는 법적 허가가 아님). **SALE HOLD**—업비트 API 연동 프로그램 유상 배포 제한 확인, 빗썸의 현행 유상 소프트웨어 재판매 허가 미확정. 사용자 라이선스 요청/제품 범위 변경 승인 없음.
+5. **실패·원인·재시도:** 과거 YAML/f-string/Windows 콘솔 cp1252/SQLite 파일 핸들 수정 완료. 이번 회차는 서버 긴 `Retry-After`를 최대 30초로 잘라 재요청할 수 있는 API 정책 위험을 해결; 작업자 공유 cooldown 및 5번째 시도 누락 경로 보완. CI 두 차례 최신 성공, 실패 재시도 필요 없음. 무의미한 재빌드 금지.
+6. **저장소·브랜치·SHA:** 비공개 `hibi89/candle_scraper`, `main`. **검증된 최신 기능 SHA `da582b1c4c6db6740c08d2ddce7788d8e658724d`**. 이 HANDOFF와 STATUS 변경 후 원격 HEAD 별도 확인. 주요 `collector.py`, `test_v17_retry_safety.py`, `.github/workflows/windows-build.yml`, `live_history_probe.py`, `docs/COMMERCIAL_API_POLICY.md`, `docs/LICENSING_REQUEST_DRAFTS.md`.
+7. **배포/실행:** Vercel 미적용, Windows Server 2022 GitHub Actions 내부 검증만. CI #42033704161, 고객 ZIP artifact **13417935853**, Live EXE 감사 artifact **13418225561**, 2026-11-19 22:13~22:14 KST 만료. 최신 ZIP 해시: upbit `32cc7ee09682410bc0205c88b464bb1667d34eeb167f024215e90d0ea935885f`; bithumb `bc22cab45bdd2579c4cc5cd06733dbf64441942de1f5911097e3d42ce0cb4f81`; both `26a27c2c063579d0c39ee4f9b2669d36ec6a0583686d01127d6ec35ffa57e711`.
+8. **원본·백업·인증 보존:** 레거시 v1.4~1.6.1 ZIP은 ChatGPT Library 별도, v1.6.1 ZIP SHA256 `a913ac56674dc3d712b134e56dc11b78ae1e48d5e716a11e6d408d8a82eedf50`, `E:\\업비트 캔들긁어오기\\upbit_candles.sqlite3` 및 고객 로컬 데이터 수정 금지. GitHub에 비밀/API Key/시장 데이터/EXE 미커밋. SOURCE_MANIFEST.json은 역사적 최초 업로드 스냅샷.
+9. **다음 단계/승인:** (최우선) 업비트 유상 API 연동 프로그램 배포 특별 허가 가능 여부와 빗썸 상용 배포 조건을 **공식 서면 확인**. 외부 문의는 준비된 미발송 초안 기반 사용자 승인 후에만. 허가 불가 시 사용자 승인 후 정식 라이선스 데이터 공급자 교체 또는 API 비연동형 제품 전환. 이후 일반 Windows10/11 보안/쓰기권한·SmartScreen 직접 확인, 전 KRW 장기 수집과 재시작 회귀, 동일 출고 SHA 고객 ZIP 검증 후 출시 승인.
+10. **갱신·증거·커밋:** 2026-11-05 **22:15 KST**. 이번 회차 GitHub Actions SUCCESS 로그/아티팩트 해시/빌드 원본 SHA 확인. 상용 라이선스, 고객 Windows10/11 미검증 명시. 문서 기준 GitHub 커밋은 별도 최신 HEAD로 확인.
+
+---
+
 # HANDOFF 최신 검증 — 2026-11-05 21:59 KST
 
 **현재 기준: 기술 전체 완성률 추정 95% (직전 94% → +1%p), 판매 RELEASE HOLD.** 아래 94%, 92%, 85%는 과거 시점의 역사적 상태이며 우선 참조 금지.

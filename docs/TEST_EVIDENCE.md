@@ -1,3 +1,14 @@
+# 2026-11-05 22:15 KST — Latest release-safety Windows integration SUCCESS
+
+- Run [#42033704161](https://github.com/hibi89/candle_scraper/actions/runs/42033704161), functionality source SHA `da582b1c4c6db6740c08d2ddce7788d8e658724d`, Windows Server 2022 Python3.11.9/PyInstaller6.16.0.
+- Unittest **140/140 PASS**; `compileall -q .` PASS; 3/3 EXE startup checks; 3/3 individually unzipped customer EXEs start/exit and read-only live-API menus PASS for both exchanges.
+- Added safety cases for Retry-After numeric/HTTP-date, invalid/negative values, fifth/final retry long cooldown, shared cooldown blocking 5 worker threads, resume after expiry, non-retryable 403.
+- Customer ZIP hashes: Upbit `32cc7ee09682410bc0205c88b464bb1667d34eeb167f024215e90d0ea935885f`; Bithumb `bc22cab45bdd2579c4cc5cd06733dbf64441942de1f5911097e3d42ce0cb4f81`; Both `26a27c2c063579d0c39ee4f9b2669d36ec6a0583686d01127d6ec35ffa57e711`.
+- Private internal artifacts (not a customer release): ZIP ID `13417935853`, live EXE evidence ID `13418225561`; expire 2026-11-19 22:13–22:14 KST.
+- **RELEASE HOLD** — Windows10/11 real client, full-market long-run and API commercial distribution rights not verified. Market data/raw user DB never published to GitHub.
+
+---
+
 # 2026-11-05 21:59 KST — Two real 10,000-minute-candle live recovery tests PASS
 
 - [GitHub Actions run #42031303797](https://github.com/hibi89/candle_scraper/actions/runs/42031303797), SHA `f6ba8768dcd59e985354a11e4d98e7a7626d4e46`, SUCCESS; both public-api and live-history-10k jobs PASS on Windows Server 2022 Python 3.11.
