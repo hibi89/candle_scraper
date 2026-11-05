@@ -1,3 +1,20 @@
+# HANDOFF 최신 검증 — 2026-11-05 21:59 KST
+
+**현재 기준: 기술 전체 완성률 추정 95% (직전 94% → +1%p), 판매 RELEASE HOLD.** 아래 94%, 92%, 85%는 과거 시점의 역사적 상태이며 우선 참조 금지.
+
+1. **목표/기술:** 크몽 판매용 Windows 무설치 업비트/빗썸/통합 EXE 3종, 11봉, KRW 전 종목, 최초 10k 완료봉·증분 무제한, SQLite/CSV, Python 3.11+ 표준 라이브러리/PyInstaller. 변경 없이 원본 유지.
+2. **완료/설계 근거:** 고객 EXE 3종 실제 실행·실 API 메뉴 이전 127/127 PASS. 이번 회차 신규 `live_history_probe.py`가 각 거래소 KRW-BTC 1분봉 10,000개 수집을 70회 이하 호출 제한으로 증명. 2페이지 399개 저장 후 예외 주입/재개, 중복·CSV·원자성·실제 증분 검증. 전체 전종목 수집 대신 단일 고유동성 시장에서 안전한 부하로 장기 페이지 분량 검증.
+3. **테스트/검증/미검증:** [실거래소 대량 검증 run #42031303797](https://github.com/hibi89/candle_scraper/actions/runs/42031303797), SHA `f6ba8768dcd59e985354a11e4d98e7a7626d4e46`, Windows 2022 CI 2/2 jobs SUCCESS. **업비트** 399→10,000/증분 +0/CSV 10,000행/53 호출 PASS. **빗썸** 399→10,000/증분 +1/CSV 10,001행/53 호출 PASS. 정합성/PK/SQLite integrity PASS. 이전 EXE 3종 고객 ZIP 빌드·11종 실 API PASS [run #42029964305](https://github.com/hibi89/candle_scraper/actions/runs/42029964305), SHA `40c0afe32e4eecda64ada9021aad35a8d1cd96fd`. 고객 Windows10/11 환경·전 KRW/11봉 대량 장기운용은 미검증.
+4. **진행/대기/차단:** 기술적 완성도 **95% (+1%p)**, 판매 HOLD. 핵심 **상업적 제약**: Upbit 현행 Open API 제6조 제3항 유상 배포 제한 및 제5조 무단 영리 이용 금지; Bithumb 영리 소프트웨어 판매 허가 미확인. 약관 근거 `docs/COMMERCIAL_API_POLICY.md`. 유상 판매/배포를 절대 성공 판정하지 않는다.
+5. **오류·복구·재시도:** 이전 YAML/f-string/CP1252/SQLite 핸들 문제 해결하여 성공 기록. 이번 bounded history 검증 오류 0. 같은 SHA의 불필요한 반복 실행이나 API 대량 수집 금지. 정책 미확인 상태에서 신규 유료 판매 출시/게시 금지.
+6. **저장소/브랜치/SHA:** 비공개 `hibi89/candle_scraper`, `main`; 기능 검증 `f6ba8768dcd59e985354a11e4d98e7a7626d4e46`, 이후 공식 정책 문서 추가 SHA `ca180529347cb4fda6755ea57ba6aa047c2957fb`; 이 HANDOFF 갱신은 별도 커밋이므로 **현재 HEAD는 GitHub에서 재조회**. 핵심 소스 `collector.py`, `live_history_probe.py`, `.github/workflows/live-api-smoke.yml`, `docs/COMMERCIAL_API_POLICY.md`.
+7. **Production/환경:** Vercel 미적용. GitHub Windows 2022 Python 3.11.9; CI RUN `42031303797` 공개 실 API 인증 없음, 각 거래소 53회 제한 호출. 내부 건수만 담긴 증거 artifact ID `13415414502`, 2026-11-19 21:58 KST 만료; 영구 백업 아님. 고객 EXE/ZIP 기존 artifact `13416505378`, 11월 19일 만료.
+8. **원본/백업/보안:** 이전 v1.4~v1.6.1 ZIP Library에 보존, v1.6.1 원본 SHA256 `a913ac56674dc3d712b134e56dc11b78ae1e48d5e716a11e6d408d8a82eedf50`. 사용자 `E:\\업비트 캔들긁어오기\\upbit_candles.sqlite3` 절대 수정하지 않음. 검증 데이터는 CI 임시 SQLite/CSV, GitHub에는 데이터·키·토큰 없음.
+9. **다음 단계/승인:** (1) Upbit와 Bithumb의 유료 판매용 소프트웨어 연결·시세 사용 서면 허가 취득 여부 판단, 또는 사용자 승인 후 CSV 오프라인 제품/라이선스 공급자로 전환 (2) Windows10/11 실제 소비자 환경 EXE/권한·SmartScreen 검증 (3) 임시 데이터로 전종목·재시작·429회귀 (4) 동일 배포 SHA에서 회귀/고객 ZIP 해시 검증 후 사용자 출시 승인. 기술 검증만으로 HOLD 해제 금지.
+10. **검증 시각/KST/범위/문서 기준:** 2026-11-05 **21:59 KST**. Windows 2022 GitHub Actions `42031303797` 소스 SHA `f6ba8768dcd59e985354a11e4d98e7a7626d4e46` 2/2 PASS 및 실 API 검증 로그 확인. 이 문서를 포함한 최종 main SHA는 문서 업데이트 직후 재조회. 사용자 로컬 Windows10/11, 법적 허가, 전 KRW 장시간 수집은 미검증/차단.
+
+---
+
 # HANDOFF 최신 확인 — 2026-11-05 21:49 KST (이 문서의 최우선 기록)
 
 **한눈에 보는 최신 기준:**

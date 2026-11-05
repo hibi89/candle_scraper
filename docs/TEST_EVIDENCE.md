@@ -1,3 +1,14 @@
+# 2026-11-05 21:59 KST — Two real 10,000-minute-candle live recovery tests PASS
+
+- [GitHub Actions run #42031303797](https://github.com/hibi89/candle_scraper/actions/runs/42031303797), SHA `f6ba8768dcd59e985354a11e4d98e7a7626d4e46`, SUCCESS; both public-api and live-history-10k jobs PASS on Windows Server 2022 Python 3.11.
+- Each exchange uses *only* KRW-BTC 1-minute public candles with a hard cap of 70 per-exchange logical API requests, achieved 53 each.
+- **Upbit:** 399 actual candles committed -> injected crash on API page 3 -> resumed exactly to 10,000; initial second run idempotent; update +0; SQLite integrity/PK uniqueness and CSV 10,000 rows PASS.
+- **Bithumb:** 399 actual candles committed -> same injected crash -> resumed 10,000; initial second run idempotent; update +1 / 10,001 total; SQLite integrity/PK uniqueness and CSV 10,001 rows PASS.
+- No customer DB accessed, CSV and SQLite remain in automatically deleted ephemeral Windows runner. CI archive contains **counts-only** JSON artifact ID `13415414502`, expires Nov 19 2026 21:58 KST.
+- Not an all-KRW-market test or an 11-timeframe 10,000-count per pair test, and not a rights-to-resell API license; **release HOLD**, see `docs/COMMERCIAL_API_POLICY.md`.
+
+---
+
 # 2026-11-05 21:49 KST — Final Windows customer-EXE live check
 
 - [run #42029964305](https://github.com/hibi89/candle_scraper/actions/runs/42029964305), SHA `40c0afe32e4eecda64ada9021aad35a8d1cd96fd`, Windows Server 2022 Python 3.11.9, PyInstaller 6.16.0, **SUCCESS**.

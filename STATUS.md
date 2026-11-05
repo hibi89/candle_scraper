@@ -1,11 +1,20 @@
 # STATUS — Coin Candle Collector v1.6.1 (commercial Windows editions)
 
-최신 확인: **2026-11-05 21:49 KST**
+최신 확인: **2026-11-05 21:59 KST**
+
+## 2026-11-05 21:59 KST — verified 10,000-candle real exchange proof
+- **전체 기능·출시준비 기술 진척률 95% (직전 94% → +1%p)**: 업비트·빗썸의 1분봉 10,000개 실수집 및 중단/재개 기능 검증. 이 수치는 프로젝트 진행도 추정이며 전체 상품 판매 허가율을 뜻하지 않는다.
+- CI: [run #42031303797](https://github.com/hibi89/candle_scraper/actions/runs/42031303797), **SUCCESS**, 검증 소스 SHA `f6ba8768dcd59e985354a11e4d98e7a7626d4e46`, GitHub Windows Server 2022 / Python 3.11, `public-api` 및 `live-history-10k` **2/2 jobs SUCCESS**.
+- Upbit `KRW-BTC` 1분봉: 실제 첫 두 페이지 저장 **399개** → 3번째 페이지에서 **테스트용 예외 주입** → 프로세스 복구 시 정확히 **10,000개** 완성, 재실행 중복 0, 증분 후 10,000개, CSV 10,000행/UTF-8 BOM/SQLite integrity PASS. 캔들 API 요청 53회 (한도 70회).
+- Bithumb `KRW-BTC` 1분봉: 실제 첫 두 페이지 저장 **399개** → 동일한 인위적 중단 → **10,000개 복구** → 증분 신규 1개, **총 10,001개** → CSV 10,001행/SQLite integrity/PK 중복 없음 PASS. 캔들 API 요청 53회 (한도 70회).
+- 시험의 모든 SQLite·CSV는 Windows 러너 내 자동 삭제되는 임시 폴더만 사용, **사용자 DB 미접근·시장 원본 업로드 없음**. 내부 artifact `13415414502`는 **건수·결과만 기록**, 2026-11-19 **21:58 KST** 만료.
+- Upbit/Bithumb 11개 시간봉·과거 페이지 및 고객 EXE 3종 API 메뉴 실검증은 기존 성공 [run #42029964305](https://github.com/hibi89/candle_scraper/actions/runs/42029964305) SHA `40c0afe32e4eecda64ada9021aad35a8d1cd96fd` 유지. 10,000 실수집 검증은 **각 거래소 KRW-BTC 1분봉 한 조합**에 한정하며, 전 KRW 종목·전 11봉 대량/장기 운용이나 고객 Windows10/11 네이티브 실행을 증명하지 않는다.
+- **상업용 배포는 별도 계약상 차단**: Upbit Open API 현행 제6조 제3항이 유상 프로그램 배포·이용허락 금지, 제5조가 무단 영리 데이터 사용 제한. Bithumb 상업적 권한도 미확정. 근거 `docs/COMMERCIAL_API_POLICY.md`. **RELEASE HOLD (판매/제공 금지)**. 문서화가 허가 획득을 대신하지 않음.
 
 ## 판정
 - **추가 통합 검증:** Windows 고객 EXE 3종에서 실제 업비트·빗썸 공개 API 메뉴 실행까지 통과. 세부 검증 SHA와 최신 ZIP 해시 및 아티팩트는 바로 아래 최신 추가 검증 기록 참조.
-- **판매 완성률 추정 94%** (이전 85% → **+9%p**). 이는 기능·빌드·실 API 게이트 진척을 반영한 보수적 프로젝트 추정치이며 테스트 커버리지 수치가 아니다.
-- **RELEASE HOLD 유지.** Windows Server 2022 CI와 두 거래소 소량 실 API 검증은 통과했지만, 고객용 Windows 10/11 PC 직접 실행·장기/전종목 대용량 실수집·API 이용약관 최종 검토는 미검증이다.
+- **기술 완성률 추정 95%** (직전 94% → **+1%p**). 실거래소 대량·복구 기술진척을 반영한 추정치이며 테스트 커버리지나 상업적 판매 허가가 아니다.
+- **RELEASE HOLD 유지.** 실거래소 10,000봉은 KRW-BTC/1분봉만 검증, 전 종목·장기 운영·고객용 Windows 10/11 미검증. 특히 Upbit 유상 프로그램 배포 제한과 Bithumb 허가 미확인 때문에 상업적 출시 차단.
 - 기존 SQLite DB·레거시 ZIP·사용자 로컬 E: 경로 보존. 자동매매·API 키·인증·Vercel 사용 없음.
 
 ## 최종 추가 검증 — 실제 고객 EXE의 실거래소 연결 (2026-11-05 21:49 KST)

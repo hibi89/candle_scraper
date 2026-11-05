@@ -1,6 +1,10 @@
 # 코인 캔들 수집기 — v1.6.1 (비공개 GitHub 소스 저장소)
 
-**상태: 판매 보류(HOLD), 완성률 추정 94%.** Windows Server 2022 GitHub Actions에서 3종 EXE 빌드/실행 및 고객 ZIP 3종 독립 실행 3/3 PASS. 업비트·빗썸 각각 KRW-BTC 실 API 11봉·2페이지 및 임시 DB 소량 수집/증분/CSV PASS. **실제 고객 ZIP 3종의 EXE 내 메뉴 [5]도 업비트/빗썸 실 API 연결 PASS** (Windows Server 2022). 단, 소비자 Windows 10/11 실행·장기/전종목 수집·약관 검증은 남아 있습니다. GitHub 소스 ZIP 자체는 EXE가 아닙니다.
+**상태: 판매 보류(HOLD), 기술 완성률 추정 95%.** Windows Server 2022 GitHub Actions에서 3종 EXE 빌드/실행 및 고객 ZIP 3종 독립 실행 3/3 PASS. 업비트·빗썸 각각 KRW-BTC 실 API 11봉·2페이지 및 임시 DB 소량 수집/증분/CSV PASS. **실제 고객 ZIP 3종의 EXE 내 메뉴 [5]도 업비트/빗썸 실 API 연결 PASS** (Windows Server 2022). 단, 소비자 Windows 10/11 실행·장기/전종목 수집·약관 검증은 남아 있습니다. GitHub 소스 ZIP 자체는 EXE가 아닙니다.
+
+## 실거래소 10,000봉 중단/복구 검증 — 2026-11-05 21:59 KST
+
+[Windows CI #42031303797](https://github.com/hibi89/candle_scraper/actions/runs/42031303797) (소스 SHA `f6ba8768dcd59e985354a11e4d98e7a7626d4e46`): 업비트와 빗썸의 **KRW-BTC 1분봉**에서 각각 실캔들 399개 저장 후 강제 중단, 이어받아 **10,000개까지 복구 PASS**, 최초 수집 중복 0, 증분 및 CSV 실검사 PASS. 업비트 10,000행/53 호출, 빗썸 증분 1개 포함 10,001행/53 호출. 두 거래소 각각 허용된 70 API 호출 한도 이내. 원본 고객 DB에 접근하지 않고 임시 DB만 생성했으며 GitHub 증거 아티팩트에는 데이터가 아닌 결과 건수만 저장. **전체 KRW 종목·전 봉·장기 안정성 검증은 아님.** 제품 출시 라이선스 문제는 `docs/COMMERCIAL_API_POLICY.md`를 참고; 판매 HOLD 유지.
 
 ## 최신 고객 ZIP 검증 (2026-11-05 21:49 KST)
 
