@@ -1,3 +1,9 @@
+## v1.1 — 신호 당시 고정 BB 상단 재도달 필터 (2026-11-06)
+
+`future_retouch_review.py`: 업로드된 기존 357건 `results.csv`의 각 신호 `bb_upper`를 기준가로 사용(기본값). 신호봉 다음부터 high >= 기준가를 찾는다. 첫 터치 시각/경과분/봉 개수 기록. 골든크로스 수식/신호 목록 및 원본 SQLite는 수정하지 않는다. 이전 SMA280은 `--price-field sma280` 옵션. 실제 고객 DB 미검증. 자세한 내용은 `docs/BBUPPER_RETOUCH_v1.1.md`.
+
+---
+
 ## 오프라인 결과 뷰어 (2026-11-06)
 
 긴 결과 CSV를 직접 읽기 어려우면 `CandlePatternResultsViewer.html` 더블클릭 → **CSV 파일 선택** → 기존 `results.csv` 또는 `pattern_matches.csv` 지정. 다시 검색할 필요 없음. 브라우저 안에서만 읽으며 종목/분봉/거래소/날짜 필터, 검출 건수, 정렬, 60건씩 보기, 각 사건의 EMA/SMA/BB 자세히 보기, 필터 CSV 저장 기능 제공. 원본 CSV/SQLite 불변.

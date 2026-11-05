@@ -1,3 +1,18 @@
+# 2026-11-06 — BB상단 재도달 판정 v1.1 인수인계
+
+1. **목표/요구/기술:** 기존 골든크로스 탐색 수식 그대로, CSV의 각 신호봉 당시 볼린저 상단(`bb_upper`)을 고정해 이후 최초 high >= 기준가 재도달 여부로 필터링. Python 3.11+ 표준 라이브러리/SQLite read-only/HTML 정적 보고서.
+2. **완료/근거:** 이전 v1.0 SMA280 기본→v1.1 bb_upper 기본, `--price-field sma280|sma560|close` 비교 옵션 유지. 여러 신호를 (market,unit)별 정렬 스트림+최소힙으로 단일 조회해 반복 DB 조회보다 적게 읽음. 갭상승 포함, 신호봉 제외, 미재도달/첫재도달/보류 CSV + 시각/경과 시간/봉 수/고저가/보고서.
+3. **테스트:** `python -W error -m unittest -q test_future_retouch_review.py` 18 PASS/0 FAIL, Python compileall PASS, JS `node --check` PASS, 사용자 원본 신호 CSV 357건 BB 양수 확인, ZIP CRC 및 입력 SHA256 일치 PASS. 실 3.63GB DB/Windows 10/11/차트 교차 검증 NOT_RUN.
+4. **상태:** 기능 구현과 합성 검증 완료. 사용자 실제 357건 결과 판정 미검증. Windows EXE/상업 배포 미완. 출시 HOLD.
+5. **오류/시도/대안:** 이전 v1.0 기본 SMA280 때문에 연구 대상이 달라짐. 이번 수정은 신호식이 아닌 기준가만 변경. 새 보고서는 재실행해야 함; 이전 보고서 숫자 재사용 금지. 실 DB가 없으므로 터치 숫자 임의 생성 금지.
+6. **저장소/브랜치/SHA:** private `hibi89/candle_scraper`, `feature/candle-pattern-analyzer`, 업데이트 이전 HEAD `436620733979cafadd5f56111486adc42fd0c754`. 최종 SHA는 GitHub branch HEAD에서 확인. 새 소스 `future_retouch_review.py` blob `b1eda1355c12110aecfb6b85f96e0a04fdcc70a6`, 테스트 `7f3b99c5d1a62b623ee80a1cd726f30ff7f61900`, BAT; `main` 비변경.
+7. **배포/환경:** Vercel 미적용. 사용자 Windows에서 Python3.11+ 및 ZIP 해제 후 BAT 실행, DB 기본 `E:\업비트 캔들긁어오기\upbit_candles.sqlite3`. 유저 결과 `report.html`. GitHub CI는 기존 설정의 제한된 트리거에 따르며 Windows 검증을 대신하지 않음.
+8. **원본/보안:** 원본 DB/WAL/SHM과 신호 CSV의 수정·이동 금지. SQLite mode=ro/query_only; 실 DB는 미접근. 357개 시장신호 CSV는 대화 ZIP에만 포함, GitHub 업로드 금지. 기존 ZIP 유지.
+9. **다음 우선순위:** 고객 DB에서 동일 v1.1 ZIP 실행 → AXS 240m 등 신호 원본 차트와 수동 대조 → 실제 Windows 이용성/에러/성능 확인 → EXE → 출시 승인. 동시 수집기 WAL/SHM 변경에 주의.
+10. **갱신 기준:** 2026-11-06 KST, 로컬 소스+18 합성테스트+실 신호 CSV+ZIP 검증. GitHub 본 커밋 기준, 실 DB/브라우저/EXE는 미검증.
+
+---
+
 # 2026-11-06 — 후속 재도달 판정 기능 인수인계 (소스 GitHub 미반영)
 
 1. **목표·확정 요구:** 이미 추출한 357개 패턴 신호에서 신호 이후 저장된 캔들의 high가 골든크로스 기준가 이상인 적이 없던 건만 남기고, 한 번이라도 넘은 건의 최초 도달 봉/경과 시간을 백테스트 기록. Python 표준 라이브러리 + 기존 SQLite mode=ro + 오프라인 HTML.

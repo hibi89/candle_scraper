@@ -1,3 +1,13 @@
+# 2026-11-06 — BB상단 기준 후속 미재도달 판정 v1.1 (기능 소스 GitHub 반영)
+
+- 골든크로스 패턴 검출 수식 불변. 기존 추출 357개 결과를 재사용. 향후 재도달의 기준가를 신호 당시 고정 `bb_upper`로 변경(기존 v1.0 SMA280 기본과 구별). BB 미래값 추종 없음.
+- 오프라인 구현 `future_retouch_review.py`, 테스트 `test_future_retouch_review.py`, Windows Python 실행 BAT를 이 브랜치에 추가. 원본 `main` 수집기와 3GB DB·WAL·SHM 및 원본 CSV 불변.
+- 검증: Python3.13.5 합성 18/18 PASS, compileall PASS, HTML JavaScript `node --check` PASS, 실제 사용자 357개 CSV 파싱/BB 양수 및 SHA 일치 PASS, ZIP CRC PASS. **E: 실 DB/Windows/EXE 미검증**. 실제 357건 분류 개수 확인 불가. RELEASE HOLD.
+- 사용법과 새 CSV `reference_field`는 `docs/BBUPPER_RETOUCH_v1.1.md` 참조. 기존 2026-11-06 v1.0 기록 중 'GitHub 신기능 소스 미반영'은 당시 상태이며 이번 v1.1 소스 반영으로 해소.
+- ZIP v1.1: SHA256 `8fb27b6bb106138de8bb2ee4acd7eb6b4e3155a9f8b398fbf60f28316736e7e9`. 다음: 실제 사용자 DB 후속 OHLC/AXS 240분봉 비교 → Windows 실행 → 출시 검토. 현재 GitHub 기준은 본 변경이 포함된 `feature/candle-pattern-analyzer` 최신 HEAD.
+
+---
+
 # 2026-11-06 — 후속 고가 재도달 검사 (로컬 산출물, GitHub 소스 미반영)
 
 - 사용자 업로드 `results.csv` **357신호 / 210종목 / 8종 분봉 / 326 종목·분봉 조합** 정상 파싱, 중복 0. 해당 CSV만으로는 이후 고가·저가를 판정할 수 없음.
