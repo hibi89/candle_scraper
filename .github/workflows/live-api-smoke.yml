@@ -1,0 +1,41 @@
+name: Bounded live Upbit and Bithumb API check
+on:
+  workflow_dispatch:
+  # New workflow creation triggers exactly one check. Later execution stays manual
+  # unless this workflow file is intentionally changed.
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/live-api-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  public-api:
+    runs-on: windows-2022
+    timeout-minutes: 12
+    env:
+      PYTHONIOENCODING: utf-8
+      PYTHONUTF8: '1'
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Use Python 3.11
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.11'
+      - name: Compile bounded public API probe
+        run: python -m compileall -q collector.py live_api_probe.py
+      - name: Probe KRW-BTC public endpoints and disposable SQLite
+        run: python live_api_probe.py
+      - name: Preserve verification evidence regardless of network outcome
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: CoinCollector-LiveAPI-EVIDENCE-${{ github.sha }}
+          path: live_api_evidence.json
+          if-no-files-found: warn
+          retention-days: 14
