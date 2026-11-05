@@ -7,6 +7,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/windows-build.yml'
+      - 'menu.py' # Korean console compatibility requires actual Windows CI
 
 permissions:
   contents: read
