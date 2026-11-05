@@ -66,9 +66,47 @@ def check_customer_packages(launch=False):
     return checked
 
 
+def check_unicode_and_space_paths():
+    """Run actual customer EXEs from a Hangul/space directory, without API calls.
+
+    Windows runner is not a customer Windows 10/11 device; this checks
+    UTF-8 menu handling and PyInstaller path resolution only.
+    """
+    if os.name != 'nt':
+        raise RuntimeError('Windows is required for Unicode EXE verification')
+    paths = packages.verify_products()
+    for edition, original in paths.items():
+        zip_path = packages.OUTPUT / f'CoinCollector_{edition}_customer.zip'
+        with tempfile.TemporaryDirectory(prefix='캔들 수집기 한글 경로_') as folder:
+            with ZipFile(zip_path) as archive:
+                if set(archive.namelist()) != {original.name, '사용설명서.txt'}:
+                    raise RuntimeError(f'{edition}: unverified customer package')
+                archive.extractall(folder)
+            exe = Path(folder) / original.name
+            # Menu [6] queries only local DB existence; no exchange API calls.
+            # The both edition prompts for its exchanges and checks both.
+            menu_input = '6\n3\n\n0\n' if edition == 'both' else '6\n\n0\n'
+            result = subprocess.run([str(exe)], input=menu_input, text=True,
+                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                    encoding='utf-8', errors='replace',
+                                    cwd=folder, timeout=80)
+            expected_db_messages = 2 if edition == 'both' else 1
+            if (result.returncode != 0 or
+                    f'Edition: {EDITION_TITLES[edition]}' not in result.stdout or
+                    result.stdout.count('아직 DB가 없습니다:') != expected_db_messages or
+                    '오류 ' in result.stdout):
+                raise RuntimeError(f'{edition}: Unicode-path menu [6] check failed: '
+                                   f'rc={result.returncode}, {result.stdout[-500:]}')
+            if any(Path(folder).glob('*.sqlite3*')):
+                raise RuntimeError(f'{edition}: read-only menu created database')
+            print(f'PASS Unicode/space customer EXE: {edition} '
+                  f'({expected_db_messages} missing-DB checks, no database writes)')
+
+
 def main():
     checked = check_customer_packages(launch=True)
     print(f'PASS {len(checked)}/{len(EDITION_TITLES)} independent customer ZIP executions')
+    check_unicode_and_space_paths()
 
 
 if __name__ == '__main__':

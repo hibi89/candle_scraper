@@ -9,6 +9,7 @@ on:
       - '.github/workflows/windows-build.yml'
       - 'collector.py'
       - 'test_v17_retry_safety.py'
+      - 'verify_customer_packages.py'
 
 permissions:
   contents: read
