@@ -145,6 +145,35 @@ class DatabaseTests(unittest.TestCase):
             analyzer.scan([source], self.folder / "matches.csv")
         self.assertEqual(source.read_bytes(), original)
 
+
+    def test_real_calculated_cross_from_synthetic_price_history(self):
+        """An actual indicator series (not mocked) must emit one match."""
+        segments = [
+            (15,35.29), (34,28.26), (99,45.13), (53,48.11),
+            (95,22.02), (65,15.44), (83,14.42), (53,12.29),
+            (90,46.93), (26,47.07), (26,8.20), (66,23.36),
+            (54,9.38), (49,19.26), (65,14.36),
+        ]
+        prices = [price for count, price in segments for _ in range(count)]
+        source = make_db(self.folder, count=0)
+        with closing(sqlite3.connect(source)) as db, db:
+            db.executemany(
+                "INSERT INTO candles(market,unit,utc,kst,close) VALUES(?,?,?,?,?)",
+                (("KRW-BTC", 240, f"2026-01-{i:05d}",
+                  f"KST-{i:05d}", price) for i, price in enumerate(prices))
+            )
+        out = self.folder / "matches.csv"
+        totals = analyzer.scan([source], out)
+        self.assertEqual(totals["matches"], 1)
+        with out.open(encoding="utf-8-sig", newline="") as f:
+            row = next(csv.DictReader(f))
+        self.assertEqual(row["utc"], "2026-01-00669")
+        self.assertGreater(float(row["sma560"]), float(row["bb_upper"]))
+        self.assertGreater(float(row["ema560"]), float(row["ema280"]))
+        self.assertEqual(analyzer.scan(
+            [source], out, last=100, overwrite=True
+        )["matches"], 0)
+
     def test_cli_smoke(self):
         source = make_db(self.folder)
         out = self.folder / "matches.csv"
