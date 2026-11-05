@@ -7,7 +7,7 @@ import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, call
 
 import pattern_analyzer as analyzer
 
@@ -89,7 +89,8 @@ class DatabaseTests(unittest.TestCase):
     def test_all_or_last_n_with_full_history_warmup(self):
         source = make_db(self.folder, count=1000)
         out = self.folder / "matches.csv"
-        with patch.object(analyzer, "is_signal", return_value=True):
+        with patch.object(analyzer, "is_candidate", return_value=True), \
+             patch.object(analyzer, "is_signal", return_value=True):
             last = analyzer.scan([source], out, last=10)
         self.assertEqual(last["candles_processed"], 1000)
         self.assertEqual(last["matches"], 10)
@@ -97,7 +98,8 @@ class DatabaseTests(unittest.TestCase):
             rows = list(csv.DictReader(f))
         self.assertEqual(rows[0]["utc"], "2026-01-00990")
         self.assertEqual(rows[-1]["utc"], "2026-01-00999")
-        with patch.object(analyzer, "is_signal", return_value=True):
+        with patch.object(analyzer, "is_candidate", return_value=True), \
+             patch.object(analyzer, "is_signal", return_value=True):
             all_ = analyzer.scan([source], out, last=0, overwrite=True)
         self.assertEqual(all_["matches"], 441)  # valid from #560 onward
 
@@ -105,9 +107,9 @@ class DatabaseTests(unittest.TestCase):
         source = make_db(self.folder, count=700)
         out = self.folder / "matches.csv"
         self.assertEqual(analyzer.scan([source], out, units=(1,))["pairs"], 0)
-        self.assertEqual(analyzer.scan(
-            [source], out, markets=frozenset(("KRW-ETH",)), overwrite=True
-        )["pairs"], 0)
+        with self.assertRaisesRegex(ValueError, "absent from input DB"):
+            analyzer.scan([source], out, markets=frozenset(("KRW-ETH",)),
+                          overwrite=True)
 
     def test_existing_file_not_overwritten_unless_flag(self):
         source = make_db(self.folder)
@@ -173,6 +175,117 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(analyzer.scan(
             [source], out, last=100, overwrite=True
         )["matches"], 0)
+
+    def test_ticker_parse_search_and_market_list(self):
+        source = make_db(self.folder, count=700)
+        self.assertEqual(analyzer.parse_markets("btc,KRW-ETH"),
+                         frozenset({"KRW-BTC", "KRW-ETH"}))
+        self.assertIsNone(analyzer.parse_markets("all"))
+        self.assertEqual(analyzer.list_markets([source]), ["KRW-BTC"])
+        for invalid in ["BTC,", "BTC;ETH", "KRW-", "!BTC"]:
+            with self.subTest(invalid=invalid):
+                with self.assertRaises(ValueError):
+                    analyzer.parse_markets(invalid)
+
+    def test_selected_market_and_all_markets_independent(self):
+        source = make_db(self.folder, count=800)
+        with closing(sqlite3.connect(source)) as db, db:
+            db.executemany(
+                "INSERT INTO candles(market,unit,utc,kst,close) VALUES(?,?,?,?,?)",
+                (("KRW-ETH", 240, f"2026-01-{i:05d}",
+                  f"KST-{i:05d}", 110.0) for i in range(800))
+            )
+        out = self.folder / "matches.csv"
+        selected = analyzer.scan([source], out,
+                                 markets=analyzer.parse_markets("ETH"))
+        self.assertEqual(selected["pairs"], 1)
+        self.assertEqual(selected["candles_processed"], 800)
+        both = analyzer.scan([source], out, overwrite=True)
+        self.assertEqual(both["pairs"], 2)
+        self.assertEqual(both["candles_processed"], 1600)
+
+    def test_interactive_specific_selection(self):
+        source = make_db(self.folder, count=700)
+        out = self.folder / "selected.csv"
+        # DB was given; choose selected market, timeframe, limit, result, start.
+        answers = ["2", "BTC", "240", "100", str(out), "Y"]
+        with patch.object(analyzer, "_prompt", side_effect=answers):
+            self.assertEqual(analyzer.main(["--interactive", "--db", str(source)]), 0)
+        self.assertTrue(out.exists())
+        with out.open(encoding="utf-8-sig", newline="") as file:
+            self.assertEqual(list(csv.DictReader(file)), [])
+
+    def test_interactive_unknown_market_then_retry(self):
+        markets = ["KRW-BTC", "KRW-ETH"]
+        with patch.object(analyzer, "_prompt", side_effect=["3", "XRP", "2", "DOGE", "2", "ETH"]):
+            self.assertEqual(analyzer._interactive_markets(markets),
+                             frozenset({"KRW-ETH"}))
+
+    def test_cli_select_market_and_list(self):
+        source = make_db(self.folder, count=700)
+        out = self.folder / "cli.csv"
+        self.assertEqual(analyzer.main(["--db", str(source), "--markets", "BTC",
+                                        "--units", "240", "--last", "20",
+                                        "--quiet", "--output", str(out)]), 0)
+        self.assertEqual(analyzer.main(["--db", str(source), "--list-markets"]), 0)
+        self.assertEqual(analyzer.main(["--db", str(source), "--markets", "ETH",
+                                        "--output", str(self.folder / "missing.csv")]), 2)
+        self.assertFalse((self.folder / "missing.csv").exists())
+
+    def test_progress_and_source_safety(self):
+        source = make_db(self.folder, count=5000)
+        original = hashlib.sha256(source.read_bytes()).digest()
+        log = []
+        output = self.folder / "progress.csv"
+        result = analyzer.scan([source], output, progress=True, report=log.append)
+        self.assertEqual(result["candles_processed"], 5000)
+        self.assertTrue(any("100.0%" in row for row in log))
+        self.assertEqual(original, hashlib.sha256(source.read_bytes()).digest())
+        self.assertFalse((self.folder / "upbit_candles.sqlite3-wal").exists())
+
+    def test_refuses_non_csv_target_even_with_overwrite(self):
+        source = make_db(self.folder)
+        original = source.read_bytes()
+        with self.assertRaisesRegex(ValueError, "separate .csv"):
+            analyzer.scan([source], self.folder / "other.sqlite3", overwrite=True)
+        self.assertEqual(source.read_bytes(), original)
+
+    def test_bollinger_only_on_cross_candidates(self):
+        source = make_db(self.folder, count=1000)
+        out = self.folder / "matches.csv"
+        with patch.object(analyzer.Indicators, "bollinger_upper", side_effect=AssertionError("not called")):
+            result = analyzer.scan([source], out)
+        self.assertEqual(result["matches"], 0)
+
+    def test_large_history_with_last_1000(self):
+        source = make_db(self.folder, count=12345)
+        out = self.folder / "large.csv"
+        with patch.object(analyzer, "is_candidate", return_value=True), \
+             patch.object(analyzer, "is_signal", return_value=True):
+            result = analyzer.scan([source], out, last=1000)
+        self.assertEqual(result["candles_processed"], 12345)
+        self.assertEqual(result["matches"], 1000)
+        with out.open(encoding="utf-8-sig", newline="") as file:
+            rows = list(csv.DictReader(file))
+        self.assertEqual(rows[0]["utc"], "2026-01-11345")
+
+    def test_unicode_database_path(self):
+        source = make_db(self.folder, name="한글 공백#?.sqlite3")
+        out = self.folder / "out.csv"
+        digest = hashlib.sha256(source.read_bytes()).hexdigest()
+        result = analyzer.scan([source], out)
+        self.assertEqual(result["candles_processed"], 650)
+        self.assertEqual(digest, hashlib.sha256(source.read_bytes()).hexdigest())
+
+    def test_multiple_databases_output(self):
+        source1 = make_db(self.folder, name="upbit_candles.sqlite3")
+        source2 = make_db(self.folder, name="bithumb_candles.sqlite3")
+        out = self.folder / "combined.csv"
+        stats = analyzer.scan([source1, source2], out)
+        self.assertEqual(stats["pairs"], 2)
+        self.assertEqual(stats["candles_processed"], 1300)
+        with self.assertRaisesRegex(ValueError, "Duplicate"):
+            analyzer.scan([source1, source1], out, overwrite=True)
 
     def test_cli_smoke(self):
         source = make_db(self.folder)
