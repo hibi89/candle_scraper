@@ -1,3 +1,19 @@
+# 분석기 브랜치 최신 상태 — 2026-11-06 00:26 KST
+
+**작동 확인 범위: Python 인터랙티브 메뉴형 검색기 v1.0 / Windows 무설치 EXE는 아직 미구현 / 사용자 실 DB는 미검증.**
+
+- 완료: `pattern_analyzer.py`에 전체/선택/복수 KRW 종목(예: BTC,ETH), 종목 검색, 8종 분봉 다중 선택, 종목·분봉별 전체 또는 최근 N개 구간의 발생 신호 검색, 수집기 SQLite의 읽기 전용 연결, 원자적 CSV, 진행률(%)/처리 건수/검출 건수/ETA, CLI 옵션 유지. `start_pattern_analyzer.bat` 더블클릭 메뉴 시작(Python 설치 필요).
+- 성능 개선: SMA280↑SMA560 + EMA 배열의 교차 후보에서만 BB20 표준편차 평가. 합성 종가 10만 개 반복 계산 내부 비교 0.43초(전봉 BB) 대비 0.13초(BB 생략) 관찰. 실제 3GB SQLite 전체 검색 속도와 차트 일치 여부는 미측정.
+- 검색 규칙: 직전 `SMA280<=SMA560`, 현재 `SMA280>SMA560`, `EMA560>EMA280>SMA280>SMA560>BBupper(20,2)`. 빈 신호도 헤더 CSV 출력.
+- 검증: 로컬 Python 3.13.5 `python -m unittest -q test_pattern_analyzer.py` **23/23 PASS**, `python -m compileall -q pattern_analyzer.py test_pattern_analyzer.py` PASS; 합성 12,345봉 전체 계산/최근 1,000봉 결과 필터, 실제 합성 교차 1건, 선택 복수 종목/CLI/메뉴, 한글·특수문자 경로, 원본 DB SHA256 불변, 출력 CSV 보호·원자성 통과. 거래소 실데이터·Windows 10/11/EXE NOT_RUN.
+- GitHub: private `hibi89/candle_scraper`, `feature/candle-pattern-analyzer`; 원본 `main` 소스 SHA `1f976770db4797bcaa846ed32962e306318971ca`, 현재 코드·테스트/런처의 Git Blob SHA는 각각 `cb41a4935e3b890e26f30b479804e14d628ef16c`, `e52c206224b1c241fde0d4b5d4dd2ddaf72873dd`, `a8d5e8710c22fe3a6be34a7aa58a4b598704f4be`. 최종 문서 HEAD는 커밋 후 재조회.
+- 다운로드 ZIP: `CandlePatternScanner_v1.0_Python.zip` sha256 `5545bf03fcb317b29a0ba36b61bd210cfe7f40fd29f74f10ef7e3d95be687ffe`; 3개 파일, ZIP CRC PASS. GitHub에는 패키지 바이너리·시장 데이터·로컬 고객 DB 미업로드.
+- 원본/출시: 수집기 `collector.py`와 `menu.py` 변경 없음; 사용자 로컬 `E:\\업비트 캔들긁어오기\\upbit_candles.sqlite3` 미접근, 재수집 없음, 외부 API 호출 없음. 기존 수집기 판매 RELEASE HOLD 유지. 분석기 실고객 배포도 EXE/실 DB/계약 검증 전 보류.
+- 잔여: 실제 사용자 DB에서 전/선택 종목 검색, Windows10/11 실행과 표시, 정확한 차트 재현, 무설치 EXE 제작·검증, 일반 파일 포맷 어댑터. 사용자 승인 없는 원본/권한/개인자료 변경 없음. Vercel/Production 미적용.
+- 설계 대안: 기존 CLI만 유지(수정 소량, 실사용 난도 높음) vs CLI+안전한 대화형 메뉴(표준 라이브러리, 유지보수 용이). 후자 선택, 동적 고객 Python 코드 실행 및 외부 GUI 의존성 배제.
+
+---
+
 # 분석기 브랜치 현행 상태 — 2026-11-05 KST
 
 - **적용 범위:** `feature/candle-pattern-analyzer` 전용 신규 코드. 기존 `main` 수집기/고객 SQLite는 변경 없음. 사용자 제공 기준 SHA `1f976770db4797bcaa846ed32962e306318971ca`에서 시작.
