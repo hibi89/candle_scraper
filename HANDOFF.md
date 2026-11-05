@@ -1,3 +1,18 @@
+# 캔들 패턴 분석기 v1.0 최신 인수인계 — 2026-11-06 00:26 KST
+
+1. **목표·기술·확정 요구:** 수집기와 독립된 오프라인 맞춤식 검색기. 보라 EMA560 > 노랑 EMA280 > 분홍 SMA280 > 파랑 SMA560 > BB(20,2) 상단, SMA280이 SMA560을 이번 봉에서 골든크로스. KRW 전 종목·1/3/5/10/15/30/60/240분봉, DB 모든 누적 봉 또는 최근 N개 신호만. Python3.11+ 표준 라이브러리, SQLite 읽기 전용, CSV 출력.
+2. **완료·설계·결정:** `pattern_analyzer.py`(CLI+인터랙티브), `start_pattern_analyzer.bat`(Windows 더블클릭, Python 필요), `test_pattern_analyzer.py` 회귀. 종목 전체/단일/복수 선택·검색 메뉴, 분봉 선택, N 자유 입력, 진행률/ETA, CSV 기존 파일 보존·원자 저장. 빠른 후보 필터에서만 BB 표준편차 계산. CLI 단독보다 메뉴 병행을 선택(유지보수·의존성 비용 낮음), 임의 고객 코드 실행 미도입.
+3. **검증 명령·결과:** Python3.13.5 `python -m unittest -q test_pattern_analyzer.py`: **23 PASS, 0 FAIL/ERROR**. `python -m compileall -q pattern_analyzer.py test_pattern_analyzer.py` PASS. 합성 12,345봉, 실제 계산 합성 교차 1회, 전체/최근 1,000, 오류/중단/원자 파일, 한글 경로, 두 DB, 메뉴 정상. 사용자의 약 3.6GB 업비트 원본 검증 **NOT_RUN**, Windows10/11·EXE **NOT_RUN**.
+4. **완료/진행/대기/차단:** Python 검색기 v1.0/테스트/더블클릭 BAT/설명서 ZIP 완료. 실제 데이터 진단, 상용 무설치 EXE, CSV/JSON/Excel/Parquet 입력은 미완료. 기존 거래소 수집기의 출시 **RELEASE HOLD**와 별도.
+5. **오류·원인·재시도 금지·대안:** 종목 검증 시 예전 테스트는 미존재 종목 0건 결과를 기대했으나 새 설계는 명시적 오류 처리; 교차 후보 선별 때문에 목(mock) 신호 테스트를 갱신. 수정 후 23 PASS. 실제 PC 오류·성능은 아직 재현된 바 없으므로 단정 금지. 고객 대형 DB를 GitHub로 복사하지 말고 사용자 PC에서 읽기 전용으로 확인.
+6. **저장소·브랜치·SHA·경로:** private `hibi89/candle_scraper`, `feature/candle-pattern-analyzer`, 초기/원본 main `1f976770db4797bcaa846ed32962e306318971ca`. 코드/테스트/BAT Git blob은 `cb41a4935e3b890e26f30b479804e14d628ef16c`, `e52c206224b1c241fde0d4b5d4dd2ddaf72873dd`, `a8d5e8710c22fe3a6be34a7aa58a4b598704f4be`; GitHub 문서 커밋 후 브랜치 HEAD 재조회. `docs/PATTERN_ANALYZER.md` 핵심 수식 명세.
+7. **환경·Production/실행:** Python3.11+가 있으면 ZIP 해제 후 `start_pattern_analyzer.bat` 실행, 또는 `py pattern_analyzer.py --db "E:\\업비트 캔들긁어오기\\upbit_candles.sqlite3" --markets BTC,ETH --units 240 --last 10000 --output results.csv`. Windows EXE 아직 빌드하지 않음. Vercel 미적용, CI Windows 작업 없음.
+8. **원본·백업·보안/변경금지:** 로컬 `E:\\업비트 캔들긁어오기\\upbit_candles.sqlite3`, 관련 -wal/-shm은 사용자 장비에만 두고 건드리지 않음. GitHub에는 소스·합성 테스트·문서만, 시세/키/실DB/EXE 없음. 실제 수집기 main 및 과거 ZIP 보존. 결과는 `.csv`에만 기록, 입력 DB `mode=ro`+`query_only`.
+9. **다음 우선순위·완료 기준/승인:** (a) 사용자 로컬 DB 전체 검색 + 성능/ETA/출력 및 차트 시각 검증 (b) Windows 10/11 비관리자·한글 경로 검증 (c) PyInstaller 독립 EXE + 메뉴 빌드·실기기 점검, 필요 비용/권한 사전 확인 (d) 고객 CSV/JSON/Excel/Parquet 어댑터 (e) 상업적 라이선스 검증과 최종 사용자 RELEASE 승인. 구버전 실행 중에는 교체 파일 자동 적용되지 않음.
+10. **갱신 기준·검증 범위:** 2026-11-06 00:26 KST. 로컬 합성 DB 오프라인 Python 23개 테스트·ZIP 무결성/소스 SHA 검증까지 완료. GitHub Actions/실제 업비트 DB/Windows EXE/실차트/판매 허가 검증 없음.
+
+---
+
 # 캔들 패턴 분석기 브랜치 인수인계 — 2026-11-05 KST (최우선)
 
 1. **목표·확정 요구·기술:** 기존 수집기 독립 유료 오프라인 패턴 검색 도구(예정가 170,000원). 기존 업비트 SQLite의 모든 KRW 종목·1/3/5/10/15/30/60/240분봉·누적 전체 과거 10,000봉 이상에서 사용자 수식 검색, 종목/봉/시간/조건값 CSV. Python 3.11+ 표준 라이브러리. 선택 `--last N`, 0=전체, N=종목/분봉별 최신 N개 결과만 판단; 계산은 전체 이력 사용. SQLite 고정 스키마를 첫 입력으로 구현, 기타 CSV/JSON/Excel/Parquet는 향후 어댑터.
