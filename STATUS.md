@@ -1,8 +1,21 @@
 # STATUS — Coin Candle Collector v1.6.1 (commercial Windows editions)
 
-최신 확인: **2026-11-05 22:15 KST**
+최신 확인: **2026-11-05 22:30 KST**
 
-## 2026-11-05 22:15 KST — latest verified release-safety improvement
+## 2026-11-05 22:30 KST — 144-case / multilingual consumer-path regression verified
+
+- **전체 기술 완성도 추정 98% (직전 97% → +1%p).** 이는 기술적 검증 목표의 주관적 추정이며 판매 허가/출시 준비 100%를 뜻하지 않는다. **RELEASE HOLD 유지**.
+- **현재 최신 Windows 검증:** [GitHub Actions #42035893214](https://github.com/hibi89/candle_scraper/actions/runs/42035893214), code SHA `75bdd6ea6d78887200b93f29fab9b389c3054e3f`, Windows Server 2022, Python 3.11.9 + PyInstaller 6.16.0, **SUCCESS**. unittest **144/144 PASS**, 전체 EXE 3/3 빌드·시작, 고객 ZIP 3/3 개별 압축 해제 및 실행 PASS.
+- **추가 실제 Windows EXE 경로 검증:** 고객 ZIP 각각을 한글과 공백이 있는 임시 경로에 해제·실행하여 메뉴 `[6]` DB 조회: 업비트 1회, 빗썸 1회, 통합형 2회. 모두 **PASS**, 존재하지 않는 DB를 자동 생성하지 않음을 확인. 고객 Windows 10/11 자체 테스트나 SmartScreen/Defender 인증은 **미실시**.
+- **실제 고객 ZIP의 live [5] 메뉴:** 업비트 단독, 빗썸 단독, 통합형 양 거래소 11종 실 API 점검 전부 PASS. 이 검증은 시세·고객 DB를 GitHub에 업로드하지 않음.
+- **다종목/장애 회귀 강화:** 모의 거래소 REST 응답으로 5 KRW 종목 × 11 시간봉 × 2 거래소 = **110개의 조합**, 각 최초 206개/추가 1개·중복 0·CSV 행 수 207개 검증. 특정 한 종목 오류 시 **54/55 작업 보존**, 다음 `initial`에서 55/55로 회복 검증. 업비트 UTC `to`와 빗썸 KST `to` 각각 확인.
+- **429/RateLimit:** 0~30초 내 단기 Retry-After 및 Retry-After 미제공 429도 5개 병렬 작업자 공통 RateGate가 차단하고 이후 복구. 앞선 30초 초과, 마지막 재시도 장기 429 보강도 유지.
+- **이전 실패 처리:** [run #42035413941](https://github.com/hibi89/candle_scraper/actions/runs/42035413941)는 새 테스트의 SQLite 연결 미종료와 429 호출횟수 기대 오류로 FAILURE; 테스트 코드 수정 후 [#42035667647](https://github.com/hibi89/candle_scraper/actions/runs/42035667647) **144/144 SUCCESS**. 이후 Unicode 경로를 포함한 **최종 run #42035893214 SUCCESS**. 제품 장애/판매 불가의 원인으로 오기하지 않음.
+- **현재 검증 ZIP 해시(SHA256):** Upbit `e308076d4e8dd85b829361cb5ee16d0b6710f56a92d9307788aa24d82f0664f3`; Bithumb `5bf396c39fbae5c3bdc82fab0bbecb0c11d098396e7739171fed74aec0079cd9`; Both `7b253ba2e058a42aa72a90d606efce1238cce6c7a15eb50907fe502842baf985`. GitHub Actions 고객 ZIP artifact ID `13418123592`·실 API evidence `13417524024`. **2026-11-19 22:29~22:30 KST 만료**.
+- **로컬 ZIP 교차 검수:** 외부 GitHub Artifacts에서 받은 묶음 ZIP `candle_collector_latest_INTERNAL_75bdd6e.zip` 크기 29,715,882bytes/sha256 `46651307e7fad65502f2bb46e0d6ba29284afb5df09ddc310748e099ebfa68eb`, 내부 3개 ZIP 각 SHA256과 무결성 `ZipFile.testzip()==None` 직접 PASS. 고객 상품에 시장 CSV·DB 포함 없음.
+- **최종 남은 차단:** Windows 10/11 **비관리자 사용자 실기기** + Defender/SmartScreen 직접 검사, 전 KRW·전 11봉 장시간 실제 수집은 미실시. **업비트 Open API 유상 배포 제한**, 빗썸 유상 EXE 배포 권한 미확정: 판매·공개·고객 전달 **금지**. 현행 제품 허가·제품 재설계·출시 모두 별도 사용자 승인 필요. `docs/COMMERCIAL_API_POLICY.md`와 미발송 `docs/LICENSING_REQUEST_DRAFTS.md` 참조.
+
+## 2026-11-05 22:15 KST — historical 140-test release-safety improvement
 
 - **기술 전체 완성률 추정 97% (이전 95% 대비 +2%p)**. 기능 테스트 통과와 고객 배포·판매 허가는 별개이며 **RELEASE HOLD**. 소비자 Windows10/11 실제 환경/SmartScreen, 전 KRW/11종 장시간 사용, API 상업적 라이선스는 차단/미검증.
 - [Windows GitHub CI #42033704161](https://github.com/hibi89/candle_scraper/actions/runs/42033704161), source SHA `da582b1c4c6db6740c08d2ddce7788d8e658724d`, **completed SUCCESS**. Python 3.11.9, pinned PyInstaller 6.16.0.
@@ -23,9 +36,9 @@
 - Upbit/Bithumb 11개 시간봉·과거 페이지 및 고객 EXE 3종 API 메뉴 실검증은 기존 성공 [run #42029964305](https://github.com/hibi89/candle_scraper/actions/runs/42029964305) SHA `40c0afe32e4eecda64ada9021aad35a8d1cd96fd` 유지. 10,000 실수집 검증은 **각 거래소 KRW-BTC 1분봉 한 조합**에 한정하며, 전 KRW 종목·전 11봉 대량/장기 운용이나 고객 Windows10/11 네이티브 실행을 증명하지 않는다.
 - **상업용 배포는 별도 계약상 차단**: Upbit Open API 현행 제6조 제3항이 유상 프로그램 배포·이용허락 금지, 제5조가 무단 영리 데이터 사용 제한. Bithumb 상업적 권한도 미확정. 근거 `docs/COMMERCIAL_API_POLICY.md`. **RELEASE HOLD (판매/제공 금지)**. 문서화가 허가 획득을 대신하지 않음.
 
-## 현재 최종 판정
+## 이전 판정(현행 98%가 우선)
 
-- **기술 완성률 97% (검증 범위 기준 추정)**. 아래 95%, 94%, 92%는 과거 회차의 역사적 기록으로 최신 판정이 아님.
+- **기술 완성률 97% (검증 범위 기준 과거 추정)**. 아래 95%, 94%, 92%는 과거 회차의 역사적 기록으로 최신 판정이 아님.
 - **판매 준비 상태: 차단(HOLD)** — 업비트 유상 프로그램 배포 금지, 빗썸 유상 배포 권리 미확인, 고객 Windows 10/11 검증 미실시. 제품 발매·전송·결제 없음.
 
 ## 과거 판정 기록 (최신이 아님)

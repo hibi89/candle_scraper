@@ -1,3 +1,20 @@
+# HANDOFF 최신 — 2026-11-05 22:30 KST
+
+**현재 기술 완성률 추정 98% (97% → +1%p), 유상 배포 RELEASE HOLD.** '98%'는 기술 품질의 프로젝트 추정이며 **판매 98% 허가**가 아니다. 아래 97%, 95% 등은 역사적 시점이다.
+
+1. **목표·확정 요구·기술:** 기존 크몽 Windows 무설치 EXE 3종(Upbit/Bithumb/Both), KRW 전 종목, 11봉, 최초 10k 완료봉과 이후 무제한 증분, 선택적 시간봉, 5 병렬 워커, SQLite 별도 DB/CSV, 진행률/ETA. Python 3.11 stdlib/PyInstaller 6.16.0. 디자인/서비스 범위 변경 없음.
+2. **완료·변경·설계:** 기존 140개 회귀·EXE 검증 보존. 새 공통 RateGate: **짧은/헤더 없는 429도 다른 4개 병렬 요청자가 일시 정지**; 30초 초과/최종 429 정책 보존. 신규 오프라인 데이터 매트릭스 5×11×2=110조합, 장애-재시도 54/55→55/55, 증분/CSV/중복. 추가 실제 EXE 한글·공백 경로 실행·DB 조회 메뉴 무쓰기 검증 3판형.
+3. **테스트 명령·결과/범위:** `python -m unittest discover -p 'test_*.py' -q` **144/144 PASS**. `build_windows.bat` 5/5 단계 PASS, `python -m compileall -q .` PASS. 최신 [Windows Actions #42035893214](https://github.com/hibi89/candle_scraper/actions/runs/42035893214) source SHA `75bdd6ea6d78887200b93f29fab9b389c3054e3f`: EXE 3/3, 고객 ZIP 3/3, Unicode 경로 3/3, 실제 EXE 공개 API 검사 3개 판형 PASS. 이전 각 거래소 BTC 1분봉 실제 10k/중단/복구 CI [#42031303797](https://github.com/hibi89/candle_scraper/actions/runs/42031303797). 전 종목 장시간·소비자 Windows10/11 직접 검증 **미실시**.
+4. **진행·대기·차단:** 전체 기술 완성률 **98%** (이전 97% 대비 +1%p). 고객 Windows10/11·SmartScreen/Defender 미확인. **유상 판매 HOLD**: Upbit API 사용 프로그램 유상 배포 금지 조항, Bithumb 유상 EXE 권리 미확인. 승인 전 고객에게 ZIP/시장 DB 제공 금지.
+5. **오류/원인/시도/재시도:** 첫 신규 다종목 테스트 [#42035413941](https://github.com/hibi89/candle_scraper/actions/runs/42035413941) 실패 원인은 **테스트 코드** SQLite context-manager 비종료 `WinError32`, mock `block_for` 기대횟수 누락. `closing()`과 assertion 정정 후 [#42035667647](https://github.com/hibi89/candle_scraper/actions/runs/42035667647) SUCCESS, 후속 Unicode 최종 [#42035893214](https://github.com/hibi89/candle_scraper/actions/runs/42035893214) SUCCESS. 실패한 SHA 재실행/무의미한 API 대량 검사 불필요.
+6. **GitHub·브랜치·SHA·경로:** 비공개 `hibi89/candle_scraper`, `main`; **최신 실제 빌드 검증 SHA `75bdd6ea6d78887200b93f29fab9b389c3054e3f`**. 본 HANDOFF 문서 커밋 후 현재 HEAD를 재확인. 주요 `collector.py`, `test_v17_retry_safety.py`, `test_v18_market_matrix.py`, `verify_customer_packages.py`, `build_windows.bat`, `.github/workflows/windows-build.yml`.
+7. **Production·실행 환경:** Vercel 미적용; GitHub Windows Server 2022 Python3.11.9/PyInstaller6.16.0. 내부 고객 ZIP artifact **13418123592**/실 EXE API 감사 **13417524024**, 2026-11-19 22:29~22:30 KST 만료; 원본 외부 ZIP 29,715,882bytes SHA256 `46651307e7fad65502f2bb46e0d6ba29284afb5df09ddc310748e099ebfa68eb`. 개별 ZIP 해시는 STATUS 최신 섹션 참조. 판매 릴리스 아님.
+8. **원본·백업·인증/수정금지:** 모든 v1.4~1.6.1 소스 ZIP Library/비공개 GitHub 보존, v1.6.1 원본 ZIP sha256 `a913ac56674dc3d712b134e56dc11b78ae1e48d5e716a11e6d408d8a82eedf50`. 사용자 `E:\업비트 캔들긁어오기\upbit_candles.sqlite3` 수정/동기화 금지, 비밀키·시장원본·고객 DB·EXE의 GitHub 원본 소스 내 반영 금지. CI는 임시 DB만 사용.
+9. **다음 우선 작업·완료 기준·승인:** (a) 현행 판매 모델을 유지하려면 거래소 양사에 공식 유상 프로그램 라이선스 서면 허가 확인—미발송 문의 초안은 `docs/LICENSING_REQUEST_DRAFTS.md`, 사용자 승인 전 발송 금지 (b) 소비자 Windows10/11 비관리자 ZIP 실행·Defender/SmartScreen 증거 확보 (c) 필요 시 실제 전종목 실행은 사용자의 별도 동의와 API 정책/리소스 검토 후 한정 수행 (d) 허가 불가 시 사용자 승인 후 오프라인/정식 라이선스 데이터 소스 상품으로 전환 (e) 사용자 RELEASE 승인. 불허된 상태에서는 기술 100%여도 출시 금지.
+10. **KST·검증 시점·문서 커밋:** 2026-11-05 **22:30 KST** 기준 GitHub Actions `42035893214` 완료 SUCCESS 및 로컬 다운로드된 GitHub artifacts 4개 ZIP 해시/압축 무결성 확인. 고객 PC/실 상용허가 미검증. 문서 기준 SHA는 갱신 후 remote HEAD 확인.
+
+---
+
 # HANDOFF 최신 — 2026-11-05 22:15 KST
 
 **최신 확인된 기술 완성률 97% (전 회차 95% → +2%p) / 판매 RELEASE HOLD.** 아래 연혁의 95%,94% 등은 과거 시점 기록이다.

@@ -1,8 +1,12 @@
 # 코인 캔들 수집기 — v1.6.1 (비공개 GitHub 소스 저장소)
 
-**상태: 판매 보류(HOLD), 기술 완성률 추정 97%.** Windows Server 2022 GitHub Actions에서 3종 EXE 빌드/실행 및 고객 ZIP 3종 독립 실행 3/3 PASS. 업비트·빗썸 각각 KRW-BTC 실 API 11봉·2페이지 및 임시 DB 소량 수집/증분/CSV PASS. **실제 고객 ZIP 3종의 EXE 내 메뉴 [5]도 업비트/빗썸 실 API 연결 PASS** (Windows Server 2022). 단, 소비자 Windows 10/11 실행·장기/전종목 수집·약관 검증은 남아 있습니다. GitHub 소스 ZIP 자체는 EXE가 아닙니다.
+**상태: 판매 보류(HOLD), 기술 완성률 추정 98%.** Windows Server 2022 GitHub Actions에서 3종 EXE 빌드/실행 및 고객 ZIP 3종 독립 실행 3/3 PASS. 업비트·빗썸 각각 KRW-BTC 실 API 11봉·2페이지 및 임시 DB 소량 수집/증분/CSV PASS. **실제 고객 ZIP 3종의 EXE 내 메뉴 [5]도 업비트/빗썸 실 API 연결 PASS** (Windows Server 2022). 단, 소비자 Windows 10/11 실행·장기/전종목 수집·약관 검증은 남아 있습니다. GitHub 소스 ZIP 자체는 EXE가 아닙니다.
 
-## 최신 140개 회귀·고객 EXE 검증 (2026-11-05 22:15 KST)
+## 최신 Windows 소비자 경로 검증 — 2026-11-05 22:30 KST
+
+[Windows CI #42035893214](https://github.com/hibi89/candle_scraper/actions/runs/42035893214), 소스 SHA `75bdd6ea6d78887200b93f29fab9b389c3054e3f`: 144/144 자동 테스트, Windows EXE 3판형 및 각 ZIP 독립 실행, **한글·공백 포함 실제 압축해제 경로에서 3개 EXE의 메뉴 [6] 로컬 DB 조회/DB 미생성 PASS**, 3판형 실거래소 API 점검 PASS. 모의 데이터로 5개 KRW 종목 × 11봉 × 양 거래소 총 110종목-봉 조합의 증분·CSV·선택적 오류 복구·중복 0 검증. **기술 완성률 추정 98%**. **Windows10/11 소비자 단말, 유료 판매 허가 미검증**이므로 판매 및 고객 배포 HOLD.
+
+## 과거 140개 회귀·고객 EXE 검증 (2026-11-05 22:15 KST)
 
 [GitHub Actions #42033704161](https://github.com/hibi89/candle_scraper/actions/runs/42033704161) SHA `da582b1c4c6db6740c08d2ddce7788d8e658724d`: Windows Python 3.11.9에서 **140/140 PASS**, EXE 3종/고객 ZIP 3종 독립 실행 및 실제 공개 API 메뉴 전부 PASS. 서버의 긴 Retry-After를 존중하고 같은 거래소 5개 병렬 작업자가 초과 요청하지 않도록 공동 쿨다운을 추가. **기술 완성률 추정 97%, 판매 HOLD**. 현재 유상 판매 권한을 얻은 것이 아닙니다. 허가 문의용 미발송 초안은 [docs/LICENSING_REQUEST_DRAFTS.md](docs/LICENSING_REQUEST_DRAFTS.md).
 

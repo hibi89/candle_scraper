@@ -1,3 +1,14 @@
+# Latest — 2026-11-05 22:30 KST
+
+- [CI #42035893214](https://github.com/hibi89/candle_scraper/actions/runs/42035893214), source SHA `75bdd6ea6d78887200b93f29fab9b389c3054e3f`, Windows Server 2022 Python3.11.9/PyInstaller6.16.0, **completed SUCCESS**.
+- **144/144 offline tests PASS**, EXE 3/3 startup, ZIP 3/3 independent execution, Hangul/space directory EXE 3/3 menu [6] read-only/no DB creation, EXE 3-edition live API menus PASS.
+- Matrix in `test_v18_market_matrix.py`: 5 markets × 11 timeframes × 2 providers; each pair 206 completed synthetic candles, then +1 update, exported 55 CSVs/exchange, no duplicates, one-market failure recovery. New shared short/no-header 429 gate tests.
+- Failed intermediate [#42035413941](https://github.com/hibi89/candle_scraper/actions/runs/42035413941): test fixture Windows SQLite handle leak and obsolete 429 call-count assertion; both repaired. Passing intermediate [#42035667647](https://github.com/hibi89/candle_scraper/actions/runs/42035667647) 144/144.
+- Latest ZIP internal artifact `13418123592`, live EXE evidence `13417524024`; expire Nov 19 KST. GitHub artifact archive sha256 `46651307e7fad65502f2bb46e0d6ba29284afb5df09ddc310748e099ebfa68eb`. Independent ZIP digests: Upbit `e308076d4e8dd85b829361cb5ee16d0b6710f56a92d9307788aa24d82f0664f3`, Bithumb `5bf396c39fbae5c3bdc82fab0bbecb0c11d098396e7739171fed74aec0079cd9`, both `7b253ba2e058a42aa72a90d606efce1238cce6c7a15eb50907fe502842baf985`; all ZIP CRC PASS.
+- No customer Win10/11 or antivirus evidence, no all KRW/11 timeframes real prolonged collection, no exchange distribution permission. **SALES RELEASE HOLD**.
+
+---
+
 # 2026-11-05 22:15 KST — Latest release-safety Windows integration SUCCESS
 
 - Run [#42033704161](https://github.com/hibi89/candle_scraper/actions/runs/42033704161), functionality source SHA `da582b1c4c6db6740c08d2ddce7788d8e658724d`, Windows Server 2022 Python3.11.9/PyInstaller6.16.0.
