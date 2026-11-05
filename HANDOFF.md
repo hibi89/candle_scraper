@@ -1,3 +1,20 @@
+# HANDOFF 최신 검증 — 2026-11-05 22:50 KST
+
+**기술 전체 완성률 추정 99% (직전 98% 대비 +1%p), 판매 RELEASE HOLD.** 기술 진척과 상업용 출시 허가는 별개의 게이트이다. 이 문서 아래의 98%, 97%, 95%는 역사적 기록이며 최신 판정이 아니다.
+
+1. **목표·요구·기술:** Windows 로컬 무설치 EXE 3종(업비트/빗썸/통합), KRW 전 종목, 월/주/일/240/60/30/15/10/5/3/1분 11봉, 최초 각 10,000개 완료봉·이후 증분 무제한, 5워커, SQLite DB 거래소별 분리, CSV, 진행률/ETA, 오류로그, Python3.11 stdlib/PyInstaller. 기존 요구/원본 변경 없음.
+2. **완료/결정/근거:** 페이지 일부 INSERT 중 예외 발생 시 `rollback()`해 기존 정상 데이터를 보존, 실패한 DB 열기/PRAGMA/WAL/DDL/초기 검증이나 KeyboardInterrupt 시 `close()`보장. 기본 SQLite 자동 정리에 의존하는 방식보다 실패 범위가 명시적인 최소 수정 선택. 기존 안전한 PK/커서/429 제한/다종목 매트릭스 보존. 신규 `test_v19_db_atomicity.py` 3개 회귀.
+3. **테스트/증거:** [Windows CI #42038795999](https://github.com/hibi89/candle_scraper/actions/runs/42038795999) **SUCCESS**, 코드 검증 SHA `9e0632890c5621f4756e9ca7328480d860b2b710`, Windows Server2022 Python3.11.9 PyInstaller6.16.0, `python -m unittest discover -p 'test_*.py' -q`: **147/147 PASS**; 3/3 EXE 부팅, 3/3 고객 ZIP 독립 실행 및 한글 경로 3/3, 실제 EXE의 업비트·빗썸 각각 공개 API 검사 PASS. 과거 실제 BTC 10,000봉·중단/복구는 [#42031303797](https://github.com/hibi89/candle_scraper/actions/runs/42031303797). 고객 PC Windows10/11/SmartScreen·전종목 장시간 실제 운용 NOT_RUN.
+4. **진행/차단:** 기능 검증 기준 기술 추정 **99%**; 추가 실제 PC·라이선스 별도. **유상 판매 HOLD**. 업비트 제6조 제3항 유료 프로그램 양도·배포/이용 허락 금지, 빗썸 유상 EXE 판매 라이선스 미확정, 서면 허가·사용자 출시 승인 없음.
+5. **오류/시도/대안:** 과거 Windows f-string/CP1252/테스트 SQLite 연결 누락 등은 이후 성공 SHA로 해결. 이번 실패 주입 테스트에서 SQLite 데이터 트랜잭션 롤백·핸들 보존 문제를 명시적으로 보완하고 CI 147 PASS. 실패 SHA 반복·대량 API 재수집 불필요. 기술 이외 판매 제한은 버그가 아니라 이용약관 협의/제품 구조 변경 문제.
+6. **저장소/브랜치/SHA/주요 경로:** private `hibi89/candle_scraper` `main`; **기능 통합 검증 SHA `9e0632890c5621f4756e9ca7328480d860b2b710`**, 그 후 별도 `docs/RELEASE_CHECKLIST.md`·`docs/COMMERCIAL_API_POLICY.md` 정정 커밋 `f1d5ccd5f197ea464d643453de3cb4a37b0bbb70`. 이 문서의 최종 HEAD는 다시 GitHub 조회. `collector.py`, `test_v19_db_atomicity.py`, `.github/workflows/windows-build.yml`, `docs/RELEASE_CHECKLIST.md`.
+7. **Production/환경:** Vercel 미적용. Windows GitHub Actions run `42038795999`, Python3.11.9 PyInstaller6.16.0. 내부 고객 ZIP 3종 artifact ID `13419497818`, EXE 실 API 감사 artifact ID `13418954271`, 만료 2026-11-19 22:48~22:49 KST. ZIP SHA256: Upbit `a61393bf8dd058afc7aed44d73329b8accb24e7df53386f12316dfd754bd7e00`, Bithumb `e5677ca43f26c9b24bb52bb663dc1602210ee6e8b5747086e7df6f047136cbbf`, Both `b152e053408810f0e9873fe8c564f991fcb896973935c2b1d391afdf197f9ade`; 통합 artifact sha256 `11572559bf3dc092099dd47028a86455ea811c76027d47d1bbb3450486ebc5d1`. 테스트 전용/판매 미승인.
+8. **원본/백업/인증·변경금지:** v1.4~v1.6.1 원본 ZIP은 Library에 별도 보존, v1.6.1 원본 ZIP SHA256 `a913ac56674dc3d712b134e56dc11b78ae1e48d5e716a11e6d408d8a82eedf50`. 사용자 `E:\업비트 캔들긁어오기\upbit_candles.sqlite3` 및 기존 로컬/시장 DB 절대 건드리지 않음. CI는 새 임시 DB/모의 데이터만 쓰며 GitHub에 고객 DB/CSV/비밀·EXE 없음. SOURCE_MANIFEST.json은 최초 스냅샷 기록만.
+9. **다음 우선순위/완료 기준·승인:** 실고객 Windows10/11 비관리자·SmartScreen/Defender 확인, 전종목/11봉의 실제 장기 스트레스 검증(요청 제한/이용조건 고려), 업비트/빗썸 유료 EXE 유통 **서면 허가** 및 사용자 출시 최종 승인. 문의 초안 `docs/LICENSING_REQUEST_DRAFTS.md` 미발송. 허가 불가시 정식 라이선스 소스 또는 오프라인 CSV 상품으로 범위 전환 *사전 사용자 승인* 필요. 99% 진행을 판매 허용으로 해석 금지.
+10. **갱신 시점/KST/증거/문서 SHA:** 2026-11-05 **22:50 KST**. GitHub CI SUCCESS #42038795999 정확한 소스 SHA `9e0632890c5621f4756e9ca7328480d860b2b710`; 별도 sandbox 다운로드 artifact 및 3개 ZIP CRC/SHA256 검수 PASS. Windows Server 2022에서 실제 EXE 실행 확인; 일반 사용자 Windows10/11 등 미검증. 본 HANDOFF 반영 문서 커밋은 main 원격 최신 HEAD로 재확인.
+
+---
+
 # HANDOFF 최신 — 2026-11-05 22:30 KST
 
 **현재 기술 완성률 추정 98% (97% → +1%p), 유상 배포 RELEASE HOLD.** '98%'는 기술 품질의 프로젝트 추정이며 **판매 98% 허가**가 아니다. 아래 97%, 95% 등은 역사적 시점이다.

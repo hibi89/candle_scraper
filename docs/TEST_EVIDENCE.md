@@ -1,3 +1,14 @@
+# 2026-11-05 22:50 KST — latest verified SQLite safety / complete Windows build
+
+- [Run #42038795999](https://github.com/hibi89/candle_scraper/actions/runs/42038795999) source SHA `9e0632890c5621f4756e9ca7328480d860b2b710` **SUCCESS** on Windows Server2022, Python3.11.9/PyInstaller6.16.0.
+- `python -m unittest discover -p 'test_*.py' -q`: **147/147 PASS**, including three new DB failure-injection scenarios: SQL-trigger aborted second row causes complete rollback with prior commit intact and next retry success; PRAGMA/WAL setup OperationalError closes connection; KeyboardInterrupt during DB open also closes connection.
+- `build_windows.bat`: 3 EXE boot and 3 independent customer ZIP execution PASS. Korean/space path [6] no-DB-write checks PASS for all 3. Live read-only [5] API from each customer EXE PASS (Upbit-only/Bithumb-only/Both).
+- Verified ZIP SHA256: upbit `a61393bf8dd058afc7aed44d73329b8accb24e7df53386f12316dfd754bd7e00`; bithumb `e5677ca43f26c9b24bb52bb663dc1602210ee6e8b5747086e7df6f047136cbbf`; both `b152e053408810f0e9873fe8c564f991fcb896973935c2b1d391afdf197f9ade`. Outer GitHub artifact `13419497818` SHA256 `11572559bf3dc092099dd47028a86455ea811c76027d47d1bbb3450486ebc5d1`, inner ZIP CRC/hash checked independently in sandbox. EXE live audit artifact `13418954271`. All expire 2026-11-19 KST.
+- Private original DB untouched, no customer market data or credentials in repo. **RELEASE HOLD**: consumer Windows10/11 actual device, all-market long run and explicit commercial distribution rights still NOT_VERIFIED.
+- `SOURCE_MANIFEST.json` refers only to initial import; current artifact integrity is evidenced by exact CI source SHA plus BUILD_EVIDENCE and ZIP hashes.
+
+---
+
 # Latest — 2026-11-05 22:30 KST
 
 - [CI #42035893214](https://github.com/hibi89/candle_scraper/actions/runs/42035893214), source SHA `75bdd6ea6d78887200b93f29fab9b389c3054e3f`, Windows Server 2022 Python3.11.9/PyInstaller6.16.0, **completed SUCCESS**.

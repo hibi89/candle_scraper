@@ -1,8 +1,20 @@
 # STATUS — Coin Candle Collector v1.6.1 (commercial Windows editions)
 
-최신 확인: **2026-11-05 22:30 KST**
+최신 확인: **2026-11-05 22:50 KST**
 
-## 2026-11-05 22:30 KST — 144-case / multilingual consumer-path regression verified
+## 2026-11-05 22:50 KST — latest Windows 147/147, SQLite rollback/handle lifecycle verified
+
+- **기술 완성률 추정 99% (직전 98% → +1%p)**. 강한 데이터 안전성 검증이 추가되었으나 실제 소비자 Windows10/11/SmartScreen·전종목 실운용은 미검증, 상업적 출시 **RELEASE HOLD 유지**.
+- [Windows CI run #42038795999](https://github.com/hibi89/candle_scraper/actions/runs/42038795999) **SUCCESS**, exact tested **source SHA `9e0632890c5621f4756e9ca7328480d860b2b710`**, Windows Server 2022 / Python 3.11.9 / pinned PyInstaller 6.16.0.
+- 오프라인 **147/147 테스트 PASS** (144→147; 추가 3개 SQLite 오류 주입): `insert_page`의 중간 트리거 실패 시 **해당 페이지 전체 명시적 rollback** 및 기존 완료 데이터 보존, 장애 해제 후 재시도 PASS; `db_open`의 DB 초기화 오류 및 키보드 인터럽트에서도 **SQLite 핸들 close** 보장.
+- **고객용 Windows EXE 3/3** 시작/종료, 고객 ZIP 3/3 독립 압축해제 실행 PASS. 한글·공백 경로에서 메뉴 [6] 읽기 전용·DB 미생성 **3/3 PASS**. 실제 고객 EXE에서 업비트 단독/빗썸 단독/양사 통합 메뉴 [5] 공개 API 검사 모두 PASS.
+- 최신 ZIP SHA256: upbit `a61393bf8dd058afc7aed44d73329b8accb24e7df53386f12316dfd754bd7e00`; bithumb `e5677ca43f26c9b24bb52bb663dc1602210ee6e8b5747086e7df6f047136cbbf`; both `b152e053408810f0e9873fe8c564f991fcb896973935c2b1d391afdf197f9ade`. GitHub Actions 내부 ZIP artifact ID `13419497818`, EXE 실 API evidence ID `13418954271`, 2026-11-19 22:48~22:49 KST 만료. **이전 ZIP의 해시와 혼동 금지**.
+- CI artifact ZIP을 현재 작업 임시 저장소로 복사 후 ZIP CRC, 내부 EXE/사용설명서 2파일 구성, 고객 ZIP 3종 SHA256 일치 직접 확인. 바깥 artifact sha256 `11572559bf3dc092099dd47028a86455ea811c76027d47d1bbb3450486ebc5d1`. Windows 실행 검증의 근거는 **GitHub runner**이며 로컬 Linux 환경에서 Windows EXE를 실행했다고 주장하지 않음.
+- 출시 체크리스트 오류 수정: `SOURCE_MANIFEST.json`은 **초기 import의 과거 SHA 스냅샷**이다. 현재 소스를 역사적 manifest와 비교하라는 잘못된 지시 제거; 확인은 현재 빌드 소스 SHA·CI 실행 SHA·`BUILD_EVIDENCE.txt`와 artifact 해시로 수행. 공식 [Upbit Open API 약관](https://www.upbit.com/open_api_agreement) 및 [제6조 3항 원문 안내](https://docs.upbit.com/kr/v1.5.9/changelog/%EC%95%88%EB%82%B4-open-api-%ED%82%A4-%EC%A0%95%EB%B3%B4-%EB%B3%B4%EC%95%88-%EC%A3%BC%EC%9D%98-%EC%95%88%EB%82%B4-%EB%B0%8F-%EC%9D%B4%EC%9A%A9%EC%95%BD%EA%B4%80-%EC%95%88%EB%82%B4-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8-%EC%9C%A0%EC%83%81-%ED%8C%90%EB%A7%A4-%EB%B6%88%EA%B0%80) 근거 링크 보강.
+- **남은 게이트:** 고객 PC 실제 Windows 10/11 비관리자·Defender/SmartScreen/쓰기권한 미검증, KRW 전 종목/11봉의 실제 장시간 전체 운용 미실시. **판매 HOLD:** Upbit API 사용 유료 EXE 판매/배포 제한; Bithumb 소프트웨어 유상 재판매 허가 미확인. 서면 허가 요청 초안은 미발송, 출시 승인 없음. 원본 개인 DB·Library ZIP 변경 없음.
+- Vercel/Production URL: **미적용** (Windows 로컬 상품).
+
+## 2026-11-05 22:30 KST — previous 144-case / multilingual consumer-path regression (historical)
 
 - **전체 기술 완성도 추정 98% (직전 97% → +1%p).** 이는 기술적 검증 목표의 주관적 추정이며 판매 허가/출시 준비 100%를 뜻하지 않는다. **RELEASE HOLD 유지**.
 - **현재 최신 Windows 검증:** [GitHub Actions #42035893214](https://github.com/hibi89/candle_scraper/actions/runs/42035893214), code SHA `75bdd6ea6d78887200b93f29fab9b389c3054e3f`, Windows Server 2022, Python 3.11.9 + PyInstaller 6.16.0, **SUCCESS**. unittest **144/144 PASS**, 전체 EXE 3/3 빌드·시작, 고객 ZIP 3/3 개별 압축 해제 및 실행 PASS.
