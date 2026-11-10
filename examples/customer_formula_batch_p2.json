@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "name": "SMA20/SMA60 cross",
+      "when": {
+        "all": [
+          {
+            "cross_up": [
+              {
+                "indicator": "sma",
+                "field": "close",
+                "period": 20
+              },
+              {
+                "indicator": "sma",
+                "field": "close",
+                "period": 60
+              }
+            ]
+          },
+          {
+            "left": {
+              "field": "close"
+            },
+            "op": ">",
+            "right": {
+              "indicator": "sma",
+              "field": "close",
+              "period": 20
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BB20 upper breakout",
+      "when": {
+        "left": {
+          "field": "close"
+        },
+        "op": ">",
+        "right": {
+          "indicator": "bb_upper",
+          "field": "close",
+          "period": 20,
+          "multiplier": 2
+        }
+      }
+    }
+  ]
+}

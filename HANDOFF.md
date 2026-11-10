@@ -1,3 +1,18 @@
+# 2026-11-11 KST — 코인 패턴 분석기 P2 통합 인수인계
+
+1. 목표/설계: 크몽 코인 맞춤식 50→70% 목표, P1 JSON DSL 단일 계약을 보존하면서 16규칙 1회 SQL 스캔. 독립 batch DSL의 중복 유지비용 때문에 P1 evaluator 재사용 선택, PR #1 실험용 격리 미병합.
+2. 구현: custom_formula_batch.py 신규, test_custom_formula_batch.py 신규, P1 잘못된 JSON typed operator/indicator/field 3건 안전 오류 수정, rules 예제, 진행률·규칙별 카운트·동일 CSV·SHA256.
+3. 테스트: Linux Python3.13.5 P1 15 + P2 14 = 29 PASS/0 FAIL/0 SKIP; strict ResourceWarning; compileall PASS. 합성 SQLite 8만 봉×16규칙·4종목 3.2초/5056 신호/DB 해시 불변. Git blobs P1 8b98d125 / P2 97c6bef5 / tests 452159c6 exact; 이 결과는 Windows·고객 DB 대체 불가.
+4. 상태: 상품 추정 50% 그대로, 70% 미달, RELEASE HOLD. 기능 초안은 자체 검증됐지만 고객 납품/기존 전체 회귀 미완.
+5. 오류/대안: P1 malformed JSON unhashable list→TypeError 3건 재현 후 수정해 29/29 PASS. Local private clone DNS 제한; 반복하지 말고 GitHub blob 검증 또는 허가된 체크아웃. Windows 3.6GB DB 접근/Actions 비용확인 불가.
+6. 저장소/브랜치/SHA: private hibi89/candle_scraper@feature/candle-pattern-analyzer, 본 커밋의 SHA는 원격 갱신 후 재조회. 경로 custom_formula_scanner.py / custom_formula_batch.py / test_custom_formula_batch.py / docs/CUSTOM_FORMULA_BATCH_P2_20261111.md. PR #1 draft 별도.
+7. 실행/배포: python custom_formula_batch.py --db PATH --rules JSON --output CSV --progress; full env Python3.11+ 예정. Vercel/Production 미적용, 실 Windows/EXE 미검증.
+8. 원본·백업·인증: 기존 git history 및 main/collector, 사용자 E: SQLite/WAL/SHM 및 과거 CSV/ZIP 불변. 실 고객 원본 사용/외부전송·계정/권한/유료 CI 없음. git revert 복구.
+9. 다음: 전체 브랜치 old P1/BB/retouch/collector 테스트 실행, Windows3.11·실 데이터 read-only 스트레스/차트·CSV viewer·고객 규칙 작성 UX, EXE 패키지/상업권 확인 후 70% 검토. Draft PR #1은 비교 후 중복 해소 전 무단 병합 금지.
+10. 갱신: 2026-11-11 KST, 로컬 합성 테스트만 실행; SHA/HEAD와 원격 파일 재확인 후 문서 기준 확정. 상세 docs/CUSTOM_FORMULA_BATCH_P2_20261111.md.
+
+---
+
 # 2026-11-11 KST — Coin Pattern Custom Formula P1 인수인계
 
 1. **목표/요구/기술:** 크몽 50→70% 목표 중 사용자별 맞춤 수식이 핵심. collector 원본이 아닌 별도 Python3.11+ 오프라인 JSON DSL/SQLite 읽기 전용 검색기 추가. DBVORA는 다른 작업 담당이므로 본 회차 범위에서 제외.

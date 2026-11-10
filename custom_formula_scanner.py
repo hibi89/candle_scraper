@@ -57,7 +57,7 @@ def _operand(obj):
         raise ValueError("Operand must be a field, value, or indicator object")
     if "field" in obj and "indicator" not in obj:
         _keys(obj, {"field"})
-        if obj["field"] not in FIELDS:
+        if not isinstance(obj["field"], str) or obj["field"] not in FIELDS:
             raise ValueError("Unsupported candle field")
         return ("field", obj["field"])
     if "value" in obj and "indicator" not in obj:
@@ -65,7 +65,8 @@ def _operand(obj):
         return ("value", _finite_number(obj["value"]))
     _keys(obj, {"indicator", "field", "period"}, {"multiplier"})
     name, field, period = obj["indicator"], obj["field"], obj["period"]
-    if name not in INDICATORS or field not in FIELDS:
+    if (not isinstance(name, str) or not isinstance(field, str)
+            or name not in INDICATORS or field not in FIELDS):
         raise ValueError("Unsupported indicator or source field")
     if isinstance(period, bool) or not isinstance(period, int) or not 2 <= period <= 560:
         raise ValueError("Indicator period must be 2..560")
@@ -104,7 +105,7 @@ def _node(obj, operands, counter, depth=0):
         operands.update((left, right))
         return (key, left, right)
     _keys(obj, {"left", "op", "right"})
-    if obj["op"] not in OPERATORS:
+    if not isinstance(obj["op"], str) or obj["op"] not in OPERATORS:
         raise ValueError("Comparison operator not supported")
     left, right = _operand(obj["left"]), _operand(obj["right"])
     operands.update((left, right))
