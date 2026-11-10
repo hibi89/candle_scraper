@@ -28,3 +28,6 @@ The JSON receipt records the CSV file SHA256, rules file SHA256, each compiled f
 
 ## Next
 Verify from one authorized complete feature checkout: \`python -W error -m unittest discover -p "test_*.py"\` and P3+P4 actual CLI integration. Then on customer-approved Windows copy, verify JSON rule -> CSV -> HTML/receipt flow and per-market chart parity, packaging/entitlements before reassessing final rate.
+
+
+> **Central score reconciliation (2026-11-11 KST):** After this P4 feature was created, the command-center branch recognized **65% provisional product completion** for the P1–P4 canonical customer CLI/report scope. This separate evidence-receipt enhancement is **not an extra scored uplift**. 70% remains unverified; customer Windows, real DB, release/rights gates remain HOLD.

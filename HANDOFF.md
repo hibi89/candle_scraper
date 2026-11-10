@@ -1,3 +1,15 @@
+## 2026-11-11 KST — P4 영수증과 중앙 완성률 65% 정합성
+1. Goal: 70% target, hub now records 65% provisional for existing P1~P4 canonical customer workflow; receipt is additional evidence work, no double uplift.
+2. Feature: offline CSV/rule hash and row-formula SHA256 consistency check, new JSON receipt, separate from existing coin_report.py; no collector or old scanner changes.
+3. Tests: local Python3.13 P1/P2/P3-builder/receipt 46 PASS, code blob cf9850f5, test blob 8449fa43; branch full P3 integration and Windows/real DB unverified.
+4. State: hub provisional 65%, 70% still missing 5pp, release HOLD. No deployment.
+5. Failure/pivot: abandoned an uncommitted duplicate HTML module when concurrent coin_report.py appeared; do not reintroduce duplicate.
+6. Source: hibi89/candle_scraper@feature/candle-pattern-analyzer, code commit 03b3ca87f8a9fa38806116b0799f65ae3037bb80; verify current HEAD after docs update.
+7. Environment: Python3.11+ intended, actual isolated Python3.13; no Production/Vercel.
+8. Preserve: original user E: DB/WAL/SHM, CSV, main/collector, private data, secrets and draft PR untouched.
+9. Next: complete local checkout full-unit and P3 E2E, Windows source-copy verification/chart/EXE/license; score only after objective gates.
+10. Date 2026-11-11 KST; revision reflects hub 647973e9 65% checkpoint and feature SHA 03b3ca87.
+
 ## 2026-11-11 KST — Coin analyzer P4 evidence receipt handoff
 1. Goal: P1/P2 formula rules and emitted CSV have verifiable offline binding; product target 50→70%, currently 50%.
 2. New files: coin_evidence_receipt.py and test_coin_evidence_receipt.py plus docs; existing P3 coin_report and core collector unchanged. Alternative plain hash vs row-to-rule check; choose both combined to detect mismatches, without arbitrary execution.
