@@ -1,3 +1,15 @@
+## 2026-11-11 KST — Coin analyzer P4 evidence receipt handoff
+1. Goal: P1/P2 formula rules and emitted CSV have verifiable offline binding; product target 50→70%, currently 50%.
+2. New files: coin_evidence_receipt.py and test_coin_evidence_receipt.py plus docs; existing P3 coin_report and core collector unchanged. Alternative plain hash vs row-to-rule check; choose both combined to detect mismatches, without arbitrary execution.
+3. Tests: exact Git blob source cf9850f5fb1aae4fb7a64eb111c7098355296fa9 and test 8449fa430db59dfba794f236e6a31848ef6dfb53, local Linux3.13.5 P1/P2/P3-builder/P4=46 PASS/0 FAIL, P4 py_compile PASS. Full source + P3 CLI/report integration and Windows3.11/3.6GB customer DB NOT RUN.
+4. State: P4 isolated incremental value, not customer-release acceptance; product completion 50% unchanged, RELEASE HOLD.
+5. Failure/pivot: new P4 HTML report duplicated concurrent P3 coin_report, so abandoned that uncommitted duplicate and pivoted to distinct rule-CSV integrity. Initial duplicated report 48 test success does not imply shipped source. GitHub clone DNS unavailable, no blind repeat.
+6. Repo/branch: hibi89/candle_scraper feature/candle-pattern-analyzer, check HEAD after this commit. Paths coin_evidence_receipt.py, test_coin_evidence_receipt.py, docs/COIN_FORMULA_EVIDENCE_P4_20261111.md. Draft PR #1 remains unmerged.
+7. Runtime: Python3.11+ stdlib intended, Linux Python3.13 local tests. No Vercel, CI paid run, production deployment.
+8. Original security: E: SQLite/WAL/SHM, collected prices, existing reports, feature core, collector main untouched. No secrets, network, trades or market uploads; git revert.
+9. Next: authorized full private checkout overall test discovery and P3 CLI/report/P4 receipt E2E; Windows native DB/UX/chart and EXE/license acceptance before 70 credit.
+10. Confirmed 2026-11-11 KST. Source/test isolated real SQL PASS, integration/Windows/production unknown. Doc record uses parent and commit after verified ref update.
+
 ## 2026-11-11 KST — Coin Pattern Analyzer P4 integrated CLI/report checkpoint
 
 1. **Goal, required stack:** Kmong customer-defined historic candle formula search, provisional 50→65→70% roadmap, offline Python3.11+ SQLite P1/P2/P3; customer data local and read only.
