@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "SMA20_50_CROSS",
+      "when": {
+        "cross_up": [
+          {
+            "sma": [
+              20,
+              "close"
+            ]
+          },
+          {
+            "sma": [
+              50,
+              "close"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "BB_BREAKOUT",
+      "when": {
+        "all": [
+          {
+            "gt": [
+              "close",
+              {
+                "bb_upper": [
+                  20,
+                  2,
+                  "close"
+                ]
+              }
+            ]
+          },
+          {
+            "gt": [
+              "close",
+              {
+                "const": 1000
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
