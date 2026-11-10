@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "name": "SMA cross with price confirmation",
+  "when": {
+    "all": [
+      {"cross_up": [
+        {"indicator": "sma", "field": "close", "period": 20},
+        {"indicator": "sma", "field": "close", "period": 60}
+      ]},
+      {"left": {"field": "close"}, "op": ">", "right": {"indicator": "sma", "field": "close", "period": 20}}
+    ]
+  }
+}
