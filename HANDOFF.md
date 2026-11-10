@@ -1,3 +1,17 @@
+# 2026-11-11 KST — 코인 분석기 P3 간편 수식 생성기 인수인계
+1. 목적: 기술에 익숙하지 않은 크몽 고객의 수식 JSON 편집 부담 감소, 기존 Python3.11+ P1/P2 계약 재사용, 별도 UI 프레임워크 의존성 없음.
+2. 기능: 5가지 수식 템플릿(EMA/SMA/BB상단/하단/가격 임계값), 파라미터 한도·기존 JSON 보존/원자적 새 파일 작성, 콘솔/CLI+Windows 시작 BAT(미실행).
+3. 테스트: Linux Python3.13.5 P1 15 + P2 14 + P3 7 = 36/36 PASS, compileall PASS. P3 합성 DB E2E 5템플릿, CLI·사용자 선택·기존 파일/오류 차단. 첫 36-test 1 오류(default threshold=0) 수정 후 36 PASS. Windows BAT/실 고객 DB/전체 기존 회귀 NOT_RUN.
+4. 상태: 코인 최종상품 추정 50% 유지, 70% 미달, RELEASE HOLD. 독립 배치 PR #1 미병합.
+5. 오류/대안: 원인 기본 close_above threshold 0 부적격, 안전한 기본 100으로 수정. 실제 Windows/EXE/실시장 데이터 없으며 유료 CI 강제하지 않음.
+6. GitHub: hibi89/candle_scraper feature/candle-pattern-analyzer; builder blob 57b9514482b4168151300f751357b0faf8104a55, test 8798d99476db4a72ce7adb8b05ceb54c7fa2a2d6, BAT/docs/STATUS/HANDOFF는 이 커밋에서 함께 반영. 최신 HEAD 재확인.
+7. 실행: python custom_formula_builder.py --interactive; 생성 rule.json → custom_formula_batch.py --db ... --rules rule.json --output ...; Windows CMD BAT는 미실행. Vercel/Production 미적용.
+8. 원본/보안: 고객 E: DB/WAL/SHM/CSV/ZIP, collector/main, 토큰/권한, 과금·서비스 미변경; git revert.
+9. 다음: Python3.11 Windows 전수 회귀, 3.6GB DB/차트·성능/중복/시각검증, 고객 결과 뷰어 및 EXE·라이선스 검토, 70% 재평가.
+10. 날짜/근거: 2026-11-11 KST, 로컬 합성 36 PASS와 exact Git blobs. 상세 docs/CUSTOM_FORMULA_BUILDER_P3_20261111.md.
+
+---
+
 # 2026-11-11 KST — 코인 패턴 분석기 P2 통합 인수인계
 
 1. 목표/설계: 크몽 코인 맞춤식 50→70% 목표, P1 JSON DSL 단일 계약을 보존하면서 16규칙 1회 SQL 스캔. 독립 batch DSL의 중복 유지비용 때문에 P1 evaluator 재사용 선택, PR #1 실험용 격리 미병합.
