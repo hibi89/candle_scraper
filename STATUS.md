@@ -183,3 +183,8 @@
 - 비공개 `hibi89/candle_scraper`, `main`; 최근 전체 Windows/EXE 실 API 검증 SHA `40c0afe32e4eecda64ada9021aad35a8d1cd96fd`. 이후 `.gitignore` 반영과 본 문서 커밋 때문에 최신 HEAD는 GitHub에서 직접 확인.
 - `SOURCE_MANIFEST.json` 파일 해시 목록은 **초기 GitHub 반영 소스 SHA `b9a1483a790c642704abd492493c50e038ad7344`의 역사적 스냅샷**이지 현재 HEAD 전체 파일의 매니페스트가 아니다. 원본 ZIP SHA는 `docs/ARCHIVE_PROVENANCE.md` 참고.
 - Vercel/Production URL: **미적용** (오프라인 Windows 상품).
+
+## 2026-11-11 KST — isolated safe multi-rule P0 / draft PR #1
+- New branch feature/custom-batch-rule-engine, code commit a7b33d60ec62ece8f01acc1900739f80defafe10, draft PR https://github.com/hibi89/candle_scraper/pull/1. This branch started from existing analyzer feature before unrelated parallel work; main/collector/original scanner untouched.
+- Experimental up-to-16-rule JSON DSL batch executor, read-only SQLite multi-DB and safe CSV. Local strict Python3.13.5 synthetic SQLite 23/23 PASS; exact source/test blobs f0d16c11 and 6119c830. No product-level single-/multi-rule integration, Windows, 3GB DB or existing full regressions.
+- Coin Pattern Analyzer final-product estimate **50% unchanged**, target 70%, RELEASE HOLD. Merge after interface consolidation, no double-counting parallel single-rule commits.

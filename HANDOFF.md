@@ -1,3 +1,16 @@
+## 2026-11-11 KST — Draft PR #1 safe batch-rule scanner checkpoint
+
+1. Goal/stack: Coin Pattern Analyzer commercialization toward 70%, Python3.11+ offline SQLite read-only; customer-specific formulas rather than only hard-coded EMA/BB signals.
+2. Delivered: optional 16-rule JSON batch evaluator, SMA/EMA/BB, thresholds, cross/boolean rules, one-pass multi-DB scans and fail-closed no-overwrite CSV; new files only. Existing custom_formula_scanner.py single-rule implementation was concurrently added to primary feature branch; both must be unified before customer shipping.
+3. Test proof: Linux Python3.13.5 strict ResourceWarning real SQLite/CSV, **23/23 PASS, 0 FAIL/0 SKIP**, exact tested Git blobs source f0d16c11cdb8b57ec8cee52771206b2eb27fe705 / tests 6119c8302763e80d3e64481bbcb2b1f7b3b2c613. Existing branch suites, Windows, real E: 3.63GB customer DB, EXE, performance NOT RUN.
+4. Status/completeness: 50% final-product baseline UNCHANGED in command center, 70% goal. Draft PR #1 for review not merged; release HOLD. No product uplift credited from isolated branch code.
+5. Failure/risks/pivot: main feature branch moved concurrently 3 times as another engineer committed single-formula source/tests/docs; aborted all forced/lease-mismatched updates, moved this independently verified multi-rule module to feature/custom-batch-rule-engine. PR mergeable status returned false; must inspect conflicts/changes before merge. Do not repeat blind shared-branch push or claim integrated success.
+6. Git: hibi89/candle_scraper; base snapshot 875836c6893a1e14e49f5d6e1ad06f9d3ff8e226, isolated implementation a7b33d60ec62ece8f01acc1900739f80defafe10, docs SHA verify after push, integration target feature/candle-pattern-analyzer, draft PR https://github.com/hibi89/candle_scraper/pull/1 .
+7. Execution/deploy: Python3.13.5 Linux synthetic local only, intended Windows3.11; Vercel/Production N/A; no paid GitHub Actions, live exchange API or external data transfer.
+8. Original & rollback: original E: DB/WAL/SHM, saved ZIP, collector/main, single-formula scanner and legacy patterns untouched. Only synthetic temporary test data; branch/PR can close with no main change.
+9. Next: compare DSL contracts to choose single unified rules format, resolve draft PR conflicts if any, run primary scanner/batch integration and full regression on same SHA, then Windows real source/UX/benchmark and legal rights gates. No hidden user action for local tests.
+10. Checked 2026-11-11 KST. Exact Git blobs / 23 focus PASS, PR is draft/unmerged, full product NOT VERIFIED. Docs CUSTOM_RULE_BATCH_P0_20261111.md, source hashes above.
+
 # 2026-11-06 KST — SMA4(Close) 목표 재검증 인수인계 (신규 코드 GitHub 미반영)
 
 1. **목표·확정 수식:** 기존 설정 BB(20,2,Close) 하단 AND BB(4,4,Open) 하단 동시 이탈 → 이후 최초 BB20 하단 위 종가 복귀까지는 **그대로 유지**. 복귀봉 시점 SMA4(Close) 고정 후 복귀 **다음 봉부터** high>=목표가인지 검사. 실전 봉내 선후관계/미래 참조 방지.
