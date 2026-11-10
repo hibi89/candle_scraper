@@ -249,14 +249,22 @@ def _parse_csv_tokens(raw: str, *, market: bool) -> tuple | None:
 
 
 def scan(paths: list[Path], rules: tuple[tuple[str, dict], ...], output: Path, *,
-         markets: str = 'all', units: str = 'all', last: int = 0, overwrite: bool = False) -> dict:
-    if not paths or type(last) is not int or last < 0:
+         markets: str = 'all', units: str = 'all', last: int = 0, overwrite: bool = False,
+         max_matches: int = 500000) -> dict:
+    if (not paths or type(last) is not int or last < 0 or
+            type(max_matches) is not int or not 1 <= max_matches <= 1000000):
         raise RuleError('Invalid database list or candle count')
     chosen_markets = _parse_csv_tokens(markets, market=True)
     chosen_units = _parse_csv_tokens(units, market=False)
     if len(paths) > 8: raise RuleError('Maximum eight source databases')
     sources = [Path(p).resolve(strict=True) for p in paths]
+    if len(set(sources)) != len(sources):
+        raise RuleError('Duplicate source database')
+    if len({source.stem.casefold() for source in sources}) != len(sources):
+        raise RuleError('Duplicate source labels; rename or separate scans')
     target = Path(output).absolute()
+    if target.suffix.lower() != '.csv':
+        raise RuleError('Output must be a CSV file')
     if any(target.resolve() == source for source in sources):
         raise RuleError('Results cannot replace source database')
     if target.exists() and not overwrite:
@@ -289,16 +297,23 @@ def scan(paths: list[Path], rules: tuple[tuple[str, dict], ...], output: Path, *
                         params.extend(chosen_units)
                     where = ' WHERE '+' AND '.join(filters) if filters else ''
                     group_sql = 'SELECT market,unit,COUNT(*) FROM candles'+where+' GROUP BY market,unit ORDER BY market,unit'
-                    pairs = db.execute(group_sql, params).fetchall()
+                    pairs = [(m,u,n) for m,u,n in db.execute(group_sql, params).fetchall()
+                             if type(m) is str and _MARKET.fullmatch(m)]
                     stats['databases'] += 1
                     stats['pairs'] += len(pairs)
                     for market, unit, total in pairs:
                         active = {key: Indicator(key) for key in all_keys}
                         threshold = total-last if last else 0
                         rows = db.execute('SELECT utc,kst,open,high,low,close FROM candles WHERE market=? AND unit=? ORDER BY utc ASC', (market, unit))
+                        prev_utc = None
                         for index, (utc,kst,opening,high,low,close) in enumerate(rows):
+                            if (type(utc) is not str or not utc or type(kst) is not str
+                                    or not kst or (prev_utc is not None and utc <= prev_utc)):
+                                raise RuleError('Missing or non-increasing candle timestamp')
+                            prev_utc = utc
                             values = (opening,high,low,close)
-                            if any(type(v) not in (float,int) or not math.isfinite(v) or v<=0 for v in values) or high<low:
+                            if (any(type(v) not in (float,int) or not math.isfinite(v) or v<=0 for v in values)
+                                    or high < max(opening,close) or low > min(opening,close)):
                                 raise RuleError('Invalid OHLC values in source; no output published')
                             bar = dict(zip(('open','high','low','close'), values))
                             for indicator in active.values(): indicator.push(bar)
@@ -310,6 +325,8 @@ def scan(paths: list[Path], rules: tuple[tuple[str, dict], ...], output: Path, *
                                                      'utc': _csv_safe(utc), 'kst': _csv_safe(kst),
                                                      'close': close, 'rule_id': name})
                                     stats['matches'] += 1
+                                    if stats['matches'] > max_matches:
+                                        raise RuleError('Match count exceeds safety limit; no CSV published')
                 finally:
                     db.close()
             stream.flush()
@@ -339,10 +356,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument('--units', default='all')
     parser.add_argument('--last', type=int, default=0)
     parser.add_argument('--overwrite', action='store_true')
+    parser.add_argument('--max-matches', type=int, default=500000, help='Max result rows 1..1000000')
     args=parser.parse_args(argv)
     try:
         result=scan(args.db, load_rules(args.rules.resolve()), args.output,
-                    markets=args.markets, units=args.units, last=args.last, overwrite=args.overwrite)
+                    markets=args.markets, units=args.units, last=args.last,
+                    overwrite=args.overwrite, max_matches=args.max_matches)
     except (OSError, sqlite3.DatabaseError, RuleError, ValueError) as exc:
         print('ERROR: '+str(exc), file=sys.stderr)
         return 2
