@@ -1,3 +1,18 @@
+# 2026-11-11 KST — Coin Pattern Custom Formula P1 인수인계
+
+1. **목표/요구/기술:** 크몽 50→70% 목표 중 사용자별 맞춤 수식이 핵심. collector 원본이 아닌 별도 Python3.11+ 오프라인 JSON DSL/SQLite 읽기 전용 검색기 추가. DBVORA는 다른 작업 담당이므로 본 회차 범위에서 제외.
+2. **구현/설계:** 임의 Python import 방식(유연하나 임의 코드실행 위험)을 거부하고 허용목록 JSON 규칙을 채택. 필드(open/high/low/close/volume/trade_value), SMA/EMA/BB, 조건 비교, cross_up/down, all/any/not, 제한된 중첩/기간/출력건수. 원본 읽기 전용, 중복 파일 금지/명시적 덮어쓰기, CSV 원자 출력, 규칙 SHA256. 기존 고정 패턴과 Collector 무변경.
+3. **테스트/검증:** Linux Python3.13 local `python -W error -m unittest -v test_custom_formula_scanner.py` **15 PASS/0 FAIL**, `python -m compileall -q custom_formula_scanner.py test_custom_formula_scanner.py` PASS; 임시 SQLite E2E, 데이터 해시/CSV 실패 보호, JSON 보안, CLI 검증. GitHub 정확 Git blob code `8a6a858a58348717498e190eea3f1ff86132d375`, tests `75974dd5c656e74b1295f803216384d95d24220c` 로컬 마지막 개행 제거 후 일치 확인. 기존 전 테스트/실 Windows/실 3.6GB DB/차트·EXE 미실행.
+4. **상태:** P1 소스·테스트·설명 GitHub 반영 완료, 전체 최종상품 추정 **50% (70% 미달)**, RELEASE HOLD. 15 합성 테스트 성공만으로 진행률 상승 인정하지 않음.
+5. **실패/차단/대안:** customer E: 원본 DB·Windows10/11 접근 불가, full private checkout/container DNS 제한(과거 확인)으로 원본 전체 검증 불가. 실제 신호 수/성능/수익률 추정 금지. 대안은 본 소스 기반 로컬 또는 허가된 Windows CI/실기기 테스트(비용 발생 여부 승인 선행), 기존 고정식 테스트와 함께 회귀 실행.
+6. **저장소/브랜치/SHA/경로:** `hibi89/candle_scraper@feature/candle-pattern-analyzer`, source commit `e713891692750b40c6feac0152b9c4274e63d552`, test `3e712c23f1019840eb07d140ef1b74d8bd3de7bb`, doc `875836c6893a1e14e49f5d6e1ad06f9d3ff8e226`. 핵심 `custom_formula_scanner.py`, `test_custom_formula_scanner.py`, `docs/CUSTOM_FORMULA_SCANNER_20261111.md`. 이 인수인계 커밋 후 최신 SHA 재확인.
+7. **실행/배포:** `python custom_formula_scanner.py --db PATH --rule rule.json --output matches.csv` / test `python -W error -m unittest -v test_custom_formula_scanner.py`. Python3.11+ 예정, Vercel/Production/EXE 미적용.
+8. **원본/백업/보안:** 사용자 로컬 E: SQLite/WAL/SHM·기존 결과 CSV 변경 금지, 고객 DB/거래 데이터 GitHub 미전송. source만 private feature branch; `main` 미변경. 코드 문제 시 Git revert 가능. 동시 WAL writer 실험 미검증.
+9. **다음 단계/완료 기준:** 전체 브랜치 체크아웃에서 신규 15 + 기존 패턴/이중BB + 전체 수집기 회귀, Windows10/11 실제 사용자 DB 읽기 전용 스캔·차트/성능 확인, 고객 수식 GUI·배포 EXE·라이선스 확인. 그 후 증거 기준으로 최종 상품화 70% 재평가.
+10. **기준 일시/정확성:** 2026-11-11 KST, 로컬 합성 Python과 원격 Git blob 확인, GitHub Actions/전체 원본/실기기/고객 데이터 미검증. 이후 HEAD 확인이 기준.
+
+---
+
 # 2026-11-06 KST — SMA4(Close) 목표 재검증 인수인계 (신규 코드 GitHub 미반영)
 
 1. **목표·확정 수식:** 기존 설정 BB(20,2,Close) 하단 AND BB(4,4,Open) 하단 동시 이탈 → 이후 최초 BB20 하단 위 종가 복귀까지는 **그대로 유지**. 복귀봉 시점 SMA4(Close) 고정 후 복귀 **다음 봉부터** high>=목표가인지 검사. 실전 봉내 선후관계/미래 참조 방지.
