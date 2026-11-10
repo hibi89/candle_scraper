@@ -1,3 +1,16 @@
+## 2026-11-11 KST — Coin Pattern Analyzer P4 integrated CLI/report checkpoint
+
+1. **Goal, required stack:** Kmong customer-defined historic candle formula search, provisional 50→65→70% roadmap, offline Python3.11+ SQLite P1/P2/P3; customer data local and read only.
+2. **Implemented:** P4 `coin_analyzer.py` canonical P1 single/P2 16-rule dispatch, `coin_report.py` offline HTML counts and safe 120-row preview, optional two BATs and JSON sample. No duplicate batch interpreter in primary, no modification of existing P1/P2/P3/collector.
+3. **Executed:** Linux Python3.13.5 strict ResourceWarning 8 mocked CLI +13 genuine report CSV/HTML = **21/21 PASS**; Chromium real DOM synthetic P1 CSV 1/1 PASS (no console/HTTP, no injected image). Exact 9 local Git blobs matched pushed source; canonical P1/P2/P3 earlier independent 36/36 PASS, NOT rerun on this P4 HEAD. New 4 full primary integration tests and complete repo/Windows NOT RUN.
+4. **Status:** provisional final-product completion **65%**, up from 50% based on delivered bounded formula engines, five-template customer builder, CLI and report; **5pp to 70%**, contingent on complete-source same-SHA integration/release gate. Commercial RELEASE HOLD, customer-ready status unverified.
+5. **Risks/pivot:** user requested faster progress. Competing draft PR #1 contains different duplicate batch DSL; primary canonical P2 reuses P1 compiler and is preferred. Do not merge PR #1 or alter core unless separately reconciled. No authenticated private clone in execution environment; do not repeat blind DNS-failing clone.
+6. **Repo/branch/SHA:** private `hibi89/candle_scraper`, `feature/candle-pattern-analyzer`, P4 code `33ed7ae00341016b8c6e42a43eb0f6d610e0b742`, documentation SHA verify on push. Key new paths `coin_analyzer.py`, `coin_report.py`, `test_coin_analyzer.py`, `test_coin_cli_dispatch.py`, `test_coin_report.py`, `docs/COIN_ANALYZER_P3_UNIFIED_20261111.md`.
+7. **Deploy/commands:** `python -W error::ResourceWarning -m unittest -v test_custom_formula_scanner.py test_custom_formula_batch.py test_custom_formula_builder.py test_coin_cli_dispatch.py test_coin_report.py test_coin_analyzer.py`, then entire repo discovery in authorized checkout. Actual Windows Python3.11, browser file URL, EXE, Vercel/Production unverified or N/A.
+8. **Originals/backup/security:** user E: SQLite/WAL/SHM and CSV untouched, synthetic only; main collector/main branch and prior ZIP preserved. Git revert restores code. No customer uploads, billed CI, credentials, permissions, domain or new release.
+9. **Next actions/acceptance:** run new four full-source P4 E2E and full existing regression at same current SHA; resolve actual failures, then re-score 65→70 only when accepted. Follow with Windows3.11, 3.6GB user DB copy and customer UX/chart parity and clear data/collector rights before shipping; user interventions at genuine gates only.
+10. **KST and scope:** 2026-11-11, isolated 21 P4 + Chromium 1 actually executed; prior 36 canonical separate prior SHA; full integration and customer release not verified. Detailed doc `docs/COIN_ANALYZER_P3_UNIFIED_20261111.md`.
+
 # 2026-11-11 KST — 코인 분석기 P3 간편 수식 생성기 인수인계
 1. 목적: 기술에 익숙하지 않은 크몽 고객의 수식 JSON 편집 부담 감소, 기존 Python3.11+ P1/P2 계약 재사용, 별도 UI 프레임워크 의존성 없음.
 2. 기능: 5가지 수식 템플릿(EMA/SMA/BB상단/하단/가격 임계값), 파라미터 한도·기존 JSON 보존/원자적 새 파일 작성, 콘솔/CLI+Windows 시작 BAT(미실행).

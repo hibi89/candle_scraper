@@ -74,3 +74,6 @@ py pattern_analyzer.py --db "E:\업비트 캔들긁어오기\upbit_candles.sqlit
 - 로컬 Python 오프라인 단위시험 11개 성공: 교차·배열·볼린저 조건, 지표 560봉 준비, 전체/최신 N개, 마켓/분봉 필터, DB SHA256 불변, CSV BOM/원자 저장, 파일 보호, CLI.
 - 실제 사용자 DB 전체 검색, 실차트 1:1 대조, Windows EXE, 판매/배포 법적 허가: **미검증/미구현**.
 - 업비트·빗썸 수집기 배포는 별도 문서의 **RELEASE HOLD** 유지. 유료 오프라인 분석기와 무료 수집기를 섞어 판매 허가를 추정하지 않는다.
+
+## 2026-11-11 KST — canonical customer CLI and offline HTML report (P4)
+The `feature/candle-pattern-analyzer` branch now contains `coin_analyzer.py` (single `--rule` P1 or compatible multi `--rules` P2), `coin_report.py` (offline report from produced P1/P2 CSV), 8 mocked CLI and 13 actual safe HTML regression tests, and 4 full-source integration E2E tests awaiting complete checkout. Neither original collector, P1/P2 code, nor user DB is changed. The already existing P3 console template builder can generate P1 JSON and be used by either scanner. No EXE, Windows actual verification or commercial license clearance is claimed. Details `docs/COIN_ANALYZER_P3_UNIFIED_20261111.md`.
