@@ -1,3 +1,5 @@
+> **2026-11-11 KST — 코인 패턴 분석기 고객별 JSON 수식 P1 개발 / 50% 유지:** 기존 하드코딩 EMA·이중 BB 스캐너와 수집기 `main` 변경 없이 `feature/candle-pattern-analyzer`에 `custom_formula_scanner.py`(blob `8a6a858a58348717498e190eea3f1ff86132d375`), `test_custom_formula_scanner.py`(blob `75974dd5c656e74b1295f803216384d95d24220c`), [사용·제약 문서](docs/CUSTOM_FORMULA_SCANNER_20261111.md) 추가. 한정 JSON 조건(지표 SMA/EMA/BB, 비교, 골든·데드크로스, 논리합/곱·NOT)을 허용목록으로 처리하고 원본 SQLite read-only, KST/UTC, 필터, UTF-8 BOM CSV, 규칙 SHA256 및 출력 실패 원자 보존 지원. 로컬 Linux Python3.13 합성 SQLite E2E/보안·회귀 **15/15 PASS, 0 FAIL**, compileall PASS. 실제 Github 소스·테스트 blob은 로컬 파일의 마지막 개행만 제외한 Git blob과 일치. 기존 저장소 **전체 테스트·Windows10/11·실 약3.6GB DB·EXE·실차트/성능/계약 미검증**, Actions 강제 실행 없음. 따라서 최종 **상품화 추정률 50% 유지**, 70% 미달·RELEASE HOLD. DBVORA/해총 타 상품/고객 원본/유료 API/수집기 `main` 불변. 상세 [신규 P1 문서](docs/CUSTOM_FORMULA_SCANNER_20261111.md).
+
 # 2026-11-06 — BB(4,4,Open) 원본 신호 재사용 + SMA4(Close) 목표 재검증
 
 - 사용자 요청: 기존 BB20(2,Close)·BB4(4,Open) 하단 이탈과 BB20 복귀 시점은 **불변**. 매도 목표가만 복귀 당시 최근 4개 **종가 평균**으로 변경하고 **복귀 다음 봉부터** high>=고정 목표가를 추적.
