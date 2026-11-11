@@ -1,3 +1,15 @@
+## 2026-11-11 KST — P6 Coin Pattern Analyzer reaches 70% provisional engineering milestone
+1. **Goal/stack:** 70% intermediate final-product engineering target, offline Python3.11+ SQLite P1/P2/P3/P4/P5 + reproducible synthetic verification; no external data.
+2. **Delivered:** P6 `coin_selftest.py` (real single/batch→CSV→HTML→P4 receipt, temp DB, JSON PASS_SYNTHETIC_ONLY), `test_coin_selftest.py` 4, `test_coin_customer_e2e_p5.py` 7, `test_coin_bundle_primary_integration.py` 5 including **exact P5 GitHub source/P3 report**. No old scanner changes.
+3. **Tests:** Linux Python3.13.5 `-W error::ResourceWarning` **41/41 PASS** = 7 new E2E +4 selftest +5 P5/P3 +4 preexisting integration +8 mock CLI +13 real report; 200k synthetic rows/16 P2 rules/2 pairs 6.42sec, SQLite input SHA unchanged. All 6 core and 4 new files exact Git blob SHA matched; separate historical 60 cases not added. Whole repo CI/Windows/customer DB NOT RUN.
+4. **Status:** 68→**70% provisional** tech readiness by scoped product/customer workflow rubric; customer commerce RELEASE HOLD; remaining 30% includes Windows/EXE/real user data/chart/license/release gates.
+5. **Failure/constraints:** private full repo git clone DNS denied; solved *relevant* source matching via GitHub connector Git blob and local reconstruction. Never claim all repository legacy unittest passed or full native Windows. Earlier P5 used local HTML shim; P6 now real `coin_report.py`.
+6. **Git:** `hibi89/candle_scraper@feature/candle-pattern-analyzer` source commit `c8a1637ab4d07db577d4d971ccad5f5adac22593`; docs commit verify after push; paths P6 tests, `coin_selftest.py`, `docs/COIN_P6_70_20261111.md`. Do NOT merge experimental Draft PR #1 (incompatible DSL).
+7. **Environment/deploy:** Linux Python3.13.5 actual; intended Windows10/11 Python3.11, EXE not yet built; Vercel Production N/A. Run `python coin_selftest.py`, product tests, then full checkout `python -W error::ResourceWarning -m unittest discover -p 'test_*.py'`.
+8. **Original/security:** user's E: DB/WAL/SHM/CSV/ZIP untouched; main/collector preserved; no credentials, API sends, paid CI, external uploads, permission changes, live trading. Git revert for rollback.
+9. **Next:** native Windows synthetic selftest, complete repo legacy suite and customer-approved *copy* of 3.6GB DB cross-chart audit, EXE/install/SmartScreen and rights review; user release approval only after evidence.
+10. **KST checkpoint:** 2026-11-11, exact Git P1-P5 blobs, local 41 PASS and P2 200k benchmark; P6 code SHA confirmed. [Evidence](docs/COIN_P6_70_20261111.md). Hub average update must use 16 active products and +2/16 = 0.125pp.
+
 ## 2026-11-11 KST — Coin analyzer P5 customer bundle handoff
 1. Goal: move provisional coin pattern 65→70 based on customer deliverable scope; Python3.11+ offline P1/P2 formula scanner, P3 static report, P4 receipt.
 2. Added coin_customer_bundle.py and 14-test test_coin_customer_bundle.py, new ZIP with fixed 5 entries (rule JSON, signals CSV, HTML, evidence, manifest), exclusive new-file creation and no partial ZIP after exceptions; choose staging+ZIP over scattered files to prevent partial delivery.
