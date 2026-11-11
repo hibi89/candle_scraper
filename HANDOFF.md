@@ -1,3 +1,15 @@
+## 2026-11-11 KST — Coin analyzer P5 customer bundle handoff
+1. Goal: move provisional coin pattern 65→70 based on customer deliverable scope; Python3.11+ offline P1/P2 formula scanner, P3 static report, P4 receipt.
+2. Added coin_customer_bundle.py and 14-test test_coin_customer_bundle.py, new ZIP with fixed 5 entries (rule JSON, signals CSV, HTML, evidence, manifest), exclusive new-file creation and no partial ZIP after exceptions; choose staging+ZIP over scattered files to prevent partial delivery.
+3. Tests: local Linux Python3.13.5 P1 15 + P2 14 + builder 7 + receipt 10 + P5 14 = 60/60 PASS; compileall PASS; source/test Git blob exact 85a74ef719a8fe774612cc0b66fa09baf77a26f2/24286bbabaa1b4eb1b5caa51fb1eae8f5e4adf60. P5 invokes actual P2+P4, with local HTML adapter (not exact P3 original), full GitHub source E2E NOT RUN.
+4. Provisional score: coin 68% (+3) and 70% goal remains 2pp short, RELEASE HOLD; source exists but Windows/EXE and customer requirements not proven.
+5. Failure/pivot: private full clone remains DNS blocked, no blind retries; initial test assertion erroneously treated 'http-equiv' (CSP meta) as outbound URL, corrected to check http:// and https://, then 60 PASS. No untested live data claim.
+6. Git: hibi89/candle_scraper@feature/candle-pattern-analyzer parent latest; P5 files and docs/COIN_CUSTOMER_BUNDLE_P5_20261111.md, STATUS.md, HANDOFF.md committed. Check ref/SHA after write; hub hibi89/hackathon-command-center-2026@kmong-productization sync after verified feature SHA.
+7. Runtime: Python 3.11 intended; test Python3.13.5 Linux. No Production/Vercel, no paid CI, no real exchange API.
+8. Originals: collector main, old analysis rules, raw E: DB/WAL/SHM, archives/CSV and credentials unchanged; no customer dataset copied or uploaded. Normal Git revert available.
+9. Next: actual GitHub P3 exact renderer integration+4 E2E, complete repo regression, Windows true Python3.11 and copied 3.6GB DB/real chart, then assess 70% and EXE/licensing release gates.
+10. Checkpoint 2026-11-11 KST; source Git blob/isolated tests verified, Windows/real customer/whole CI unverified.
+
 ## 2026-11-11 KST — P4 영수증과 중앙 완성률 65% 정합성
 1. Goal: 70% target, hub now records 65% provisional for existing P1~P4 canonical customer workflow; receipt is additional evidence work, no double uplift.
 2. Feature: offline CSV/rule hash and row-formula SHA256 consistency check, new JSON receipt, separate from existing coin_report.py; no collector or old scanner changes.
