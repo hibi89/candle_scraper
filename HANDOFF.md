@@ -1,3 +1,15 @@
+## 2026-11-11 KST — P6 source-exact 101 scoped tests evidence, 70% unchanged
+1. Goal/stack: verify real P1/P2/P3/P4/P5/P6 customer flow on exact GitHub Python modules, scoped 70% provisional engineering milestone.
+2. Completion: full canonical Python3.13 Linux 19 source/test files SHA exactly equal to GitHub blobs; no code modification, doc-only verification.
+3. Tests: Python -W error::ResourceWarning unittest 101/101 PASS/0 FAIL/SKIP; compileall exit0; coin_selftest returns PASS_SYNTHETIC_ONLY, source DB SHA unchanged; exact P3/P5 ZIP end-to-end included. NOT a full repo run.
+4. Status: existing coin product 70% provisional (no additional credit), commercial RELEASE HOLD; Windows/client data/EXE/license unverified.
+5. Failure/alternative: private checkout git DNS blocked; GitHub connector exact file content and blob verification in local source-exact scratch copy. Avoid any paid CI/forced push.
+6. Source: hibi89/candle_scraper feature/candle-pattern-analyzer source P6 c8a1637ab4d07db577d4d971ccad5f5adac22593, existing checkpoint 62b5ceb6230ac0e404dab95e03b13838ae52f116; this docs commit SHA verify after push. Evidence docs/COIN_P6_SOURCE_EXACT_101_SCOPED_20261111.md.
+7. Runtime/deploy: local Linux Python3.13.5; Windows Python3.11 intended/not run; production/Vercel N/A.
+8. Original safety: main collector, E: user SQLite/WAL/SHM, reports, credentials, commercial ZIP untouched. docs can be Git reverted.
+9. Next: full authorized repo unittest discovery, Windows3.11 standalone selftest, source-backup read-only large DB and chart reconciliation, EXE packaging/rights check before sale.
+10. KST 2026-11-11, scope 19 exact files and 101 focused tests; not a whole-repository certification.
+
 ## 2026-11-11 KST — P6 Coin Pattern Analyzer reaches 70% provisional engineering milestone
 1. **Goal/stack:** 70% intermediate final-product engineering target, offline Python3.11+ SQLite P1/P2/P3/P4/P5 + reproducible synthetic verification; no external data.
 2. **Delivered:** P6 `coin_selftest.py` (real single/batch→CSV→HTML→P4 receipt, temp DB, JSON PASS_SYNTHETIC_ONLY), `test_coin_selftest.py` 4, `test_coin_customer_e2e_p5.py` 7, `test_coin_bundle_primary_integration.py` 5 including **exact P5 GitHub source/P3 report**. No old scanner changes.
