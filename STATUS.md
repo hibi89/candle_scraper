@@ -1,3 +1,9 @@
+## 2026-11-12 KST — Kmong 94→95% provisional delivery-integrity gate (sale HOLD)
+- Original main `1f976770db4797bcaa846ed32962e306318971ca` preserved. Isolated feature `feature/kmong-collector-p95-delivery-integrity-20261112` adds `audit_customer_packages.py`, 10 regressions, and build_windows.bat stage 6/6 with fail-closed protection for all 3 customer ZIPs and exact Korean guide. No collector.py, DB, market API, user file or release changes.
+- Local Python3.13.5 exact Git Blob parity 2/2: audit `36959c113e4e3043ca8a6d68673165c26d16a85e`; test `4136b09620c1478d5d1621c85a93d781bd446509`; `python -m unittest -q test_v20_customer_zip_integrity` **10 PASS/0 FAIL/0 SKIP**, compileall PASS, three synthetic EXE/ZIP packages. Existing verified Windows 147 PASS baseline is historical, and **full feature-branch Windows 157 / actual EXE/ZIP stage 6 unverified**.
+- Internal productization estimate **95% provisional** (+1 for separate verifiable delivery-integrity contract), technical collector 99% historical; not 95% commercial authorization or buyer-accepted release. **RELEASE HOLD** due Upbit paid distribution restriction, Bithumb license unknown, Windows10/11 + Defender/SmartScreen/owner approval incomplete. No chargeable Actions or live API triggered.
+- Design A inline existing Windows verifier vs B separately testable offline post-build gate: selected B for minimum risk/cost. [Details](docs/KMONG_P95_DELIVERY_INTEGRITY_20261112.md). After legitimate authorized native Windows CI/workstation confirmation, rescore if failing. Vercel N/A.
+
 # STATUS — Coin Candle Collector v1.6.1 (commercial Windows editions)
 
 최신 확인: **2026-11-05 22:50 KST**
