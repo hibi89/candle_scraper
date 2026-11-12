@@ -1,3 +1,17 @@
+# HANDOFF 최신 — 2026-11-12 KST — 크몽 수집기 P95 잠정 (10항)
+1. 목표: 기존 Upbit/Bithumb/Both Windows EXE 3판형 상품화 94→95% 잠정 엔지니어링; 기존 기술 99%, 유료 출시 승인과 분리.
+2. 완료/결정: 기존 자동 EXE 실행검사는 유지, 새로운 독립 감사 모듈로 고객 ZIP 3종의 검증된 EXE·정확한 한글 설명서·ZIP 헤더/CRC/중복·추가·숨은 페이로드를 확인. 빌드 6단계에서 실패 즉시 HOLD. 기존 검증기에 직접 추가(A)보다 독립 사후 감사(B)가 CI 과금·회귀 위험 낮음.
+3. 테스트: Linux Python3.13.5 로컬 synthetic 3판형 `python -m unittest -q test_v20_customer_zip_integrity` 10 PASS/0 FAIL/0 SKIP, compileall PASS. 실행한 소스/테스트 로컬 Git Blob 2/2 원격 일치: 36959c113e4e3043ca8a6d68673165c26d16a85e / 4136b09620c1478d5d1621c85a93d781bd446509. 실제 Windows 전체 147+10, stage6는 아직 미실행.
+4. 상태: 제품화 **95% 내부 잠정**(추가 인수 무결성 +1%p), 판매 RELEASE HOLD; 업비트 유상 API 연결 프로그램 약관·빗썸 서면 허가·사용자 최종 승인 미해결.
+5. 실패/제약: GitHub private repo 컨테이너 DNS 사용 불가로 전체 private checkout 미확보; 계약을 동일하게 구현한 테스트 전용 mock 패키징 인터페이스로만 10회귀 PASS. GitHub Windows runner 과금 허용 미확인으로 수동 실행하지 않음. 실제 GitHub source 코드와 생성기 인터페이스는 별도로 읽음. 검증 범위 확장 전 성공 주장 금지.
+6. 저장소: private `hibi89/candle_scraper@feature/kmong-collector-p95-delivery-integrity-20261112`, 이전 main 원본/복구 SHA `1f976770db4797bcaa846ed32962e306318971ca`; 새 `audit_customer_packages.py`, `test_v20_customer_zip_integrity.py`, `build_windows.bat`, `docs/KMONG_P95_DELIVERY_INTEGRITY_20261112.md`.
+7. Production: Windows 오프라인 EXE; Vercel 미적용; 기존 실제 CI #42038795999 147/147 및 EXE 3종/ZIP3종은 이전 main 소스 검증. 신규 feature SHA Windows EXE/ZIP/빌드 6단계는 미검증, CI 미호출.
+8. 백업/권한: 사용자 SQLite·CSV, Library ZIP, 기존 Windows 고객 빌드, main 원본 보존. API 키/개인정보/시세 데이터 GitHub 전송 없음. 원본 DB 경로 E드라이브 접근 금지. 별도 승인 없이는 고객 ZIP 판매·전송·허가 문의 불가.
+9. 다음: 승인된 무료/유료 범위의 정확 feature SHA Windows 전체 unittest 예상 157/157, Python3.11/PyInstaller6.16, 실제 build_windows.bat 6/6, 3 ZIP 독립 실행, 파일 해시·한글 경로 확인. 실패 시 점수 재평가(94 복귀)하고 차단. 실제 소비자 Win10/11/보안 및 양 거래소 서면 허가 후 최종 GO 별도 승인.
+10. 갱신: 2026-11-12 KST; 기능 Git blob SHA 및 Linux 10회귀만 확인; feature docs 및 최종 커밋 SHA는 원격 조회 후 기록. 상세 `docs/KMONG_P95_DELIVERY_INTEGRITY_20261112.md`.
+
+---
+
 # HANDOFF 최신 검증 — 2026-11-05 22:50 KST
 
 **기술 전체 완성률 추정 99% (직전 98% 대비 +1%p), 판매 RELEASE HOLD.** 기술 진척과 상업용 출시 허가는 별개의 게이트이다. 이 문서 아래의 98%, 97%, 95%는 역사적 기록이며 최신 판정이 아니다.
