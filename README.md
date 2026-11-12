@@ -1,3 +1,13 @@
+## Coin Pattern Analyzer P85 candidate — offline forward signal study (2026-11-12)
+
+**This is feature-branch engineering only, not a sale/production release.** The optional new coin_forward_eval.py accepts original coin_analyzer.py P1/P2 eight-column signals.csv and a quiescent copied SQLite candle DB. It evaluates hypothetical *next* candle open to signal-plus-H candle close, fees/slippage on both sides, incomplete-future/gapped events excluded from return statistics, per-rule summaries and local Korean HTML/CSV/JSON/SHA256 manifest. It does not trade, claim portfolio backtest results or copy source DB data into the repository.
+
+Example (owner substitutes *private copies* and new output folder):
+    python coin_forward_eval.py --db PATH_TO_OFFLINE_UPBIT_DB --signals PATH_TO_SIGNALS_CSV --out-dir PATH_TO_NEW_RESULTS --horizon 5 --fee-bps 5 --slippage-bps 5
+
+Scoped test: python -W error::ResourceWarning -m unittest -q test_coin_forward_eval.py (25 local PASS on exact Git blobs; native Windows/full repository NOT VERIFIED).
+Evidence/ten-point handoff: docs/COIN_P85_FORWARD_STUDY_20261112.md. Old main collector and P1–P6 feature source unchanged. RELEASE HOLD.
+
 # 코인 캔들 수집기 — v1.6.1 (비공개 GitHub 소스 저장소)
 
 **상태: 판매 보류(HOLD), 기술 완성률 추정 99%.** Windows Server 2022 GitHub Actions에서 3종 EXE 빌드/실행 및 고객 ZIP 3종 독립 실행 3/3 PASS. 업비트·빗썸 각각 KRW-BTC 실 API 11봉·2페이지 및 임시 DB 소량 수집/증분/CSV PASS. **실제 고객 ZIP 3종의 EXE 내 메뉴 [5]도 업비트/빗썸 실 API 연결 PASS** (Windows Server 2022). 단, 소비자 Windows 10/11 실행·장기/전종목 수집·약관 검증은 남아 있습니다. GitHub 소스 ZIP 자체는 EXE가 아닙니다.
